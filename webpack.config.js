@@ -12,6 +12,11 @@ module.exports = {
         include: __dirname + '/src',
         test: /\.js$/,
         use: { loader: 'babel-loader' }
+      },
+      {
+        include: __dirname + '/resources',
+        test: /\.(gif|png|jpe?g|svg)$/i,
+        use: { loader: 'url-loader' }
       }
     ]
   },
