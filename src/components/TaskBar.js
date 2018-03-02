@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import withStyles from 'react-jss';
+import p from 'prop-types';
 
 import StartButton from './StartButton';
+import StartMenu from './StartMenu';
 
 const styles = {
   container: {
@@ -20,23 +22,30 @@ const styles = {
       backgroundColor: '#C3C7CB'
     }
   },
-  padding: {
+  inner: {
     height: '100%',
-    padding: '1px'
+    padding: '2px'
   }
 };
 
-const TaskBar = ({ classes }) => (
+const taskBarHeight = 20;
+const TaskBar = ({ classes, startMenuOpen }) => (
   <div
     className={classes.container}
     style={{
-      height: 20
+      height: taskBarHeight
     }}
   >
-    <div className={classes.padding}>
-      <StartButton down />
+    <div className={classes.inner}>
+      {startMenuOpen && <StartMenu bottom={taskBarHeight - 4}/>}
+      <StartButton down={startMenuOpen} />
     </div>
   </div>
 );
+
+TaskBar.propTypes = {
+  classes: p.objectOf(p.string),
+  startMenuOpen: p.bool
+};
 
 export default withStyles(styles)(TaskBar);

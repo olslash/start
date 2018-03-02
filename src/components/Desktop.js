@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import withStyles from 'react-jss';
+import p from 'prop-types';
 
 const styles = {
   container: {
@@ -8,10 +9,8 @@ const styles = {
   }
 };
 
-const Desktop = ({classes}) => (
-  <div
-    className={classes.container}
-  />
-);
+const Desktop = ({ classes }) => <div className={classes.container} />;
+
+Desktop.propTypes = {};
 
 export default withStyles(styles)(Desktop);
