@@ -39,3 +39,6 @@ App.propTypes = {
 };
 
 export default withStyles(styles)(App);
+
+// add the clock.
+// add redux, get click handler set up for the start menu

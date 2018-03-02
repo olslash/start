@@ -4,10 +4,10 @@ import p from 'prop-types';
 
 import StartButton from './StartButton';
 import StartMenu from './StartMenu';
+import Clock from './Clock';
 
 const styles = {
   container: {
-    display: 'flex',
     position: 'relative',
     width: '100%',
     backgroundColor: '#C3C7CB',
@@ -23,8 +23,20 @@ const styles = {
     }
   },
   inner: {
+    display: 'flex',
     height: '100%',
     padding: '2px'
+  },
+  leftMenuItems: {
+    display: 'flex',
+    height: '100%',
+    flexGrow: 1
+  },
+  rightMenuItems: {
+    display: 'flex',
+    height: '100%',
+    justifyContent: 'flex-end',
+    width: '50px'
   }
 };
 
@@ -38,7 +50,12 @@ const TaskBar = ({ classes, startMenuOpen }) => (
   >
     <div className={classes.inner}>
       {startMenuOpen && <StartMenu bottom={taskBarHeight - 4}/>}
-      <StartButton down={startMenuOpen} />
+      <div className={classes.leftMenuItems}>
+        <StartButton down={startMenuOpen} />
+      </div>
+      <div className={classes.rightMenuItems}>
+        <Clock />
+      </div>
     </div>
   </div>
 );
