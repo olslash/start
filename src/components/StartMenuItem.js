@@ -11,21 +11,34 @@ import run from '../../resources/icon-run.png';
 import settings from '../../resources/icon-settings.png';
 import shutdown from '../../resources/icon-shutdown.png';
 
+import MoreIconRight from './MoreIconRight';
+
 const styles = {
   container: {
     display: 'flex',
     alignItems: 'center',
-    height: '100%',
+    height: '30px',
     width: '100%',
     fontSize: '10px',
     padding: '5px 10px',
     paddingRight: 0
+  },
+  iconCol: {
+    width: '20px',
+    height: '100%'
+  },
+  caretCol: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '10px',
+    height: '100%'
   },
   hovered: {
     background: '#0000AA',
     color: 'white'
   },
   label: {
+    flexGrow: 1,
     paddingLeft: '10px'
   },
   icon: {
@@ -43,10 +56,12 @@ const icons = {
   shutdown
 };
 
+// todo: tall/short bool for main/submenu items
 class StartMenuItem extends Component {
   static propTypes = {
     label: p.string.isRequired,
-    icon: p.oneOf(Object.keys(icons))
+    icon: p.oneOf(Object.keys(icons)),
+    moreArrow: p.bool
   };
 
   state = {
@@ -71,8 +86,17 @@ class StartMenuItem extends Component {
         onMouseOver={this.setHovered}
         onMouseLeave={this.setUnHovered}
       >
-        {icon && <img src={icons[icon]} className={classes.icon} />}
+        <div className={classes.iconCol}>
+          {icon && <img src={icons[icon]} className={classes.icon} />}
+        </div>
+
         <span className={classes.label}>{label}</span>
+
+        <div className={classes.caretCol}>
+          {this.props.moreArrow && (
+            <MoreIconRight inverted={this.state.hovered} />
+          )}
+        </div>
       </div>
     );
   }

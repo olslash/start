@@ -10,20 +10,13 @@ const styles = {
     '*': {
       boxSizing: 'border-box',
       cursor: 'default'
-    },
-
+    }
   },
 
-  '@font-face': [
-    {
-      fontFamily: 'px1',
-      src: 'url(resources/hellovetica.ttf)'
-    },
-    {
-      fontFamily: 'micro',
-      src: 'url(resources/micross.ttf)'
-    }
-  ],
+  '@font-face': {
+    fontFamily: 'micro',
+    src: 'url(resources/micross.ttf)'
+  },
 
   container: {
     height: '300px',
@@ -39,7 +32,7 @@ const styles = {
 const App = ({ classes }) => (
   <div className={classes.container}>
     <Desktop />
-    <TaskBar startMenuOpen />
+    <TaskBar />
   </div>
 );
 

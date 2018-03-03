@@ -5,6 +5,7 @@ import p from 'prop-types';
 import background from '../../resources/startmenu-blank.png';
 
 import StartMenuItem from './StartMenuItem';
+import StartSubMenu from './StartSubMenu';
 
 const styles = {
   container: {
@@ -22,15 +23,21 @@ const styles = {
   top: {
     flexGrow: 1,
     display: 'flex',
-    alignItems: 'center',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
     justifyContent: 'flex-start',
+    paddingTop: '2px'
+  },
+  divider: {
+    height: '8px'
   },
   bottom: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
-    height: '30px'
+    height: '30px',
+    paddingBottom: '3px'
   }
 };
 
@@ -42,8 +49,14 @@ const StartMenu = ({ classes, bottom }) => (
     }}
   >
     <div className={classes.top}>
-      <StartMenuItem label="Top..."/>
+      <StartMenuItem label="Programs" icon="programs" moreArrow />
+      <StartMenuItem label="Documents" icon="documents" moreArrow />
+      <StartMenuItem label="Settings" icon="settings" moreArrow />
+      <StartMenuItem label="Find" icon="find" moreArrow />
+      <StartMenuItem label="Help" icon="help" />
+      <StartMenuItem label="Run" icon="run" />
     </div>
+    <div className={classes.divider} />
     <div className={classes.bottom}>
       <StartMenuItem icon="shutdown" label="Shut Down..." />
     </div>
