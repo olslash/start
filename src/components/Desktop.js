@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import withStyles from 'react-jss';
 import p from 'prop-types';
 

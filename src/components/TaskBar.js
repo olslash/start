@@ -1,6 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import withStyles from 'react-jss';
 import p from 'prop-types';
+
+import { currentDate } from '../state/clock';
+import {
+  startMenuOpen,
+  openStartMenu,
+  closeStartMenu
+} from '../state/explorer';
 
 import StartButton from './StartButton';
 import StartMenu from './StartMenu';
@@ -41,20 +50,25 @@ const styles = {
 };
 
 const taskBarHeight = 20;
-const TaskBar = ({ classes, startMenuOpen }) => (
+const TaskBar = props => (
   <div
-    className={classes.container}
+    className={props.classes.container}
     style={{
       height: taskBarHeight
     }}
   >
-    <div className={classes.inner}>
-      {startMenuOpen && <StartMenu bottom={taskBarHeight - 4}/>}
-      <div className={classes.leftMenuItems}>
-        <StartButton down={startMenuOpen} />
+    <div className={props.classes.inner}>
+      {props.startMenuOpen && <StartMenu bottom={taskBarHeight - 4} />}
+      <div className={props.classes.leftMenuItems}>
+        <StartButton
+          down={props.startMenuOpen}
+          onClick={
+            props.startMenuOpen ? props.closeStartMenu : props.openStartMenu
+          }
+        />
       </div>
-      <div className={classes.rightMenuItems}>
-        <Clock />
+      <div className={props.classes.rightMenuItems}>
+        <Clock currentDate={props.currentDate} />
       </div>
     </div>
   </div>
@@ -62,7 +76,22 @@ const TaskBar = ({ classes, startMenuOpen }) => (
 
 TaskBar.propTypes = {
   classes: p.objectOf(p.string),
-  startMenuOpen: p.bool
+  startMenuOpen: p.bool,
+  openStartMenu: p.func.isRequired,
+  closeStartMenu: p.func.isRequired,
+  currentDate: p.instanceOf(Date).isRequired
 };
 
-export default withStyles(styles)(TaskBar);
+export default compose(
+  withStyles(styles),
+  connect(
+    state => ({
+      currentDate: currentDate(state),
+      startMenuOpen: startMenuOpen(state)
+    }),
+    {
+      openStartMenu,
+      closeStartMenu
+    }
+  )
+)(TaskBar);

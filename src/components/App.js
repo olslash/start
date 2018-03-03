@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import withStyles from 'react-jss';
 import p from 'prop-types';
 
@@ -8,14 +8,22 @@ import Desktop from './Desktop';
 const styles = {
   '@global': {
     '*': {
-      boxSizing: 'border-box'
-    }
+      boxSizing: 'border-box',
+      cursor: 'default'
+    },
+
   },
 
-  '@font-face': {
-    fontFamily: 'px1',
-    src: 'url(resources/hellovetica.ttf)'
-  },
+  '@font-face': [
+    {
+      fontFamily: 'px1',
+      src: 'url(resources/hellovetica.ttf)'
+    },
+    {
+      fontFamily: 'micro',
+      src: 'url(resources/micross.ttf)'
+    }
+  ],
 
   container: {
     height: '300px',
@@ -23,6 +31,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#008080',
+    fontFamily: 'micro',
     '-webkit-font-smoothing': 'none'
   }
 };
@@ -39,6 +48,3 @@ App.propTypes = {
 };
 
 export default withStyles(styles)(App);
-
-// add the clock.
-// add redux, get click handler set up for the start menu

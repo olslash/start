@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import p from 'prop-types';
 
 import startUp from '../../resources/start-up.png';

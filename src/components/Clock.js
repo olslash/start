@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import withStyles from 'react-jss';
 import p from 'prop-types';
 
@@ -18,9 +18,8 @@ const styles = {
     padding: '0 5px'
   },
   time: {
-    // fixme -- fix a pixel number font
-    // fontFamily: 'px1'
-    fontSize: '10px'
+    fontFamily: 'micro',
+    fontSize: '9px'
   }
 };
 
@@ -38,18 +37,17 @@ const formatTime = date => {
   return `${hours}:${minutes}`;
 };
 
-// fixme -- update on timer via redux state
-const Clock = ({ classes, date = new Date() }) => (
+const Clock = ({ classes, currentDate }) => (
   <div className={classes.container}>
     <div className={classes.background}>
-      <span className={classes.time}>{formatTime(date)}</span>
+      <span className={classes.time}>{formatTime(currentDate)}</span>
     </div>
   </div>
 );
 
 Clock.propTypes = {
   classes: p.objectOf(p.string),
-  startMenuOpen: p.bool
+  currentDate: p.instanceOf(Date).isRequired
 };
 
 export default withStyles(styles)(Clock);
