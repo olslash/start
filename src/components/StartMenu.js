@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { compose } from 'redux';
 import withStyles from 'react-jss';
 import p from 'prop-types';
+import onClickOutside from 'react-onclickoutside';
 
 import background from '../../resources/startmenu-blank.png';
 
@@ -41,37 +43,47 @@ const styles = {
   }
 };
 
-const StartMenu = ({ classes, bottom, items, onRequestClose }) => (
-  <div
-    onClick={e => e.stopPropagation()}
-    className={classes.container}
-    style={{
-      bottom
-    }}
-  >
-    <div className={classes.top}>
-      {items.map(({ title, icon, children }) => (
-        // todo: recursively map over children, rendering submenus here
-        <StartMenuItem
-          label={title}
-          icon={icon}
-          moreArrow={children && !!children.length}
-          children={children}
-          key={title}
-        />
-      ))}
-    </div>
-    <div className={classes.divider} />
-    <div className={classes.bottom}>
-      <StartMenuItem icon="shutdown" label="Shut Down..." />
-    </div>
-  </div>
-);
+class StartMenu extends Component {
+  static propTypes = {
+    items: p.arrayOf(p.object).isRequired,
+    bottom: p.number.isRequired,
+    onRequestClose: p.func
+  };
 
-StartMenu.propTypes = {
-  items: p.arrayOf(p.object).isRequired,
-  bottom: p.number.isRequired,
-  onRequestClose: p.func
-};
+  handleClickOutside = () => {
+    this.props.onRequestClose();
+  };
 
-export default withStyles(styles)(StartMenu);
+  render() {
+    const { classes, bottom, items } = this.props;
+
+    return (
+      <div
+        onClick={e => e.stopPropagation()}
+        className={classes.container}
+        style={{
+          bottom
+        }}
+      >
+        <div className={classes.top}>
+          {items.map(({ title, icon, children }) => (
+            // todo: recursively map over children, rendering submenus here
+            <StartMenuItem
+              label={title}
+              icon={icon}
+              moreArrow={children && !!children.length}
+              children={children}
+              key={title}
+            />
+          ))}
+        </div>
+        <div className={classes.divider} />
+        <div className={classes.bottom}>
+          <StartMenuItem icon="shutdown" label="Shut Down..." />
+        </div>
+      </div>
+    );
+  }
+}
+
+export default compose(withStyles(styles), onClickOutside)(StartMenu);

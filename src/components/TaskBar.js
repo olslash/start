@@ -8,8 +8,7 @@ import { currentDate } from '../state/clock';
 import {
   startMenuOpen,
   openStartMenu,
-  closeStartMenu,
-  taskbarClick
+  closeStartMenu
 } from '../state/explorer';
 
 import StartButton from './StartButton';
@@ -52,7 +51,6 @@ const styles = {
 
 const TaskBar = ({ height = 20, ...props }) => (
   <div
-    onClick={props.taskbarClick}
     className={props.classes.container}
     style={{
       height
@@ -87,7 +85,6 @@ TaskBar.propTypes = {
   startMenuOpen: p.bool,
   openStartMenu: p.func.isRequired,
   closeStartMenu: p.func.isRequired,
-  taskbarClick: p.func.isRequired,
   currentDate: p.instanceOf(Date).isRequired
 };
 
@@ -101,11 +98,6 @@ export default compose(
     {
       openStartMenu,
       closeStartMenu,
-      taskbarClick
     }
   )
 )(TaskBar);
-
-// on click of taskbar/desktop components, fire some action. can be handled by
-// start menu reducer to close menu. make sure to stop propagation on clicks
-// to start menu and its own items so they dont reach desktop.
