@@ -2,6 +2,8 @@ import React from 'react';
 import withStyles from 'react-jss';
 import p from 'prop-types';
 
+import startMenuItems from '../startMenuItems';
+
 import TaskBar from './TaskBar';
 import Desktop from './Desktop';
 
@@ -32,7 +34,7 @@ const styles = {
 const App = ({ classes }) => (
   <div className={classes.container}>
     <Desktop />
-    <TaskBar />
+    <TaskBar startMenuItems={startMenuItems} />
   </div>
 );
 

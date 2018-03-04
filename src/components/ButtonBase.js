@@ -2,7 +2,14 @@ import React from 'react';
 import p from 'prop-types';
 
 const ButtonBase = ({ down, renderUp, renderDown, onClick, ...props }) => (
-  <span onClick={onClick}>{down ? renderDown(props) : renderUp(props)}</span>
+  <span
+    onClick={e => {
+      e.stopPropagation();
+      onClick();
+    }}
+  >
+    {down ? renderDown(props) : renderUp(props)}
+  </span>
 );
 
 ButtonBase.propTypes = {

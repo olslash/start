@@ -8,7 +8,8 @@ import { currentDate } from '../state/clock';
 import {
   startMenuOpen,
   openStartMenu,
-  closeStartMenu
+  closeStartMenu,
+  taskbarClick
 } from '../state/explorer';
 
 import StartButton from './StartButton';
@@ -49,16 +50,22 @@ const styles = {
   }
 };
 
-const taskBarHeight = 20;
-const TaskBar = props => (
+const TaskBar = ({ height = 20, ...props }) => (
   <div
+    onClick={props.taskbarClick}
     className={props.classes.container}
     style={{
-      height: taskBarHeight
+      height
     }}
   >
     <div className={props.classes.inner}>
-      {props.startMenuOpen && <StartMenu bottom={taskBarHeight - 4} />}
+      {props.startMenuOpen && (
+        <StartMenu
+          bottom={height - 4}
+          items={props.startMenuItems}
+          onRequestClose={props.closeStartMenu}
+        />
+      )}
       <div className={props.classes.leftMenuItems}>
         <StartButton
           down={props.startMenuOpen}
@@ -76,9 +83,11 @@ const TaskBar = props => (
 
 TaskBar.propTypes = {
   classes: p.objectOf(p.string),
+  startMenuItems: p.arrayOf(p.object).isRequired,
   startMenuOpen: p.bool,
   openStartMenu: p.func.isRequired,
   closeStartMenu: p.func.isRequired,
+  taskbarClick: p.func.isRequired,
   currentDate: p.instanceOf(Date).isRequired
 };
 
@@ -91,7 +100,12 @@ export default compose(
     }),
     {
       openStartMenu,
-      closeStartMenu
+      closeStartMenu,
+      taskbarClick
     }
   )
 )(TaskBar);
+
+// on click of taskbar/desktop components, fire some action. can be handled by
+// start menu reducer to close menu. make sure to stop propagation on clicks
+// to start menu and its own items so they dont reach desktop.

@@ -1,6 +1,10 @@
 import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import withStyles from 'react-jss';
 import p from 'prop-types';
+
+import { desktopClick } from '../state/explorer';
 
 const styles = {
   container: {
@@ -9,8 +13,14 @@ const styles = {
   }
 };
 
-const Desktop = ({ classes }) => <div className={classes.container} />;
+const Desktop = ({ classes, desktopClick }) => (
+  <div className={classes.container} onClick={desktopClick} />
+);
 
-Desktop.propTypes = {};
+Desktop.propTypes = {
+  desktopClick: p.func
+};
 
-export default withStyles(styles)(Desktop);
+export default compose(withStyles(styles), connect(null, { desktopClick }))(
+  Desktop
+);

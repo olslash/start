@@ -41,20 +41,25 @@ const styles = {
   }
 };
 
-const StartMenu = ({ classes, bottom }) => (
+const StartMenu = ({ classes, bottom, items, onRequestClose }) => (
   <div
+    onClick={e => e.stopPropagation()}
     className={classes.container}
     style={{
       bottom
     }}
   >
     <div className={classes.top}>
-      <StartMenuItem label="Programs" icon="programs" moreArrow />
-      <StartMenuItem label="Documents" icon="documents" moreArrow />
-      <StartMenuItem label="Settings" icon="settings" moreArrow />
-      <StartMenuItem label="Find" icon="find" moreArrow />
-      <StartMenuItem label="Help" icon="help" />
-      <StartMenuItem label="Run" icon="run" />
+      {items.map(({ title, icon, children }) => (
+        // todo: recursively map over children, rendering submenus here
+        <StartMenuItem
+          label={title}
+          icon={icon}
+          moreArrow={children && !!children.length}
+          children={children}
+          key={title}
+        />
+      ))}
     </div>
     <div className={classes.divider} />
     <div className={classes.bottom}>
@@ -64,7 +69,9 @@ const StartMenu = ({ classes, bottom }) => (
 );
 
 StartMenu.propTypes = {
-  bottom: p.number.isRequired
+  items: p.arrayOf(p.object).isRequired,
+  bottom: p.number.isRequired,
+  onRequestClose: p.func
 };
 
 export default withStyles(styles)(StartMenu);
