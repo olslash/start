@@ -5,10 +5,11 @@ import p from 'prop-types';
 
 import borderTop from '../../resources/start-submenu-top.png';
 import borderMiddle from '../../resources/start-submenu-middle.png';
-import borderBottom from '../../resources/start-submenu-bottom-130.png';
+import borderBottom from '../../resources/start-submenu-bottom.png';
 
 const styles = {
   container: {
+    position: 'absolute',
     width: '140px'
   },
   borderTop: {
@@ -30,14 +31,23 @@ const styles = {
   }
 };
 
-const StartSubMenu = ({ classes }) => (
-  <div className={classes.container}>
+const StartSubMenu = ({ items, classes, rightOffset = 0 }) => (
+  <div
+    className={classes.container}
+    style={{
+      top: -5,
+      right: -rightOffset
+    }}
+  >
     <div className={classes.borderTop} />
-    <div className={classes.content}>
-      some content
-    </div>
+    <div className={classes.content}>{items}</div>
     <div className={classes.borderBottom} />
   </div>
 );
+
+StartSubMenu.propTypes = {
+  items: p.arrayOf(p.node).isRequired,
+  rightOffset: p.number
+};
 
 export default withStyles(styles)(StartSubMenu);

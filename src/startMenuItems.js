@@ -6,10 +6,10 @@ export default [
       {
         title: 'Some Folder',
         icon: 'programs',
-        children: [{title: 'Some Nested App', icon: 'run'}]
+        children: [{title: 'programs folder app 1', icon: 'run'}]
       },
       {
-        title: 'Some App',
+        title: 'programs app 1',
         icon: 'run'
       }
     ]
@@ -19,7 +19,7 @@ export default [
     icon: 'documents',
     children: [
       {
-        title: 'Some Nested App',
+        title: 'documents app 1',
         icon: 'run'
       }
     ]
@@ -29,7 +29,7 @@ export default [
     icon: 'settings',
     children: [
       {
-        title: 'Some Nested App',
+        title: 'settings app 1',
         icon: 'run'
       }
     ]
@@ -39,7 +39,7 @@ export default [
     icon: 'find',
     children: [
       {
-        title: 'Some Nested App',
+        title: 'find app 1',
         icon: 'run'
       }
     ]

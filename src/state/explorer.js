@@ -2,10 +2,12 @@ import { createReducer } from '../helpers/index';
 
 const OPEN_START_MENU = 'OPEN_START_MENU';
 const CLOSE_START_MENU = 'CLOSE_START_MENU';
+const SET_START_MENU_ACTIVE_FOLDER_PATH = 'SET_START_MENU_ACTIVE_FOLDER_PATH';
 
 export const reducer = createReducer(
   {
-    startMenuOpen: false
+    startMenuOpen: false,
+    startMenuActiveFolderPath: []
   },
   {
     [OPEN_START_MENU](state) {
@@ -18,6 +20,25 @@ export const reducer = createReducer(
       return {
         ...state,
         startMenuOpen: false
+      };
+    },
+    [SET_START_MENU_ACTIVE_FOLDER_PATH](state, action) {
+      const { payload: { depth, index } } = action;
+
+      if (depth > state.startMenuActiveFolderPath.length) {
+        console.warn('depth is out of bounds');
+        debugger;
+        return state;
+      }
+
+      return {
+        ...state,
+        startMenuActiveFolderPath:
+          depth <= state.startMenuActiveFolderPath.length - 1
+            ? // up-tree path changed, prune
+              [...state.startMenuActiveFolderPath.slice(0, depth), index]
+            : // add depth at index
+              [...state.startMenuActiveFolderPath, index]
       };
     }
   }
@@ -37,10 +58,21 @@ export function closeStartMenu() {
   };
 }
 
+export function setStartMenuActiveFolderPath({ depth, index }) {
+  return {
+    type: SET_START_MENU_ACTIVE_FOLDER_PATH,
+    payload: { depth, index }
+  };
+}
+
 function local(state) {
   return state.explorer;
 }
 
 export function startMenuOpen(state) {
   return local(state).startMenuOpen;
+}
+
+export function startMenuActiveFolderPath(state) {
+  return local(state).startMenuActiveFolderPath;
 }

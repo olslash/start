@@ -15,6 +15,7 @@ import MoreIconRight from './MoreIconRight';
 
 const styles = {
   container: {
+    position: 'relative',
     display: 'flex',
     alignItems: 'center',
     height: '30px',
@@ -22,6 +23,10 @@ const styles = {
     fontSize: '10px',
     padding: '5px 10px',
     paddingRight: 0
+  },
+  short: {
+    height: '20px',
+    padding: '3px 10px'
   },
   iconCol: {
     width: '20px',
@@ -34,12 +39,14 @@ const styles = {
     height: '100%'
   },
   hovered: {
-    background: '#0000AA',
-    color: 'white'
+    background: '#0000AA'
   },
   label: {
     flexGrow: 1,
     paddingLeft: '10px'
+  },
+  labelHovered: {
+    color: 'white'
   },
   icon: {
     height: '100%'
@@ -56,32 +63,45 @@ const icons = {
   shutdown
 };
 
-// todo: tall/short bool for main/submenu items
 class StartMenuItem extends Component {
   static propTypes = {
     label: p.string.isRequired,
     icon: p.oneOf(Object.keys(icons)),
-    moreArrow: p.bool
+    moreArrow: p.bool,
+    onActivate: p.func,
+    index: p.number,
+    depth: p.number
+  };
+
+  static defaultProps = {
+    onActivate: () => {}
   };
 
   state = {
     hovered: false
   };
 
-  setHovered = () => {
+  setHovered = (e) => {
     this.setState({ hovered: true });
+    e.stopPropagation();
+
+    this.props.onActivate({
+      depth: this.props.depth,
+      index: this.props.index
+    });
   };
 
-  setUnHovered = () => {
+  setUnHovered = (e) => {
     this.setState({ hovered: false });
   };
 
   render() {
-    const { classes, icon, label } = this.props;
+    const { classes, icon, label, short, children } = this.props;
     return (
       <div
         className={cx(classes.container, {
-          [classes.hovered]: this.state.hovered
+          [classes.hovered]: this.state.hovered,
+          [classes.short]: short
         })}
         onMouseOver={this.setHovered}
         onMouseLeave={this.setUnHovered}
@@ -90,13 +110,20 @@ class StartMenuItem extends Component {
           {icon && <img src={icons[icon]} className={classes.icon} />}
         </div>
 
-        <span className={classes.label}>{label}</span>
+        <span
+          className={cx(classes.label, {
+            [classes.labelHovered]: this.state.hovered
+          })}
+        >
+          {label}
+        </span>
 
         <div className={classes.caretCol}>
           {this.props.moreArrow && (
             <MoreIconRight inverted={this.state.hovered} />
           )}
         </div>
+        {children}
       </div>
     );
   }

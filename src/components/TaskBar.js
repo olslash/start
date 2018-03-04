@@ -7,8 +7,10 @@ import p from 'prop-types';
 import { currentDate } from '../state/clock';
 import {
   startMenuOpen,
+  startMenuActiveFolderPath,
   openStartMenu,
-  closeStartMenu
+  closeStartMenu,
+  setStartMenuActiveFolderPath
 } from '../state/explorer';
 
 import StartButton from './StartButton';
@@ -62,6 +64,8 @@ const TaskBar = ({ height = 20, ...props }) => (
           bottom={height - 4}
           items={props.startMenuItems}
           onRequestClose={props.closeStartMenu}
+          onSetActiveFolderPath={props.setStartMenuActiveFolderPath}
+          activeFolderPath={props.startMenuActiveFolderPath}
         />
       )}
       <div className={props.classes.leftMenuItems}>
@@ -83,8 +87,10 @@ TaskBar.propTypes = {
   classes: p.objectOf(p.string),
   startMenuItems: p.arrayOf(p.object).isRequired,
   startMenuOpen: p.bool,
+  startMenuActiveFolderPath: p.arrayOf(p.number).isRequired,
   openStartMenu: p.func.isRequired,
   closeStartMenu: p.func.isRequired,
+  setStartMenuActiveFolderPath: p.func.isRequired,
   currentDate: p.instanceOf(Date).isRequired
 };
 
@@ -93,11 +99,13 @@ export default compose(
   connect(
     state => ({
       currentDate: currentDate(state),
-      startMenuOpen: startMenuOpen(state)
+      startMenuOpen: startMenuOpen(state),
+      startMenuActiveFolderPath: startMenuActiveFolderPath(state)
     }),
     {
       openStartMenu,
       closeStartMenu,
+      setStartMenuActiveFolderPath
     }
   )
 )(TaskBar);
