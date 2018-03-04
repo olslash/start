@@ -19,7 +19,8 @@ export const reducer = createReducer(
     [CLOSE_START_MENU](state) {
       return {
         ...state,
-        startMenuOpen: false
+        startMenuOpen: false,
+        startMenuActiveFolderPath: []
       };
     },
     [SET_START_MENU_ACTIVE_FOLDER_PATH](state, action) {
@@ -76,3 +77,5 @@ export function startMenuOpen(state) {
 export function startMenuActiveFolderPath(state) {
   return local(state).startMenuActiveFolderPath;
 }
+
+// fixme: must hover for .25s before new path is set
