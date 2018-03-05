@@ -53,8 +53,6 @@ class StartMenu extends Component {
   };
 
   handleClickOutside = (...args) => {
-    // fixme -- if i click on the start menu, don't fire this
-    // https://github.com/Pomax/react-onclickoutside#marking-elements-as-skip-over-this-one-during-the-event-loop ?
     this.props.onRequestClose();
   };
 
