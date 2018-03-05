@@ -61,11 +61,21 @@ class StartMenu extends Component {
       key={title}
       label={title}
       icon={icon}
-      moreArrow={children && !!children.length}
+      hasChildren={children && !!children.length}
       short={depth > 0}
       onActivate={this.props.onSetActiveFolderPath}
       index={index}
       depth={depth}
+      // fixme: active is
+      // when hovered
+      // when active
+      //   unless another item at my depth is also hovered <--
+      // pull state up a level?
+      active={
+        this.props.activeFolderPath[depth] === index &&
+        children &&
+        !!children.length
+      }
     >
       {!!children.length &&
         // only render submenu for active path

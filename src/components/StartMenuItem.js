@@ -38,7 +38,7 @@ const styles = {
     width: '10px',
     height: '100%'
   },
-  hovered: {
+  active: {
     background: '#0000AA'
   },
   label: {
@@ -67,16 +67,17 @@ class StartMenuItem extends Component {
   static propTypes = {
     label: p.string.isRequired,
     icon: p.oneOf(Object.keys(icons)),
-    moreArrow: p.bool,
+    hasChildren: p.bool,
     onActivate: p.func,
     index: p.number,
     depth: p.number,
-    activationDelayMs: p.number
+    activationDelayMs: p.number,
+    active: p.bool,
   };
 
   static defaultProps = {
     onActivate: () => {},
-    activationDelayMs: 400
+    activationDelayMs: 350
   };
 
   state = {
@@ -87,7 +88,7 @@ class StartMenuItem extends Component {
     this.setState({ hovered: true });
     e.stopPropagation();
 
-    // if still hovered after delay, activate
+    // if still hovered after delay, activate (for folders)
     setTimeout(() => {
       if (this.state.hovered) {
         this.props.onActivate({
@@ -104,10 +105,11 @@ class StartMenuItem extends Component {
 
   render() {
     const { classes, icon, label, short, children } = this.props;
+    // fixme -- should only be able to activate folder items
     return (
       <div
         className={cx(classes.container, {
-          [classes.hovered]: this.state.hovered,
+          [classes.active]: this.state.hovered || this.props.active,
           [classes.short]: short
         })}
         onMouseOver={this.setHovered}
@@ -119,15 +121,15 @@ class StartMenuItem extends Component {
 
         <span
           className={cx(classes.label, {
-            [classes.labelHovered]: this.state.hovered
+            [classes.labelHovered]: this.state.hovered || this.props.active
           })}
         >
           {label}
         </span>
 
         <div className={classes.caretCol}>
-          {this.props.moreArrow && (
-            <MoreIconRight inverted={this.state.hovered} />
+          {this.props.hasChildren && (
+            <MoreIconRight inverted={this.state.hovered || this.props.active} />
           )}
         </div>
         {children}
