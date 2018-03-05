@@ -77,5 +77,3 @@ export function startMenuOpen(state) {
 export function startMenuActiveFolderPath(state) {
   return local(state).startMenuActiveFolderPath;
 }
-
-// fixme: must hover for .25s before new path is set

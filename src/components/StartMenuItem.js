@@ -70,28 +70,35 @@ class StartMenuItem extends Component {
     moreArrow: p.bool,
     onActivate: p.func,
     index: p.number,
-    depth: p.number
+    depth: p.number,
+    activationDelayMs: p.number
   };
 
   static defaultProps = {
-    onActivate: () => {}
+    onActivate: () => {},
+    activationDelayMs: 400
   };
 
   state = {
     hovered: false
   };
 
-  setHovered = (e) => {
+  setHovered = e => {
     this.setState({ hovered: true });
     e.stopPropagation();
 
-    this.props.onActivate({
-      depth: this.props.depth,
-      index: this.props.index
-    });
+    // if still hovered after delay, activate
+    setTimeout(() => {
+      if (this.state.hovered) {
+        this.props.onActivate({
+          depth: this.props.depth,
+          index: this.props.index
+        });
+      }
+    }, this.props.activationDelayMs);
   };
 
-  setUnHovered = (e) => {
+  setUnHovered = e => {
     this.setState({ hovered: false });
   };
 
