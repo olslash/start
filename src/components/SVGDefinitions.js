@@ -12,7 +12,11 @@ const SVGDefinitions = () => (
           height="40px"
         />
         <feTile result="screendoor-tiled" in="screendoor-overlay"/>
-        <feBlend in="SourceGraphic" in2="screendoor-tiled" mode="darken" />
+
+        <feFlood floodColor="#0000AA" floodOpacity="0.6" result="flood" />
+
+        <feBlend result="screened" in="SourceGraphic" in2="screendoor-tiled" mode="darken" />
+        <feBlend in="flood" in2="screened" mode="lighten" />
       </filter>
     </defs>
   </svg>
