@@ -22,10 +22,16 @@ const styles = {
     filter: 'url(#screendoor)',
     '-webkit-mask-position': '0 0'
   },
-  title: {
+  titleContainer: {
     paddingTop: '5px',
     fontSize: '10px',
     color: 'white'
+  },
+  titleSelected: {
+    background: '#0000AA',
+    padding: '0 2px',
+    border: '1px dotted white',
+    borderRadius: '1px'
   }
 };
 
@@ -50,7 +56,15 @@ const DesktopItem = ({ classes, icon, title, selected }) => {
           WebkitMaskImage: selected ? `url(${icons[icon]})` : undefined
         }}
       />
-      <span className={classes.title}>{title}</span>
+      <div className={classes.titleContainer}>
+        <span
+          className={cx({
+            [classes.titleSelected]: selected
+          })}
+        >
+          {title}
+        </span>
+      </div>
     </div>
   );
 };
