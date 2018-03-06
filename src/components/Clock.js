@@ -18,7 +18,6 @@ const styles = {
     padding: '0 5px'
   },
   time: {
-    fontFamily: 'micro',
     fontSize: '9px'
   }
 };

@@ -3,7 +3,9 @@ import withStyles from 'react-jss';
 import p from 'prop-types';
 
 import startMenuItems from '../startMenuItems';
+import desktopItems from '../desktopItems';
 
+import SVGDefinitions from './SVGDefinitions'
 import TaskBar from './TaskBar';
 import Desktop from './Desktop';
 
@@ -27,13 +29,15 @@ const styles = {
     flexDirection: 'column',
     backgroundColor: '#008080',
     fontFamily: 'micro',
-    '-webkit-font-smoothing': 'none'
+    '-webkit-font-smoothing': 'none',
+    imageRendering: 'pixelated'
   }
 };
 
 const App = ({ classes }) => (
   <div className={classes.container}>
-    <Desktop />
+    <SVGDefinitions/>
+    <Desktop items={desktopItems} />
     <TaskBar startMenuItems={startMenuItems} />
   </div>
 );
