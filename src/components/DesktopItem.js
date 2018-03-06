@@ -40,12 +40,16 @@ const icons = {
   recycleBin
 };
 
-const DesktopItem = ({ classes, icon, title, selected }) => {
+const DesktopItem = ({ classes, icon, title, id, selected, onClick }) => {
   return (
     <div
       className={cx(classes.container, {
         [classes.active]: ''
       })}
+      onClick={e => {
+        e.stopPropagation();
+        onClick(id);
+      }}
     >
       <img
         src={icons[icon]}
@@ -71,7 +75,10 @@ const DesktopItem = ({ classes, icon, title, selected }) => {
 
 DesktopItem.propTypes = {
   title: p.string.isRequired,
-  icon: p.oneOf(Object.keys(icons))
+  icon: p.oneOf(Object.keys(icons)),
+  id: p.string.isRequired,
+  selected: p.bool,
+  onClick: p.func
 };
 
 export default withStyles(styles)(DesktopItem);

@@ -114,3 +114,5 @@ class StartMenu extends Component {
 }
 
 export default compose(withStyles(styles), withClickOutHandler)(StartMenu);
+
+// fixme -- clicking an item should skip the activation delay

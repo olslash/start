@@ -1,3 +1,5 @@
+import {uuid} from './helpers'
+
 export default [
   {
     title: 'My Computer',
@@ -7,4 +9,7 @@ export default [
     title: 'Recycle Bin',
     icon: 'recycleBin'
   }
-];
+].map(item => ({
+  ...item,
+    id: uuid()
+}));

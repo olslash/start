@@ -1,6 +1,14 @@
 import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import withStyles from 'react-jss';
 import p from 'prop-types';
+
+import {
+  selectedDesktopItemId,
+  selectDesktopItem,
+  desktopClick
+} from '../state/explorer';
 
 import DesktopItem from './DesktopItem';
 
@@ -18,9 +26,22 @@ const styles = {
   }
 };
 
-const Desktop = ({ classes, items = [] }) => (
-  <div className={classes.container}>
-    {items.map(item => <DesktopItem {...item} key={item.title} />)}
+const Desktop = ({
+  classes,
+  items = [],
+  selectedItemId,
+  selectDesktopItem,
+  desktopClick
+}) => (
+  <div className={classes.container} onClick={desktopClick}>
+    {items.map(item => (
+      <DesktopItem
+        {...item}
+        key={item.id}
+        selected={selectedItemId === item.id}
+        onClick={selectDesktopItem}
+      />
+    ))}
   </div>
 );
 
@@ -30,7 +51,21 @@ Desktop.propTypes = {
       title: p.string.isRequired,
       icon: p.string.isRequired
     })
-  )
+  ),
+  selectedItemId: p.string,
+  selectDesktopItem: p.func.isRequired,
+  desktopClick: p.func.isRequired
 };
 
-export default withStyles(styles)(Desktop);
+export default compose(
+  connect(
+    state => ({
+      selectedItemId: selectedDesktopItemId(state)
+    }),
+    { selectDesktopItem, desktopClick }
+  ),
+  withStyles(styles)
+)(Desktop);
+
+// fixme: clear selected item when desktop loses focus (click start menu,
+// within folder, taskbar, etc). clickaway?
