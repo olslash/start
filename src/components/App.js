@@ -30,13 +30,14 @@ const styles = {
     backgroundColor: '#008080',
     fontFamily: 'micro',
     '-webkit-font-smoothing': 'none',
-    imageRendering: 'pixelated'
+    imageRendering: 'pixelated',
+    userSelect: 'none'
   }
 };
 
 const App = ({ classes }) => (
   <div className={classes.container}>
-    <SVGDefinitions/>
+    <SVGDefinitions />
     <Desktop items={desktopItems} />
     <TaskBar startMenuItems={startMenuItems} />
   </div>
