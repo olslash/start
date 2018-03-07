@@ -3,7 +3,7 @@ import p from 'prop-types';
 
 const ButtonBase = ({ down, renderUp, renderDown, onClick, className, ...props }) => (
   <span
-    onClick={e => {
+    onMouseDown={e => {
       e.stopPropagation();
       onClick();
     }}

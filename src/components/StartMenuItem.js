@@ -114,6 +114,7 @@ class StartMenuItem extends Component {
         })}
         onMouseOver={this.setHovered}
         onMouseLeave={this.setUnHovered}
+        onMouseDown={this.activate}
       >
         <div className={classes.iconCol}>
           {icon && <img src={icons[icon]} className={classes.icon} />}
