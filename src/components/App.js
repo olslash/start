@@ -5,7 +5,7 @@ import p from 'prop-types';
 import startMenuItems from '../startMenuItems';
 import desktopItems from '../desktopItems';
 
-import SVGDefinitions from './SVGDefinitions'
+import SVGDefinitions from './SVGDefinitions';
 import TaskBar from './TaskBar';
 import Desktop from './Desktop';
 

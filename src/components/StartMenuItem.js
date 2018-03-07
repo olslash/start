@@ -72,7 +72,7 @@ class StartMenuItem extends Component {
     index: p.number,
     depth: p.number,
     activationDelayMs: p.number,
-    active: p.bool,
+    active: p.bool
   };
 
   static defaultProps = {
@@ -84,23 +84,41 @@ class StartMenuItem extends Component {
     hovered: false
   };
 
+  activateDelayTimeout = null;
+
   setHovered = e => {
-    this.setState({ hovered: true });
     e.stopPropagation();
 
+    if (this.state.hovered) {
+      return;
+    }
+    this.setState({ hovered: true });
+
     // if still hovered after delay, activate (for folders)
-    setTimeout(() => {
+    clearTimeout(this.activateDelayTimeout);
+    this.activateDelayTimeout = setTimeout(() => {
       if (this.state.hovered) {
-        this.props.onActivate({
-          depth: this.props.depth,
-          index: this.props.index
-        });
+        this.activate();
       }
     }, this.props.activationDelayMs);
   };
 
   setUnHovered = e => {
+    e.stopPropagation();
+
+    clearTimeout(this.activateDelayTimeout);
     this.setState({ hovered: false });
+  };
+
+  activate = (e = {}) => {
+    e.stopPropagation && e.stopPropagation();
+
+    clearTimeout(this.activateDelayTimeout);
+
+    this.props.onActivate({
+      depth: this.props.depth,
+      index: this.props.index
+    });
   };
 
   render() {

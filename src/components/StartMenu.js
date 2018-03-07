@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { compose } from 'redux';
+import { withProps } from 'recompose';
 import withStyles from 'react-jss';
 import p from 'prop-types';
 import withClickOutHandler from 'react-onclickoutside';
@@ -43,6 +44,8 @@ const styles = {
   }
 };
 
+export const clickoutIgnoreClassname = 'start-clickout-ignore';
+
 class StartMenu extends Component {
   static propTypes = {
     items: p.arrayOf(p.object).isRequired,
@@ -52,7 +55,7 @@ class StartMenu extends Component {
     onSetActiveFolderPath: p.func.isRequired
   };
 
-  handleClickOutside = (...args) => {
+  handleClickOutside = () => {
     this.props.onRequestClose();
   };
 
@@ -90,12 +93,14 @@ class StartMenu extends Component {
     </StartMenuItem>
   );
 
+  stopEvent = e => e.stopPropagation();
+
   render() {
     const { classes, bottom, items } = this.props;
 
     return (
       <div
-        onClick={e => e.stopPropagation()}
+        onClick={this.stopEvent}
         className={classes.container}
         style={{
           bottom
@@ -113,6 +118,13 @@ class StartMenu extends Component {
   }
 }
 
-export default compose(withStyles(styles), withClickOutHandler)(StartMenu);
+export default compose(
+  withStyles(styles),
+  withProps({
+    // don't trigger clickout events for start menu
+    outsideClickIgnoreClass: clickoutIgnoreClassname
+  }),
+  withClickOutHandler
+)(StartMenu);
 
 // fixme -- clicking an item should skip the activation delay

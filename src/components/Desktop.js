@@ -4,11 +4,7 @@ import { connect } from 'react-redux';
 import withStyles from 'react-jss';
 import p from 'prop-types';
 
-import {
-  selectedDesktopItemId,
-  selectDesktopItem,
-  desktopClick
-} from '../state/explorer';
+import { selectedDesktopItemId, selectDesktopItem } from '../state/explorer';
 
 import DesktopItem from './DesktopItem';
 
@@ -30,16 +26,16 @@ const Desktop = ({
   classes,
   items = [],
   selectedItemId,
-  selectDesktopItem,
-  desktopClick
+  selectDesktopItem
 }) => (
-  <div className={classes.container} onClick={desktopClick}>
+  <div className={classes.container}>
     {items.map(item => (
       <DesktopItem
         {...item}
         key={item.id}
         selected={selectedItemId === item.id}
         onClick={selectDesktopItem}
+        onClickOut={() => !!selectedItemId && selectDesktopItem(null)}
       />
     ))}
   </div>
@@ -53,8 +49,7 @@ Desktop.propTypes = {
     })
   ),
   selectedItemId: p.string,
-  selectDesktopItem: p.func.isRequired,
-  desktopClick: p.func.isRequired
+  selectDesktopItem: p.func.isRequired
 };
 
 export default compose(
@@ -62,10 +57,10 @@ export default compose(
     state => ({
       selectedItemId: selectedDesktopItemId(state)
     }),
-    { selectDesktopItem, desktopClick }
+    { selectDesktopItem }
   ),
   withStyles(styles)
 )(Desktop);
 
-// fixme: clear selected item when desktop loses focus (click start menu,
-// within folder, taskbar, etc). clickaway?
+
+  // mousedown instead of click for selections

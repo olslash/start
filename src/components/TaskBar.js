@@ -66,7 +66,6 @@ const TaskBar = ({ height = 20, ...props }) => (
           onRequestClose={props.closeStartMenu}
           onSetActiveFolderPath={props.setStartMenuActiveFolderPath}
           activeFolderPath={props.startMenuActiveFolderPath}
-          outsideClickIgnoreClass="start-clickout-ignore"
         />
       )}
       <div className={props.classes.leftMenuItems}>
@@ -75,9 +74,6 @@ const TaskBar = ({ height = 20, ...props }) => (
           onClick={
             props.startMenuOpen ? props.closeStartMenu : props.openStartMenu
           }
-          // don't trigger clickout events for start menu
-          // https://github.com/Pomax/react-onclickoutside#marking-elements-as-skip-over-this-one-during-the-event-loop
-          className="start-clickout-ignore"
         />
       </div>
       <div className={props.classes.rightMenuItems}>

@@ -4,7 +4,6 @@ const OPEN_START_MENU = 'OPEN_START_MENU';
 const CLOSE_START_MENU = 'CLOSE_START_MENU';
 const SET_START_MENU_ACTIVE_FOLDER_PATH = 'SET_START_MENU_ACTIVE_FOLDER_PATH';
 const SELECT_DESKTOP_ITEM = 'SELECT_DESKTOP_ITEM';
-const DESKTOP_CLICK = 'DESKTOP_CLICK';
 
 export const reducer = createReducer(
   {
@@ -50,12 +49,6 @@ export const reducer = createReducer(
         ...state,
         selectedDesktopItemId: action.payload.id
       };
-    },
-    [DESKTOP_CLICK](state) {
-      return {
-        ...state,
-        selectedDesktopItemId: null
-      };
     }
   }
 );
@@ -85,12 +78,6 @@ export function selectDesktopItem(id) {
   return {
     type: SELECT_DESKTOP_ITEM,
     payload: { id }
-  };
-}
-
-export function desktopClick() {
-  return {
-    type: DESKTOP_CLICK
   };
 }
 

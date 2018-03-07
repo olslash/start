@@ -4,6 +4,7 @@ import p from 'prop-types';
 import startUp from '../../resources/start-up.png';
 import startDown from '../../resources/start-down.png';
 import ButtonBase from './ButtonBase';
+import { clickoutIgnoreClassname } from './StartMenu'
 
 const StartButtonUp = () => <img style={{ height: '100%' }} src={startUp} />;
 
@@ -16,6 +17,9 @@ const StartButton = ({ ...props }) => (
     {...props}
     renderUp={StartButtonUp}
     renderDown={StartButtonDown}
+    // don't trigger clickout events for start menu
+    // https://github.com/Pomax/react-onclickoutside#marking-elements-as-skip-over-this-one-during-the-event-loop
+    className={clickoutIgnoreClassname}
   />
 );
 
