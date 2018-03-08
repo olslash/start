@@ -106,6 +106,9 @@ class StartMenu extends Component {
         children &&
         !!children.length
       }
+      style={{
+        zIndex: 1
+      }}
     >
       {!!children.length &&
         // only render submenu for active path
@@ -115,6 +118,9 @@ class StartMenu extends Component {
               this.renderItem(c, index, depth + 1)
             )}
             rightOffset={135}
+            style={{
+              zIndex: depth + 1
+            }}
           />
         )}
     </StartMenuItem>
