@@ -5,23 +5,42 @@ import withStyles from 'react-jss';
 import p from 'prop-types';
 import withClickOutHandler from 'react-onclickoutside';
 
-import background from '../../resources/startmenu-blank.png';
+import startMenuLogo from '../../resources/startmenu-logo.png';
 
+import WindowBase from './WindowBase';
 import StartMenuItem from './StartMenuItem';
 import StartSubMenu from './StartSubMenu';
 
 const styles = {
+  window: {
+    height: '210px',
+    width: '138px',
+    position: 'absolute'
+  },
   container: {
     display: 'flex',
+    height: '100%',
+    paddingBottom: '2px'
+  },
+  logoContainer: {
+    display: 'flex',
     flexDirection: 'column',
-    height: '200px',
-    width: '138px',
-    paddingLeft: '20px',
-    paddingRight: '3px',
-    paddingBottom: '3px',
-    position: 'absolute',
-    background: `url(${background}) no-repeat left center`,
-    backgroundSize: 'contain'
+    justifyContent: 'flex-end',
+    width: '20px',
+    height: '100%',
+    margin: '1px 0px 1px 1px',
+    padding: '0 2px 5px 2px',
+    backgroundColor: '#868A8E',
+  },
+  logo: {
+    height: '100px'
+  },
+  itemsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+
+    height: '100%',
+    width: '100%'
   },
   top: {
     flexGrow: 1,
@@ -29,18 +48,26 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+    paddingTop: '1px'
+  },
+  dividerContainer: {
+    height: '8px',
+    paddingRight: '1px',
     paddingTop: '2px'
   },
   divider: {
-    height: '8px'
+    width: '100%',
+    height: '1px',
+    boxSizing: 'content-box',
+    borderTop: '1px solid #868A8E',
+    backgroundColor: 'white',
   },
   bottom: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
-    height: '30px',
-    paddingBottom: '3px'
+    height: '30px'
   }
 };
 
@@ -99,21 +126,29 @@ class StartMenu extends Component {
     const { classes, bottom, items } = this.props;
 
     return (
-      <div
-        onClick={this.stopEvent}
-        className={classes.container}
+      <WindowBase
         style={{
           bottom
         }}
+        className={classes.window}
       >
-        <div className={classes.top}>
-          {items.map((item, index) => this.renderItem(item, index))}
+        <div className={classes.container}>
+        <div className={classes.logoContainer}>
+          <img src={startMenuLogo} className={classes.logo} />
         </div>
-        <div className={classes.divider} />
-        <div className={classes.bottom}>
-          <StartMenuItem icon="shutdown" label="Shut Down..." />
+        <div onClick={this.stopEvent} className={classes.itemsContainer}>
+          <div className={classes.top}>
+            {items.map((item, index) => this.renderItem(item, index))}
+          </div>
+          <div className={classes.dividerContainer}>
+          <div className={classes.divider} />
+          </div>
+          <div className={classes.bottom}>
+            <StartMenuItem icon="shutdown" label="Shut Down..." />
+          </div>
         </div>
-      </div>
+        </div>
+      </WindowBase>
     );
   }
 }

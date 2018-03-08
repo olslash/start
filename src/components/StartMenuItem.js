@@ -103,9 +103,7 @@ class StartMenuItem extends Component {
     }, this.props.activationDelayMs);
   };
 
-  setUnHovered = e => {
-    e.stopPropagation();
-
+  setUnHovered = () => {
     clearTimeout(this.activateDelayTimeout);
     this.setState({ hovered: false });
   };
