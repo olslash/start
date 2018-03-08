@@ -15,7 +15,7 @@ const StartSubMenu = ({ items, classes, style, rightOffset = 0 }) => (
   <WindowBase
     className={classes.container}
     style={{
-      top: -5,
+      top: -3,
       right: -rightOffset,
       ...style
     }}
