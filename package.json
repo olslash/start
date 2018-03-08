@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack-serve",
-    "build": "NODE_ENV=production webpack"
+    "build": "NODE_ENV=production webpack",
+    "format": "prettier --write \"./src/**/*.js\""
   },
   "dependencies": {
     "babel-cli": "^6.26.0",

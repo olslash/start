@@ -1,4 +1,4 @@
-import {uuid} from './helpers'
+import { uuid } from './helpers';
 
 export default [
   {
@@ -11,5 +11,5 @@ export default [
   }
 ].map(item => ({
   ...item,
-    id: uuid()
+  id: uuid()
 }));

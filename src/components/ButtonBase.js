@@ -1,7 +1,14 @@
 import React from 'react';
 import p from 'prop-types';
 
-const ButtonBase = ({ down, renderUp, renderDown, onClick, className, ...props }) => (
+const ButtonBase = ({
+  down,
+  renderUp,
+  renderDown,
+  onClick,
+  className,
+  ...props
+}) => (
   <span
     onMouseDown={e => {
       e.stopPropagation();
@@ -18,7 +25,7 @@ ButtonBase.propTypes = {
   renderUp: p.func.isRequired,
   renderDown: p.func.isRequired,
   onClick: p.func,
-  className: p.string,
+  className: p.string
 };
 
 export default ButtonBase;

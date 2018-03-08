@@ -62,5 +62,4 @@ export default compose(
   withStyles(styles)
 )(Desktop);
 
-
-  // mousedown instead of click for selections
+// mousedown instead of click for selections

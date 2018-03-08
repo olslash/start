@@ -60,14 +60,7 @@ class DesktopItem extends Component {
   };
 
   render() {
-    const {
-      classes,
-      icon,
-      title,
-      id,
-      selected,
-      onClick
-    } = this.props;
+    const { classes, icon, title, id, selected, onClick } = this.props;
 
     return (
       <div

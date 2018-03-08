@@ -30,7 +30,7 @@ const styles = {
     height: '100%',
     margin: '1px 0px 1px 1px',
     padding: '0 2px 5px 2px',
-    backgroundColor: '#868A8E',
+    backgroundColor: '#868A8E'
   },
   logo: {
     height: '100px'
@@ -60,7 +60,7 @@ const styles = {
     height: '1px',
     boxSizing: 'content-box',
     borderTop: '1px solid #868A8E',
-    backgroundColor: 'white',
+    backgroundColor: 'white'
   },
   bottom: {
     display: 'flex',
@@ -139,20 +139,20 @@ class StartMenu extends Component {
         className={classes.window}
       >
         <div className={classes.container}>
-        <div className={classes.logoContainer}>
-          <img src={startMenuLogo} className={classes.logo} />
-        </div>
-        <div onClick={this.stopEvent} className={classes.itemsContainer}>
-          <div className={classes.top}>
-            {items.map((item, index) => this.renderItem(item, index))}
+          <div className={classes.logoContainer}>
+            <img src={startMenuLogo} className={classes.logo} />
           </div>
-          <div className={classes.dividerContainer}>
-          <div className={classes.divider} />
+          <div onClick={this.stopEvent} className={classes.itemsContainer}>
+            <div className={classes.top}>
+              {items.map((item, index) => this.renderItem(item, index))}
+            </div>
+            <div className={classes.dividerContainer}>
+              <div className={classes.divider} />
+            </div>
+            <div className={classes.bottom}>
+              <StartMenuItem icon="shutdown" label="Shut Down..." />
+            </div>
           </div>
-          <div className={classes.bottom}>
-            <StartMenuItem icon="shutdown" label="Shut Down..." />
-          </div>
-        </div>
         </div>
       </WindowBase>
     );

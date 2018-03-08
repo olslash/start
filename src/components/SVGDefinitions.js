@@ -11,11 +11,16 @@ const SVGDefinitions = () => (
           width="40px"
           height="40px"
         />
-        <feTile result="screendoor-tiled" in="screendoor-overlay"/>
+        <feTile result="screendoor-tiled" in="screendoor-overlay" />
 
         <feFlood floodColor="#0000AA" floodOpacity="0.6" result="flood" />
 
-        <feBlend result="screened" in="SourceGraphic" in2="screendoor-tiled" mode="darken" />
+        <feBlend
+          result="screened"
+          in="SourceGraphic"
+          in2="screendoor-tiled"
+          mode="darken"
+        />
         <feBlend in="flood" in2="screened" mode="lighten" />
       </filter>
     </defs>

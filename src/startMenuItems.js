@@ -6,7 +6,7 @@ export default [
       {
         title: 'Some Folder',
         icon: 'programs',
-        children: [{title: 'programs folder app 1', icon: 'run'}]
+        children: [{ title: 'programs folder app 1', icon: 'run' }]
       },
       {
         title: 'programs app 1',
@@ -44,6 +44,6 @@ export default [
       }
     ]
   },
-  {title: 'Help', icon: 'help'}, // todo: action
-  {title: 'Run', icon: 'run'}
+  { title: 'Help', icon: 'help' }, // todo: action
+  { title: 'Run', icon: 'run' }
 ];
