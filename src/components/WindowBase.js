@@ -1,6 +1,7 @@
 import React from 'react';
 import withStyles from 'react-jss';
 import p from 'prop-types';
+import cx from 'classnames';
 
 const styles = {
   outerBorder: {
@@ -16,6 +17,10 @@ const styles = {
     paddingBottom: '1px',
     paddingRight: '1px'
   },
+  outerBorderLite: {
+    borderLeft: 'none',
+    borderTop: 'none',
+  },
   innerBorder: {
     height: '100%',
     width: '100%',
@@ -27,17 +32,23 @@ const styles = {
   }
 };
 
-const WindowBase = ({ classes, className, style, children }) => (
+const WindowBase = ({ classes, className, style, innerStyle, children, button }) => (
   <div className={className} style={style}>
-    <div className={classes.outerBorder}>
-      <div className={classes.innerBorder}>{children}</div>
+    <div className={cx(classes.outerBorder, {
+      [classes.outerBorderLite]: button
+    })}>
+      <div className={classes.innerBorder} style={innerStyle}>
+        {children}
+      </div>
     </div>
   </div>
 );
 
 WindowBase.propTypes = {
   className: p.string,
-  style: p.objectOf(p.any)
+  style: p.objectOf(p.any),
+  innerStyle: p.objectOf(p.any),
+  button: p.bool
 };
 
 export default withStyles(styles)(WindowBase);

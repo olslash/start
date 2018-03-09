@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import withStyles from 'react-jss';
 import p from 'prop-types';
 
+import myComputer from '../../resources/icon-my-computer.png';
 import { selectedDesktopItemId, selectDesktopItem } from '../state/explorer';
 
+import Folder from './Folder';
 import DesktopItem from './DesktopItem';
 
 const styles = {
@@ -29,15 +31,22 @@ const Desktop = ({
   selectDesktopItem
 }) => (
   <div className={classes.container}>
-    {items.map(item => (
-      <DesktopItem
-        {...item}
-        key={item.id}
-        selected={selectedItemId === item.id}
-        onClick={selectDesktopItem}
-        onClickOut={() => !!selectedItemId && selectDesktopItem(null)}
+    <Fragment>
+      {items.map(item => (
+        <DesktopItem
+          {...item}
+          key={item.id}
+          selected={selectedItemId === item.id}
+          onClick={selectDesktopItem}
+          onClickOut={() => !!selectedItemId && selectDesktopItem(null)}
+        />
+      ))}
+      <Folder
+        title="My Computer"
+        // active
+        icon={myComputer}
       />
-    ))}
+    </Fragment>
   </div>
 );
 
@@ -61,5 +70,3 @@ export default compose(
   ),
   withStyles(styles)
 )(Desktop);
-
-// mousedown instead of click for selections
