@@ -4,6 +4,11 @@ import p from 'prop-types';
 import cx from 'classnames';
 
 const styles = {
+  containerButton: {
+    height: '100%',
+    width: '100%',
+    boxShadow: '0px 0px 0 1px black'
+  },
   outerBorder: {
     height: '100%',
     width: '100%',
@@ -17,9 +22,12 @@ const styles = {
     paddingBottom: '1px',
     paddingRight: '1px'
   },
-  outerBorderLite: {
+  outerBorderButton: {
     borderLeft: 'none',
     borderTop: 'none',
+    borderRight: '1px solid #868A8E',
+    borderBottom: '1px solid #868A8E',
+    boxShadow: '-0.5px -0.5px 0 0.5px white'
   },
   innerBorder: {
     height: '100%',
@@ -29,15 +37,38 @@ const styles = {
     borderTop: '1px solid white',
 
     boxShadow: '0.5px 0.5px 0 0.5px #868A8E'
+  },
+  innerBorderButton: {
+    boxShadow: 'none',
+    borderLeft: 'none',
+    borderTop: 'none'
   }
 };
 
-const WindowBase = ({ classes, className, style, innerStyle, children, button }) => (
-  <div className={className} style={style}>
-    <div className={cx(classes.outerBorder, {
-      [classes.outerBorderLite]: button
-    })}>
-      <div className={classes.innerBorder} style={innerStyle}>
+const WindowBase = ({
+  classes,
+  className,
+  style,
+  innerStyle,
+  children,
+  button,
+  onClick
+}) => (
+  <div
+    className={cx(className, cx({ [classes.containerButton]: button }))}
+    style={style}
+  >
+    <div
+      className={cx(classes.outerBorder, {
+        [classes.outerBorderButton]: button
+      })}
+    >
+      <div
+        className={cx(classes.innerBorder, classes.inner, {
+          [classes.innerBorderButton]: button
+        })}
+        style={innerStyle}
+      >
         {children}
       </div>
     </div>

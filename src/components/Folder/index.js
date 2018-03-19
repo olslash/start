@@ -23,7 +23,10 @@ const Folder = ({
   height = 200,
   width = 200,
   top = 0,
-  left = 0
+  left = 0,
+  onMinimize,
+  onMaximize,
+  onClose
 }) => (
   <WindowBase
     style={{ height, width, top, left }}
@@ -32,7 +35,14 @@ const Folder = ({
     }}
     className={classes.container}
   >
-    <TitleBar title={title} active={active} icon={icon}/>
+    <TitleBar
+      title={title}
+      active={active}
+      icon={icon}
+      onMinimize={onMinimize}
+      onMaximize={onMaximize}
+      onClose={onClose}
+    />
   </WindowBase>
 );
 

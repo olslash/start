@@ -43,8 +43,11 @@ const Desktop = ({
       ))}
       <Folder
         title="My Computer"
-        // active
+        active
         icon={myComputer}
+        onMinimize={() => console.log('Minimize')}
+        onMaximize={() => console.log('Maximize')}
+        onClose={() => console.log('Close')}
       />
     </Fragment>
   </div>

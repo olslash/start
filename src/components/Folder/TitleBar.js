@@ -5,6 +5,10 @@ import p from 'prop-types';
 
 import WindowBase from '../WindowBase';
 
+import closeIcon from '../../../resources/button-close.png';
+import minimizeIcon from '../../../resources/button-minimize.png';
+import maximizeIcon from '../../../resources/button-maximize.png';
+
 const styles = {
   container: {
     display: 'flex',
@@ -26,7 +30,8 @@ const styles = {
     flexGrow: 1
   },
   rightContainer: {
-    display: 'flex'
+    display: 'flex',
+    alignItems: 'center'
   },
   title: {
     paddingLeft: '2px'
@@ -35,12 +40,20 @@ const styles = {
     height: '100%'
   },
   button: {
-    height: '11px',
-    width: '11px',
-    marginLeft: '1px'
+    height: '10px',
+    width: '12px',
+    marginLeft: '2px'
   },
   closeButton: {
     marginLeft: '4px'
+  },
+  buttonIcon: {
+    height: '8px',
+    width: '8px'
+  },
+  buttonIconContainer: {
+    display: 'flex',
+    alignItems: 'center'
   }
 };
 
@@ -63,9 +76,33 @@ const TitleBar = ({
       <span className={classes.title}>{title}</span>
     </div>
     <div className={classes.rightContainer}>
-      <WindowBase button className={classes.button} />
-      <WindowBase button className={classes.button} />
-      <WindowBase button className={cx(classes.button, classes.closeButton)} />
+      {onMinimize && (
+        <WindowBase
+          button
+          className={classes.button}
+          classes={{ inner: classes.buttonIconContainer }}
+        >
+          {<img src={minimizeIcon} className={classes.buttonIcon} />}
+        </WindowBase>
+      )}
+      {onMaximize && (
+        <WindowBase
+          button
+          className={classes.button}
+          classes={{ inner: classes.buttonIconContainer }}
+        >
+          {<img src={maximizeIcon} className={classes.buttonIcon} />}
+        </WindowBase>
+      )}
+      {onClose && (
+        <WindowBase
+          button
+          className={cx(classes.button, classes.closeButton)}
+          classes={{ inner: classes.buttonIconContainer }}
+        >
+          {<img src={closeIcon} className={classes.buttonIcon} />}
+        </WindowBase>
+      )}
     </div>
   </div>
 );
