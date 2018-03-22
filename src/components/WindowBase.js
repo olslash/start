@@ -10,6 +10,9 @@ const styles = {
   _containerButton: {
     boxShadow: '0px 0px 0 1px black'
   },
+  _containerButtonDepressed: {
+    boxShadow: '0px 0px 0 1px white'
+  },
   _outerBorder: {
     height: '100%',
     width: '100%',
@@ -29,6 +32,13 @@ const styles = {
     borderRight: '1px solid #868A8E',
     borderBottom: '1px solid #868A8E',
     boxShadow: '-0.5px -0.5px 0 0.5px white'
+  },
+  _outerBorderButtonDepressed: {
+    boxShadow: '-0.5px -0.5px 0 0.5px black',
+    borderRight: 'none',
+    borderBottom: 'none',
+    borderLeft: '1px solid #868A8E',
+    borderTop: '1px solid #868A8E'
   },
   _innerBorder: {
     height: '100%',
@@ -50,12 +60,8 @@ const styles = {
     width: '100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
-  },
-  _iconImg: {
-    // position: 'absolute',
-    // height: '100%',
-    // width: '100%',
+    justifyContent: 'center',
+    left: '-0.5px' // deal with offset from drop shadows
   }
 };
 
@@ -64,25 +70,25 @@ const WindowBase = ({
   style = {},
   children,
   button,
+  buttonDepressed = true,
   iconSrc,
   iconClassName,
   onClick
 }) => (
   <div
     className={cx(classes.root, classes._container, {
-      [classes._containerButton]: button
+      [classes._containerButton]: button,
+      [classes._containerButtonDepressed]: buttonDepressed
     })}
     style={style}
   >
     <div className={classes._iconImgContainer}>
-      <img
-        src={iconSrc}
-        className={cx(classes.icon, classes._iconImg)}
-      />
+      <img src={iconSrc} className={classes.icon} />
     </div>
     <div
       className={cx(classes._outerBorder, {
-        [classes._outerBorderButton]: button
+        [classes._outerBorderButton]: button,
+        [classes._outerBorderButtonDepressed]: buttonDepressed
       })}
     >
       <div
