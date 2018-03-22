@@ -4,12 +4,13 @@ import p from 'prop-types';
 import cx from 'classnames';
 
 const styles = {
-  containerButton: {
-    height: '100%',
-    width: '100%',
+  _container: {
+    position: 'relative'
+  },
+  _containerButton: {
     boxShadow: '0px 0px 0 1px black'
   },
-  outerBorder: {
+  _outerBorder: {
     height: '100%',
     width: '100%',
     backgroundColor: '#C3C7CB',
@@ -22,14 +23,14 @@ const styles = {
     paddingBottom: '1px',
     paddingRight: '1px'
   },
-  outerBorderButton: {
+  _outerBorderButton: {
     borderLeft: 'none',
     borderTop: 'none',
     borderRight: '1px solid #868A8E',
     borderBottom: '1px solid #868A8E',
     boxShadow: '-0.5px -0.5px 0 0.5px white'
   },
-  innerBorder: {
+  _innerBorder: {
     height: '100%',
     width: '100%',
 
@@ -38,36 +39,56 @@ const styles = {
 
     boxShadow: '0.5px 0.5px 0 0.5px #868A8E'
   },
-  innerBorderButton: {
+  _innerBorderButton: {
     boxShadow: 'none',
     borderLeft: 'none',
     borderTop: 'none'
+  },
+  _iconImgContainer: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  _iconImg: {
+    // position: 'absolute',
+    // height: '100%',
+    // width: '100%',
   }
 };
 
 const WindowBase = ({
   classes,
-  className,
-  style,
-  innerStyle,
+  style = {},
   children,
   button,
+  iconSrc,
+  iconClassName,
   onClick
 }) => (
   <div
-    className={cx(className, cx({ [classes.containerButton]: button }))}
+    className={cx(classes.root, classes._container, {
+      [classes._containerButton]: button
+    })}
     style={style}
   >
+    <div className={classes._iconImgContainer}>
+      <img
+        src={iconSrc}
+        className={cx(classes.icon, classes._iconImg)}
+      />
+    </div>
     <div
-      className={cx(classes.outerBorder, {
-        [classes.outerBorderButton]: button
+      className={cx(classes._outerBorder, {
+        [classes._outerBorderButton]: button
       })}
     >
       <div
-        className={cx(classes.innerBorder, classes.inner, {
-          [classes.innerBorderButton]: button
+        className={cx(classes.inner, classes._innerBorder, {
+          [classes._innerBorderButton]: button
         })}
-        style={innerStyle}
       >
         {children}
       </div>

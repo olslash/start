@@ -133,10 +133,12 @@ class StartMenu extends Component {
 
     return (
       <WindowBase
+        classes={{
+          root: classes.window
+        }}
         style={{
           bottom
         }}
-        className={classes.window}
       >
         <div className={classes.container}>
           <div className={classes.logoContainer}>

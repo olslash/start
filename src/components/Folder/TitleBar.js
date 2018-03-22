@@ -48,8 +48,8 @@ const styles = {
     marginLeft: '4px'
   },
   buttonIcon: {
-    height: '8px',
-    width: '8px'
+    height: '11px',
+    width: '11px'
   },
   buttonIconContainer: {
     display: 'flex',
@@ -79,29 +79,35 @@ const TitleBar = ({
       {onMinimize && (
         <WindowBase
           button
-          className={classes.button}
-          classes={{ inner: classes.buttonIconContainer }}
-        >
-          {<img src={minimizeIcon} className={classes.buttonIcon} />}
-        </WindowBase>
+          classes={{
+            root: classes.button,
+            inner: classes.buttonIconContainer,
+            icon: classes.buttonIcon
+          }}
+          iconSrc={minimizeIcon}
+        />
       )}
       {onMaximize && (
         <WindowBase
           button
-          className={classes.button}
-          classes={{ inner: classes.buttonIconContainer }}
-        >
-          {<img src={maximizeIcon} className={classes.buttonIcon} />}
-        </WindowBase>
+          classes={{
+            root: classes.button,
+            inner: classes.buttonIconContainer,
+            icon: classes.buttonIcon
+          }}
+          iconSrc={maximizeIcon}
+        />
       )}
       {onClose && (
         <WindowBase
           button
-          className={cx(classes.button, classes.closeButton)}
-          classes={{ inner: classes.buttonIconContainer }}
-        >
-          {<img src={closeIcon} className={classes.buttonIcon} />}
-        </WindowBase>
+          classes={{
+            root: cx(classes.button, classes.closeButton),
+            inner: classes.buttonIconContainer,
+            icon: classes.buttonIcon
+          }}
+          iconSrc={closeIcon}
+        />
       )}
     </div>
   </div>

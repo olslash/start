@@ -13,7 +13,7 @@ const styles = {
 
 const StartSubMenu = ({ items, classes, style, rightOffset = 0 }) => (
   <WindowBase
-    className={classes.container}
+    classes={{ root: classes.container }}
     style={{
       top: -3,
       right: -rightOffset,

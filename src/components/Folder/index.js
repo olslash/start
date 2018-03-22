@@ -8,6 +8,9 @@ import TitleBar from './TitleBar';
 const styles = {
   container: {
     position: 'absolute'
+  },
+  containerInner: {
+    padding: '1px'
   }
 };
 
@@ -30,10 +33,10 @@ const Folder = ({
 }) => (
   <WindowBase
     style={{ height, width, top, left }}
-    innerStyle={{
-      padding: '1px'
+    classes={{
+      root: classes.container,
+      inner: classes.containerInner
     }}
-    className={classes.container}
   >
     <TitleBar
       title={title}
