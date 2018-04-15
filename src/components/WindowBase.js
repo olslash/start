@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import withStyles from 'react-jss';
 import p from 'prop-types';
 import cx from 'classnames';
@@ -6,12 +6,6 @@ import cx from 'classnames';
 const styles = {
   _container: {
     position: 'relative'
-  },
-  _containerButton: {
-    boxShadow: '0px 0px 0 1px black'
-  },
-  _containerButtonDepressed: {
-    boxShadow: '0px 0px 0 1px white'
   },
   _outerBorder: {
     height: '100%',
@@ -26,20 +20,6 @@ const styles = {
     paddingBottom: '1px',
     paddingRight: '1px'
   },
-  _outerBorderButton: {
-    borderLeft: 'none',
-    borderTop: 'none',
-    borderRight: '1px solid #868A8E',
-    borderBottom: '1px solid #868A8E',
-    boxShadow: '-0.5px -0.5px 0 0.5px white'
-  },
-  _outerBorderButtonDepressed: {
-    boxShadow: '-0.5px -0.5px 0 0.5px black',
-    borderRight: 'none',
-    borderBottom: 'none',
-    borderLeft: '1px solid #868A8E',
-    borderTop: '1px solid #868A8E'
-  },
   _innerBorder: {
     height: '100%',
     width: '100%',
@@ -48,11 +28,6 @@ const styles = {
     borderTop: '1px solid white',
 
     boxShadow: '0.5px 0.5px 0 0.5px #868A8E'
-  },
-  _innerBorderButton: {
-    boxShadow: 'none',
-    borderLeft: 'none',
-    borderTop: 'none'
   },
   _iconImgContainer: {
     position: 'absolute',
@@ -65,48 +40,36 @@ const styles = {
   }
 };
 
-const WindowBase = ({
-  classes,
-  style = {},
-  children,
-  button,
-  buttonDepressed = true,
-  iconSrc,
-  iconClassName,
-  onClick
-}) => (
-  <div
-    className={cx(classes.root, classes._container, {
-      [classes._containerButton]: button,
-      [classes._containerButtonDepressed]: buttonDepressed
-    })}
-    style={style}
-  >
-    <div className={classes._iconImgContainer}>
-      <img src={iconSrc} className={classes.icon} />
-    </div>
-    <div
-      className={cx(classes._outerBorder, {
-        [classes._outerBorderButton]: button,
-        [classes._outerBorderButtonDepressed]: buttonDepressed
-      })}
-    >
-      <div
-        className={cx(classes.inner, classes._innerBorder, {
-          [classes._innerBorderButton]: button
-        })}
-      >
-        {children}
-      </div>
-    </div>
-  </div>
-);
+class WindowBase extends Component {
+  static propTypes = {
+    className: p.string,
+    style: p.objectOf(p.any),
+    innerStyle: p.objectOf(p.any),
+    handlers: p.objectOf(p.func),
+    children: p.node,
+    iconSrc: p.string
+  };
 
-WindowBase.propTypes = {
-  className: p.string,
-  style: p.objectOf(p.any),
-  innerStyle: p.objectOf(p.any),
-  button: p.bool
-};
+  render() {
+    const { classes, style = {}, children, iconSrc, handlers } = this.props;
+
+    return (
+      <div
+        className={cx(classes._container, classes.root)}
+        style={style}
+        {...handlers}
+      >
+        <div className={classes._iconImgContainer}>
+          <img src={iconSrc} className={classes.icon} draggable={false} />
+        </div>
+        <div className={cx(classes._outerBorder, classes.outer)}>
+          <div className={cx(classes._innerBorder, classes.inner)}>
+            {children}
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
 
 export default withStyles(styles)(WindowBase);
