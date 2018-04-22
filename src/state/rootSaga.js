@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 import { fork, all } from 'redux-saga/effects';
 
 import { saga as clock } from './clock';

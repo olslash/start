@@ -15,6 +15,8 @@ import DesktopItem from './DesktopItem';
 
 import styles from './desktop.scss';
 
+const testLog = (msg) => () => console.log(msg)
+
 const Desktop = ({
   items = [],
   selectedItemId,
@@ -40,7 +42,7 @@ const Desktop = ({
         left={30}
         // onMinimize={() => console.log('Minimize')}
         // onMaximize={() => console.log('Maximize')}
-        onClose={() => console.log('Close')}
+        onClose={testLog('Close')}
       />
     </Fragment>
   </div>

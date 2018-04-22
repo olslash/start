@@ -30,7 +30,6 @@ export const reducer = createReducer(
 
       if (depth > state.startMenuActiveFolderPath.length) {
         console.warn('depth is out of bounds');
-        debugger;
         return state;
       }
 

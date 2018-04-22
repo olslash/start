@@ -1,4 +1,4 @@
-import { eventChannel, END } from 'redux-saga';
+import { eventChannel } from 'redux-saga';
 
 export function createReducer(initialState, handlers) {
   return function reducer(state = initialState, action) {

@@ -64,7 +64,6 @@ class ExplorerButton extends Component {
     e.stopPropagation();
     if (this.state.mouseOver && this.state.active) {
       this.props.onClick();
-      console.log('click');
     }
 
     this.setState({

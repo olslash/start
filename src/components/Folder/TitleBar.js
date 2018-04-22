@@ -56,6 +56,7 @@ const TitleBar = ({
             icon: styles.buttonIcon
           }}
           iconSrc={closeIcon}
+          onClick={onClose}
         />
       )}
     </div>

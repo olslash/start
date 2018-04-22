@@ -10,10 +10,7 @@ const ButtonBase = ({
   ...props
 }) => (
   <span
-    onMouseDown={e => {
-      e.stopPropagation();
-      onClick();
-    }}
+    onMouseDown={onClick}
     className={className}
   >
     {down ? renderDown(props) : renderUp(props)}
