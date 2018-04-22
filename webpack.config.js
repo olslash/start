@@ -15,9 +15,27 @@ module.exports = {
       },
       {
         include: __dirname + '/resources',
-        test: /\.(gif|png|jpe?g|svg)$/i,
+        test: /\.(gif|png|jpe?g|svg|ttf)$/i,
         use: { loader: 'url-loader' }
-      }
+      },
+      {
+        include: __dirname + '/src',
+        test: /\.scss$/,
+        loaders: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              localIdentName: '[local]--[hash:base64:5]',
+              alias: {
+                resources: __dirname + '/resources'
+              }
+            }
+          },
+          // 'sass-loader'
+        ]
+      },
     ]
   },
   plugins: [new HTMLPlugin()]

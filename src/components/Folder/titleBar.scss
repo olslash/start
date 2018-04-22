@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  background-color: #868a8e;
+  color: #c3c7cb;
+  height: 14px;
+  line-height: 12px;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 1px 2px 1px 2px;
+}
+
+.containerActive {
+  background-color: #0000aa;
+  color: white;
+}
+
+.leftContainer {
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-start;
+}
+
+.rightContainer {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  padding-left: 2px;
+}
+
+.icon {
+  height: 100%;
+  width: 15px;
+}
+
+.button {
+  height: 10px;
+  width: 12px;
+  margin-left: 2px;
+}
+
+.closeButton {
+  margin-left: 4px;
+}
+
+.buttonIcon {
+  height: 11px;
+  width: 11px;
+}
+
+.buttonIconContainer {
+  display: flex;
+  align-items: center;
+}

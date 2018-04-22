@@ -81,6 +81,10 @@ export function selectDesktopItem(id) {
   };
 }
 
+export function deselectDesktopItem() {
+  return selectDesktopItem(null)
+}
+
 function local(state) {
   return state.explorer;
 }

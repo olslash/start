@@ -1,5 +1,4 @@
 import React from 'react';
-import p from 'prop-types';
 
 import startUp from '../../resources/start-up.png';
 import startDown from '../../resources/start-down.png';

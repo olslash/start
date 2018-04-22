@@ -1,0 +1,18 @@
+.container {
+  width: 42px;
+}
+
+.background {
+  height: 100%;
+  /* fixme - use css border instead of background image */
+  background: url('resources/clock-inset-blank.png') no-repeat left center;
+  background-size: contain;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 5px;
+}
+
+.time {
+  font-size: 9px;
+}

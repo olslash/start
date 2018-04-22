@@ -1,0 +1,37 @@
+.container {
+  position: relative
+}
+
+.outerBorder {
+  height: 100%;
+  width: 100%;
+  background-color: #C3C7CB;
+
+  border-left: 1px solid #C3C7CB;
+  border-top: 1px solid #C3C7CB;
+
+  box-shadow: 0.5px 0.5px 0 0.5px black;
+
+  padding-bottom: 1px;
+  padding-right: 1px;
+}
+
+.innerBorder {
+  height: 100%;
+  width: 100%;
+
+  border-left: 1px solid white;
+  border-top: 1px solid white;
+
+  box-shadow: 0.5px 0.5px 0 0.5px #868A8E
+}
+
+.iconImgContainer {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: -0.5px /* deal with offset from drop shadows */
+}

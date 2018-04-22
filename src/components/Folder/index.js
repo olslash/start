@@ -1,25 +1,16 @@
 import React from 'react';
-import withStyles from 'react-jss';
 import p from 'prop-types';
 
 import WindowBase from '../WindowBase';
 import TitleBar from './TitleBar';
 
-const styles = {
-  container: {
-    position: 'absolute'
-  },
-  containerInner: {
-    padding: '1px'
-  }
-};
+import styles from './index.scss';
 
 // todo:
 // base inset container component - depth levels (ie. footer inset vs main
 // content inset)
 
 const Folder = ({
-  classes,
   title,
   icon,
   active = false,
@@ -34,8 +25,8 @@ const Folder = ({
   <WindowBase
     style={{ height, width, top, left }}
     classes={{
-      root: classes.container,
-      inner: classes.containerInner
+      root: styles.container,
+      inner: styles.containerInner
     }}
   >
     <TitleBar
@@ -57,7 +48,9 @@ Folder.propTypes = {
   left: p.number,
   height: p.number,
   width: p.number,
-  style: p.objectOf(p.any)
+  onMinimize: p.func,
+  onMaximize: p.func,
+  onClose: p.func
 };
 
-export default withStyles(styles)(Folder);
+export default Folder;

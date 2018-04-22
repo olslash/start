@@ -1,0 +1,21 @@
+:global * {
+  box-sizing: border-box;
+  cursor: default;
+}
+
+@font-face {
+  font-family: micro;
+  src: url('resources/micross.ttf');
+}
+
+.container {
+  height: 300px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  background-color: #008080;
+  font-family: micro, sans-serif;
+  -webkit-font-smoothing: none;
+  image-rendering: pixelated;
+  user-select: none;
+}

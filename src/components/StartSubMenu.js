@@ -1,19 +1,13 @@
-import React, { Component } from 'react';
-import withStyles from 'react-jss';
+import React from 'react';
 import p from 'prop-types';
 
 import WindowBase from './WindowBase';
 
-const styles = {
-  container: {
-    position: 'absolute',
-    width: '140px'
-  }
-};
+import styles from './startSubMenu.scss';
 
-const StartSubMenu = ({ items, classes, style, rightOffset = 0 }) => (
+const StartSubMenu = ({ items, style, rightOffset = 0 }) => (
   <WindowBase
-    classes={{ root: classes.container }}
+    classes={{ root: styles.container }}
     style={{
       top: -3,
       right: -rightOffset,
@@ -30,4 +24,4 @@ StartSubMenu.propTypes = {
   style: p.objectOf(p.any)
 };
 
-export default withStyles(styles)(StartSubMenu);
+export default StartSubMenu;

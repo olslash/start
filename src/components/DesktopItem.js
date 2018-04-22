@@ -2,41 +2,13 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import { withProps } from 'recompose';
 import cx from 'classnames';
-import withStyles from 'react-jss';
 import p from 'prop-types';
 import withClickOutHandler from 'react-onclickoutside';
 
 import myComputer from '../../resources/icon-my-computer.png';
 import recycleBin from '../../resources/icon-recycle-bin.png';
 
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: '70px',
-    height: '40px'
-  },
-  icon: {
-    width: '28px'
-  },
-  iconSelected: {
-    '-webkit-mask-size': '28px',
-    filter: 'url(#screendoor)',
-    '-webkit-mask-position': '0 0'
-  },
-  titleContainer: {
-    paddingTop: '5px',
-    fontSize: '10px',
-    color: 'white'
-  },
-  titleSelected: {
-    background: '#0000AA',
-    padding: '0 2px',
-    border: '1px dotted white',
-    borderRadius: '1px'
-  }
-};
+import styles from './desktopItem.scss';
 
 const icons = {
   myComputer,
@@ -59,37 +31,36 @@ class DesktopItem extends Component {
     this.props.onClickOut();
   };
 
+  handleClick = e => {
+    e.stopPropagation();
+    this.props.onClick(this.props.id);
+  };
+
   render() {
-    const { classes, icon, title, id, selected, onClick } = this.props;
+    const { icon, title, selected } = this.props;
 
     return (
       <div
         className={cx(
-          classes.container,
+          styles.container,
           // don't trigger clickout events for desktop items
-          clickoutIgnoreClassname,
-          {
-            [classes.active]: ''
-          }
+          clickoutIgnoreClassname
         )}
-        onMouseDown={e => {
-          e.stopPropagation();
-          onClick(id);
-        }}
+        onMouseDown={this.handleClick}
       >
         <img
           src={icons[icon]}
-          className={cx(classes.icon, {
-            [classes.iconSelected]: selected
+          className={cx(styles.icon, {
+            [styles.iconSelected]: selected
           })}
           style={{
             WebkitMaskImage: selected ? `url(${icons[icon]})` : undefined
           }}
         />
-        <div className={classes.titleContainer}>
+        <div className={styles.titleContainer}>
           <span
             className={cx({
-              [classes.titleSelected]: selected
+              [styles.titleSelected]: selected
             })}
           >
             {title}
@@ -101,7 +72,6 @@ class DesktopItem extends Component {
 }
 
 export default compose(
-  withStyles(styles),
   withProps({
     outsideClickIgnoreClass: clickoutIgnoreClassname
   }),

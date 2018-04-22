@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import withStyles from 'react-jss';
 import p from 'prop-types';
 import cx from 'classnames';
 import { compose } from 'redux';
@@ -8,37 +7,16 @@ import { withProps } from 'recompose';
 
 import WindowBase from './WindowBase';
 
-const styles = {
-  _containerButton: {
-    boxShadow: '0px 0px 0 1px black'
-  },
-  _containerButtonDepressed: {
-    boxShadow: '0px 0px 0 1px white'
-  },
-  _outerBorderButton: {
-    borderLeft: 'none',
-    borderTop: 'none',
-    borderRight: '1px solid #868A8E',
-    borderBottom: '1px solid #868A8E',
-    boxShadow: '-0.5px -0.5px 0 0.5px white'
-  },
-  _outerBorderButtonDepressed: {
-    boxShadow: '-0.5px -0.5px 0 0.5px black',
-    borderRight: 'none',
-    borderBottom: 'none',
-    borderLeft: '1px solid #868A8E',
-    borderTop: '1px solid #868A8E'
-  },
-  _innerBorderButton: {
-    boxShadow: 'none',
-    borderLeft: 'none',
-    borderTop: 'none'
-  }
-};
+import styles from './explorerButton.scss';
 
 class ExplorerButton extends Component {
   static propTypes = {
-    onClick: p.func
+    onClick: p.func,
+    classes: p.shape({
+      root: p.string,
+      outer: p.string,
+      inner: p.string
+    })
   };
 
   static defaultProps = {
@@ -106,27 +84,26 @@ class ExplorerButton extends Component {
     return (
       <WindowBase
         {...rest}
-        button
         classes={{
           ...classes,
 
           root: cx(
-            classes._containerButton,
+            styles.containerButton,
             {
-              [classes._containerButtonDepressed]: this.state.depressed
+              [styles.containerButtonDepressed]: this.state.depressed
             },
             classes.root
           ),
 
           outer: cx(
-            classes._outerBorderButton,
+            styles.outerBorderButton,
             {
-              [classes._outerBorderButtonDepressed]: this.state.depressed
+              [styles.outerBorderButtonDepressed]: this.state.depressed
             },
             classes.outer
           ),
 
-          inner: cx(classes._innerBorderButton, classes.inner)
+          inner: cx(styles.innerBorderButton, classes.inner)
         }}
         handlers={{
           onMouseEnter: this.handleMouseEnter,
@@ -140,7 +117,6 @@ class ExplorerButton extends Component {
 }
 
 export default compose(
-  withStyles(styles),
   withProps({
     eventTypes: 'mouseup'
   }),
