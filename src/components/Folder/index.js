@@ -25,6 +25,7 @@ const Folder = ({
 }) => (
   <BorderedContainer
     style={{ height, width, top, left }}
+    depth={2}
     classes={{
       root: styles.container,
       inner: styles.containerInner
@@ -38,7 +39,25 @@ const Folder = ({
       onMaximize={onMaximize}
       onClose={onClose}
     />
-    <BorderedContainer>Inset container content</BorderedContainer>
+    <BorderedContainer
+      depth={2}
+      borderColors={[
+        {
+          bottomRight: 'white',
+          topLeft: '#868a8e'
+        },
+        {
+          bottomRight: '#c3c7cb',
+          topLeft: 'black'
+        }
+      ]}
+      classes={{
+        root: styles.folderContentContainer,
+        inner: styles.folderContentContainerContent
+      }}
+    >
+      Inset container content
+    </BorderedContainer>
   </BorderedContainer>
 );
 
