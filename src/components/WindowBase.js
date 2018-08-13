@@ -28,9 +28,11 @@ class WindowBase extends Component {
         style={style}
         {...handlers}
       >
-        <div className={styles.iconImgContainer}>
-          <img src={iconSrc} className={classes.icon} draggable={false} />
-        </div>
+        {this.props.iconSrc && (
+          <div className={styles.iconImgContainer}>
+            <img src={iconSrc} className={classes.icon} draggable={false} />
+          </div>
+        )}
         <div className={cx(styles.outerBorder, classes.outer)}>
           <div className={cx(styles.innerBorder, classes.inner)}>
             {children}
