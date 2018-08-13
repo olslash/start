@@ -15,7 +15,7 @@ import DesktopItem from './DesktopItem';
 
 import styles from './desktop.scss';
 
-const testLog = (msg) => () => console.log(msg)
+const testLog = msg => () => console.log(msg);
 
 const Desktop = ({
   items = [],

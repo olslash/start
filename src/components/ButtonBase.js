@@ -9,10 +9,7 @@ const ButtonBase = ({
   className,
   ...props
 }) => (
-  <span
-    onMouseDown={onClick}
-    className={className}
-  >
+  <span onMouseDown={onClick} className={className}>
     {down ? renderDown(props) : renderUp(props)}
   </span>
 );

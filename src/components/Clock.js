@@ -1,7 +1,7 @@
 import React from 'react';
 import p from 'prop-types';
 
-import styles from './clock.scss'
+import styles from './clock.scss';
 
 const formatTime = date => {
   const hours = date

@@ -16,7 +16,7 @@ import StartButton from './StartButton';
 import StartMenu from './StartMenu';
 import Clock from './Clock';
 
-import styles from './taskBar.scss'
+import styles from './taskBar.scss';
 
 const TaskBar = ({ height = 20, ...props }) => (
   <div

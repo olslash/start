@@ -8,7 +8,7 @@ import closeIcon from '../../../resources/button-close.png';
 import minimizeIcon from '../../../resources/button-minimize.png';
 import maximizeIcon from '../../../resources/button-maximize.png';
 
-import styles from './titleBar.scss'
+import styles from './titleBar.scss';
 
 const TitleBar = ({
   title,
@@ -36,6 +36,7 @@ const TitleBar = ({
             icon: styles.buttonIcon
           }}
           iconSrc={minimizeIcon}
+          onClick={onMinimize}
         />
       )}
       {onMaximize && (
@@ -46,6 +47,7 @@ const TitleBar = ({
             icon: styles.buttonIcon
           }}
           iconSrc={maximizeIcon}
+          onClick={onMaximize}
         />
       )}
       {onClose && (

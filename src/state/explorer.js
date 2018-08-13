@@ -81,7 +81,7 @@ export function selectDesktopItem(id) {
 }
 
 export function deselectDesktopItem() {
-  return selectDesktopItem(null)
+  return selectDesktopItem(null);
 }
 
 function local(state) {
