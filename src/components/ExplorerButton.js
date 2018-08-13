@@ -102,7 +102,11 @@ class ExplorerButton extends Component {
             classes.outer
           ),
 
-          inner: cx(styles.innerBorderButton, classes.inner)
+          inner: cx(styles.innerBorderButton, classes.inner),
+
+          icon: cx(classes.icon, {
+            [styles.buttonIconDepressed]: this.state.depressed
+          })
         }}
         handlers={{
           onMouseEnter: this.handleMouseEnter,
