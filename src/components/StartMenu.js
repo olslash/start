@@ -6,7 +6,7 @@ import withClickOutHandler from 'react-onclickoutside';
 
 import startMenuLogo from '../../resources/startmenu-logo.png';
 
-import WindowBase from './WindowBase';
+import BorderedContainer from './BorderedContainer';
 import StartMenuItem from './StartMenuItem';
 import StartSubMenu from './StartSubMenu';
 
@@ -73,7 +73,8 @@ class StartMenu extends Component {
     const { bottom, items } = this.props;
 
     return (
-      <WindowBase
+      <BorderedContainer
+        depth={2}
         classes={{
           root: styles.window
         }}
@@ -97,7 +98,7 @@ class StartMenu extends Component {
             </div>
           </div>
         </div>
-      </WindowBase>
+      </BorderedContainer>
     );
   }
 }

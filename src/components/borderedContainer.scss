@@ -1,0 +1,26 @@
+.container {
+  position: relative;
+}
+
+.outerBorder {
+  height: 100%;
+  width: 100%;
+  background-color: #c3c7cb;
+  padding-bottom: 1px;
+  padding-right: 1px;
+}
+
+.innerBorder {
+  height: 100%;
+  width: 100%;
+}
+
+.iconImgContainer {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: -0.5px; /* deal with offset from drop shadows */
+}

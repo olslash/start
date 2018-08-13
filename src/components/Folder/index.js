@@ -3,6 +3,7 @@ import p from 'prop-types';
 
 import WindowBase from '../WindowBase';
 import TitleBar from './TitleBar';
+import BorderedContainer from '../BorderedContainer';
 
 import styles from './index.scss';
 
@@ -22,7 +23,7 @@ const Folder = ({
   onMaximize,
   onClose
 }) => (
-  <WindowBase
+  <BorderedContainer
     style={{ height, width, top, left }}
     classes={{
       root: styles.container,
@@ -37,7 +38,8 @@ const Folder = ({
       onMaximize={onMaximize}
       onClose={onClose}
     />
-  </WindowBase>
+    <BorderedContainer>Inset container content</BorderedContainer>
+  </BorderedContainer>
 );
 
 Folder.propTypes = {

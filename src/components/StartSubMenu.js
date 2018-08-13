@@ -1,12 +1,12 @@
 import React from 'react';
 import p from 'prop-types';
 
-import WindowBase from './WindowBase';
+import BorderedContainer from './BorderedContainer';
 
 import styles from './startSubMenu.scss';
 
 const StartSubMenu = ({ items, style, rightOffset = 0 }) => (
-  <WindowBase
+  <BorderedContainer
     classes={{ root: styles.container }}
     style={{
       top: -3,
@@ -15,7 +15,7 @@ const StartSubMenu = ({ items, style, rightOffset = 0 }) => (
     }}
   >
     {items}
-  </WindowBase>
+  </BorderedContainer>
 );
 
 StartSubMenu.propTypes = {

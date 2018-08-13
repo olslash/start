@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import p from 'prop-types';
 import cx from 'classnames';
 
+import BorderedContainer from './BorderedContainer';
 import styles from './WindowBase.scss';
 
 class WindowBase extends Component {

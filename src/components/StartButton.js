@@ -2,7 +2,7 @@ import React from 'react';
 
 import startUp from '../../resources/start-up.png';
 import startDown from '../../resources/start-down.png';
-import ButtonBase from './ButtonBase';
+import ImageButton from './ImageButton';
 import { clickoutIgnoreClassname } from './StartMenu';
 
 const StartButtonUp = () => <img style={{ height: '100%' }} src={startUp} />;
@@ -12,7 +12,7 @@ const StartButtonDown = () => (
 );
 
 const StartButton = ({ ...props }) => (
-  <ButtonBase
+  <ImageButton
     {...props}
     renderUp={StartButtonUp}
     renderDown={StartButtonDown}

@@ -2,7 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 import p from 'prop-types';
 
-import ExplorerButton from '../ExplorerButton';
+import ButtonBase from '../ButtonBase';
 
 import closeIcon from '../../../resources/button-close.png';
 import minimizeIcon from '../../../resources/button-minimize.png';
@@ -29,7 +29,7 @@ const TitleBar = ({
     </div>
     <div className={styles.rightContainer}>
       {onMinimize && (
-        <ExplorerButton
+        <ButtonBase
           classes={{
             root: styles.button,
             inner: styles.buttonIconContainer,
@@ -40,7 +40,7 @@ const TitleBar = ({
         />
       )}
       {onMaximize && (
-        <ExplorerButton
+        <ButtonBase
           classes={{
             root: styles.button,
             inner: styles.buttonIconContainer,
@@ -51,7 +51,7 @@ const TitleBar = ({
         />
       )}
       {onClose && (
-        <ExplorerButton
+        <ButtonBase
           classes={{
             root: cx(styles.button, styles.closeButton),
             inner: styles.buttonIconContainer,
