@@ -1,9 +1,8 @@
 import React from 'react';
 import p from 'prop-types';
 
-import WindowBase from '../WindowBase';
-import TitleBar from './TitleBar';
 import BorderedContainer from '../BorderedContainer';
+import TitleBar from './TitleBar';
 
 import styles from './index.scss';
 

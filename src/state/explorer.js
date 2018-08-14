@@ -1,15 +1,30 @@
 import { createReducer } from '../helpers/index';
 
-const OPEN_START_MENU = 'OPEN_START_MENU';
-const CLOSE_START_MENU = 'CLOSE_START_MENU';
-const SET_START_MENU_ACTIVE_FOLDER_PATH = 'SET_START_MENU_ACTIVE_FOLDER_PATH';
-const SELECT_DESKTOP_ITEM = 'SELECT_DESKTOP_ITEM';
+const OPEN_START_MENU = 'Open the start menu';
+const CLOSE_START_MENU = 'Close the start menu';
+const SET_START_MENU_ACTIVE_FOLDER_PATH =
+  'Set the active path of the start menu as the user navigates';
+const SELECT_ITEM = 'Select a desktop/folder item';
+const DESELECT_ITEM = 'Deselect a desktop/folder item';
+
+export const active_folder_state = 'active';
+export const inactive_folder_state = 'inactive';
 
 export const reducer = createReducer(
   {
     startMenuOpen: false,
     startMenuActiveFolderPath: [],
-    selectedDesktopItemId: null
+    activeFolderId: null,
+    // which item within each folder/the desktop is currently selected?
+    // (primary selection, not including multi-select)
+    primarySelectedFolderItemByFolderId: {},
+    // Does the current folder have an active selection, or is it inactive?
+    // (once an item has been selected in a folder, it can't actually be
+    // de-selected; clicking the folder background makes the selection
+    // "inactive" but the previous selection remains half-selected in the UI)
+    // folders start "inactive", move to "active" when an item is selected,
+    // and back to "inactive" when the folder BG is clicked.
+    folderSelectionStateByFolderId: {}
   },
   {
     [OPEN_START_MENU](state) {
@@ -25,9 +40,7 @@ export const reducer = createReducer(
         startMenuActiveFolderPath: []
       };
     },
-    [SET_START_MENU_ACTIVE_FOLDER_PATH](state, action) {
-      const { payload: { depth, index } } = action;
-
+    [SET_START_MENU_ACTIVE_FOLDER_PATH](state, { payload: { depth, index } }) {
       if (depth > state.startMenuActiveFolderPath.length) {
         console.warn('depth is out of bounds');
         return state;
@@ -43,10 +56,27 @@ export const reducer = createReducer(
               [...state.startMenuActiveFolderPath, index]
       };
     },
-    [SELECT_DESKTOP_ITEM](state, action) {
+    [SELECT_ITEM](state, { payload: { itemId, folderId } }) {
       return {
         ...state,
-        selectedDesktopItemId: action.payload.id
+        primarySelectedFolderItemByFolderId: {
+          ...state.primarySelectedFolderItemByFolderId,
+          [folderId]: itemId
+        },
+        folderSelectionStateByFolderId: {
+          ...state.folderSelectionStateByFolderId,
+          [folderId]: active_folder_state
+        }
+      };
+    },
+    [DESELECT_ITEM](state, { payload: { folderId } }) {
+      return {
+        ...state,
+        // item not actually deselected, just go back to inactive folder state
+        folderSelectionStateByFolderId: {
+          ...state.folderSelectionStateByFolderId,
+          [folderId]: inactive_folder_state
+        }
       };
     }
   }
@@ -73,15 +103,18 @@ export function setStartMenuActiveFolderPath({ depth, index }) {
   };
 }
 
-export function selectDesktopItem(id) {
+export function selectItem({ folderId, itemId }) {
   return {
-    type: SELECT_DESKTOP_ITEM,
-    payload: { id }
+    type: SELECT_ITEM,
+    payload: { folderId, itemId }
   };
 }
 
-export function deselectDesktopItem() {
-  return selectDesktopItem(null);
+export function deselectItem(folderId) {
+  return {
+    type: DESELECT_ITEM,
+    payload: { folderId }
+  };
 }
 
 function local(state) {
@@ -96,6 +129,14 @@ export function startMenuActiveFolderPath(state) {
   return local(state).startMenuActiveFolderPath;
 }
 
-export function selectedDesktopItemId(state) {
-  return local(state).selectedDesktopItemId;
+export function primarySelectedItemIdForFolder(state, folderId) {
+  // fixme: this needs to be the *first* folder item by default if none exists
+  return local(state).primarySelectedFolderItemByFolderId[folderId];
+}
+
+export function folderSelectionState(state, folderId) {
+  return (
+    local(state).folderSelectionStateByFolderId[folderId] ||
+    inactive_folder_state
+  );
 }

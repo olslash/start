@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import p from 'prop-types';
 import cx from 'classnames';
 
-import styles from './buttonBase.scss';
 import { compose } from 'redux';
 import { withProps } from 'recompose';
 import withClickOutHandler from 'react-onclickoutside';
+
+import styles from './buttonBase.scss';
 
 class ButtonBase extends Component {
   static propTypes = {
@@ -17,7 +18,6 @@ class ButtonBase extends Component {
     }),
     style: p.objectOf(p.any),
     innerStyle: p.objectOf(p.any),
-    handlers: p.objectOf(p.func),
     children: p.node,
     iconSrc: p.string,
     onClick: p.func
@@ -82,7 +82,7 @@ class ButtonBase extends Component {
   };
 
   render() {
-    const { classes, style = {}, children, iconSrc, handlers } = this.props;
+    const { classes, style = {}, children, iconSrc } = this.props;
 
     return (
       <div

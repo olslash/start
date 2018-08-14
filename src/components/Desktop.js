@@ -1,50 +1,56 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import p from 'prop-types';
 
 import myComputer from '../../resources/icon-my-computer.png';
 import {
-  selectedDesktopItemId,
-  selectDesktopItem,
-  deselectDesktopItem
+  primarySelectedItemIdForFolder,
+  folderSelectionState,
+  selectItem,
+  deselectItem,
+  active_folder_state,
+  inactive_folder_state
 } from '../state/explorer';
 
 import Folder from './Folder';
-import DesktopItem from './DesktopItem';
-
-import styles from './desktop.scss';
+import FolderItem from './FolderItem';
+import FolderItemGrid from './FolderItemGrid';
 
 const testLog = msg => () => console.log(msg);
 
 const Desktop = ({
   items = [],
   selectedItemId,
-  selectDesktopItem,
-  deselectDesktopItem
+  selectionState,
+  selectItem,
+  deselectItem
 }) => (
-  <div className={styles.container}>
-    <Fragment>
+  <div style={{ height: '100%' }}>
+    <FolderItemGrid onBackgroundClick={() => deselectItem('desktop')}>
       {items.map(item => (
-        <DesktopItem
+        <FolderItem
           {...item}
           key={item.id}
           selected={selectedItemId === item.id}
-          onClick={selectDesktopItem}
-          onClickOut={deselectDesktopItem}
+          partialSelection={selectionState === inactive_folder_state}
+          onClick={() => selectItem({ folderId: 'desktop', itemId: item.id })}
         />
       ))}
+    </FolderItemGrid>
+
+    {false && (
       <Folder
         title="My Computer"
         active
         icon={myComputer}
         top={30}
         left={30}
-        // onMinimize={() => console.log('Minimize')}
-        // onMaximize={() => console.log('Maximize')}
+        onMinimize={() => console.log('Minimize')}
+        onMaximize={() => console.log('Maximize')}
         onClose={testLog('Close')}
       />
-    </Fragment>
+    )}
   </div>
 );
 
@@ -56,15 +62,18 @@ Desktop.propTypes = {
     })
   ),
   selectedItemId: p.string,
-  selectDesktopItem: p.func.isRequired,
-  deselectDesktopItem: p.func.isRequired
+  selectionState: p.oneOf([active_folder_state, inactive_folder_state])
+    .isRequired,
+  selectItem: p.func.isRequired,
+  deselectItem: p.func.isRequired
 };
 
 export default compose(
   connect(
     state => ({
-      selectedItemId: selectedDesktopItemId(state)
+      selectedItemId: primarySelectedItemIdForFolder(state, 'desktop'),
+      selectionState: folderSelectionState(state, 'desktop')
     }),
-    { selectDesktopItem, deselectDesktopItem }
+    { selectItem, deselectItem }
   )
 )(Desktop);
