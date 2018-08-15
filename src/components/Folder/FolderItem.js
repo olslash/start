@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import cx from 'classnames';
 import p from 'prop-types';
 
-import myComputer from '../../resources/icon-my-computer.png';
-import recycleBin from '../../resources/icon-recycle-bin.png';
+import myComputer from '../../../resources/icon-my-computer.png';
+import recycleBin from '../../../resources/icon-recycle-bin.png';
 
 import styles from './folderItem.scss';
 
@@ -41,7 +41,7 @@ class FolderItem extends Component {
 
     return (
       <div
-        className={cx(styles.container) }
+        className={cx(styles.container)}
         onMouseDown={this.handleMouseDown}
         onClick={this.handleClick}
       >
@@ -57,7 +57,7 @@ class FolderItem extends Component {
           }}
         />
         <div className={styles.titleContainer}>
-          <span
+          <div
             className={cx(styles.title, {
               [styles.titleDarkFont]: darkTitle,
               [styles.titleSelected]: isActiveSelection,
@@ -65,7 +65,7 @@ class FolderItem extends Component {
             })}
           >
             {title}
-          </span>
+          </div>
         </div>
       </div>
     );

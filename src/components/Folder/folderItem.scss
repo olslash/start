@@ -24,12 +24,21 @@
 }
 
 .title {
-  padding: 0 2px;
   border-radius: 1px;
+  padding: 1px;
 }
 
 .titleDarkFont {
   color: black;
+
+  &.titleSelected {
+    color: white;
+    background: #0000aa;
+  }
+
+  &.titleSelectedInactive {
+    border: 0.5px dotted #868a8e;
+  }
 }
 
 .titleSelected {

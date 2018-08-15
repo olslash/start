@@ -6,6 +6,7 @@ const SET_START_MENU_ACTIVE_FOLDER_PATH =
   'Set the active path of the start menu as the user navigates';
 const SELECT_ITEM = 'Select a desktop/folder item';
 const DESELECT_ITEM = 'Deselect a desktop/folder item';
+const FOCUS_PANE = 'Focus a folder, the desktop, the taskbar, etc';
 
 export const active_folder_state = 'active';
 export const inactive_folder_state = 'inactive';
@@ -15,7 +16,7 @@ export const reducer = createReducer(
     startMenuOpen: false,
     startMenuActiveFolderPath: [],
     // pane means folder/desktop or other entities that can be active (taskbar)
-    activePaneId: null,
+    focusedPaneId: 'desktop',
     // which item within each folder/the desktop is currently selected?
     // (primary selection, not including multi-select)
     primarySelectedFolderItemByFolderId: {},
@@ -79,6 +80,13 @@ export const reducer = createReducer(
           [folderId]: inactive_folder_state
         }
       };
+    },
+
+    [FOCUS_PANE](state, { payload: { id } }) {
+      return {
+        ...state,
+        focusedPaneId: id
+      };
     }
   }
 );
@@ -118,6 +126,13 @@ export function deselectItem(folderId) {
   };
 }
 
+export function focusPane(id) {
+  return {
+    type: FOCUS_PANE,
+    payload: { id }
+  }
+}
+
 function local(state) {
   return state.explorer;
 }
@@ -139,5 +154,11 @@ export function folderSelectionState(state, folderId) {
   return (
     local(state).folderSelectionStateByFolderId[folderId] ||
     inactive_folder_state
+  );
+}
+
+export function focusedPaneId(state) {
+  return (
+    local(state).focusedPaneId
   );
 }

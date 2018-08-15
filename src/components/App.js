@@ -1,7 +1,7 @@
 import React from 'react';
 
 import startMenuItems from '../startMenuItems';
-import desktopItems from '../desktopItems';
+import folderItems from '../itemsByFolderId';
 
 import myComputer from '../../resources/icon-my-computer.png';
 
@@ -22,6 +22,7 @@ const App = () => (
       id="test-my-computer-folder"
       title="My Computer"
       active
+      items={folderItems.myComputer}
       icon={myComputer}
       top={30}
       left={30}
@@ -29,7 +30,7 @@ const App = () => (
       onMaximize={() => console.log('Maximize')}
       onClose={testLog('Close')}
     />
-    <Desktop items={desktopItems} />
+    <Desktop items={folderItems.desktop} />
     <TaskBar startMenuItems={startMenuItems} />
   </div>
 );
