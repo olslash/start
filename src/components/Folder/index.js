@@ -1,16 +1,18 @@
 import React from 'react';
 import p from 'prop-types';
+import { range } from 'lodash'
 
 import BorderedContainer from '../BorderedContainer';
+import FolderItemGrid from '../FolderItemGrid';
+import FolderItem from '../FolderItem';
 import TitleBar from './TitleBar';
 
 import styles from './index.scss';
 
-// todo:
-// base inset container component - depth levels (ie. footer inset vs main
-// content inset)
+const titleBarHeight = 14;
 
 const Folder = ({
+  id,
   title,
   icon,
   active = false,
@@ -34,6 +36,7 @@ const Folder = ({
       title={title}
       active={active}
       icon={icon}
+      height={titleBarHeight}
       onMinimize={onMinimize}
       onMaximize={onMaximize}
       onClose={onClose}
@@ -54,13 +57,27 @@ const Folder = ({
         root: styles.folderContentContainer,
         inner: styles.folderContentContainerContent
       }}
+      style={{
+        height: `calc(100% - ${titleBarHeight}px)`,
+      }}
     >
-      Inset container content
+      <FolderItemGrid columnLayout>
+        {range(10).map((x, i) => (
+          <FolderItem
+            title="test long tieaw f alwejfleaw"
+            id={i}
+            key={i}
+            icon="myComputer"
+            darkTitle
+          />
+        ))}
+      </FolderItemGrid>
     </BorderedContainer>
   </BorderedContainer>
 );
 
 Folder.propTypes = {
+  id: p.string.isRequired,
   title: p.string.isRequired,
   icon: p.string,
   active: p.bool,

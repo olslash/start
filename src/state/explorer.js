@@ -14,7 +14,8 @@ export const reducer = createReducer(
   {
     startMenuOpen: false,
     startMenuActiveFolderPath: [],
-    activeFolderId: null,
+    // pane means folder/desktop or other entities that can be active (taskbar)
+    activePaneId: null,
     // which item within each folder/the desktop is currently selected?
     // (primary selection, not including multi-select)
     primarySelectedFolderItemByFolderId: {},

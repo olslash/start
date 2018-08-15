@@ -18,14 +18,13 @@ class FolderItem extends Component {
     icon: p.oneOf(Object.keys(icons)),
     id: p.string.isRequired,
     selected: p.bool,
-    partialSelection: p.bool,
-    onClick: p.func,
-    onClickOut: p.func
+    partialSelected: p.bool,
+    darkTitle: p.bool,
+    onClick: p.func.isRequired
   };
 
   handleMouseDown = e => {
     e.stopPropagation();
-    console.log('click ehre');
     this.props.onClick(this.props.id);
   };
 
@@ -37,12 +36,12 @@ class FolderItem extends Component {
   };
 
   render() {
-    const { icon, title, selected, partialSelection } = this.props;
-    const isActiveSelection = selected && !partialSelection;
+    const { icon, title, selected, partialSelected, darkTitle } = this.props;
+    const isActiveSelection = selected && !partialSelected;
 
     return (
       <div
-        className={cx(styles.container)}
+        className={cx(styles.container) }
         onMouseDown={this.handleMouseDown}
         onClick={this.handleClick}
       >
@@ -60,6 +59,7 @@ class FolderItem extends Component {
         <div className={styles.titleContainer}>
           <span
             className={cx(styles.title, {
+              [styles.titleDarkFont]: darkTitle,
               [styles.titleSelected]: isActiveSelection,
               [styles.titleSelectedInactive]: selected && !isActiveSelection
             })}

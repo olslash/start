@@ -14,6 +14,7 @@ const TitleBar = ({
   title,
   active = false,
   icon,
+  height = 14,
   onMinimize,
   onMaximize,
   onClose
@@ -22,6 +23,7 @@ const TitleBar = ({
     className={cx(styles.container, {
       [styles.containerActive]: active
     })}
+    style={{ height }}
   >
     <div className={styles.leftContainer}>
       <div>{icon && <img src={icon} className={styles.icon} />}</div>
@@ -69,9 +71,10 @@ TitleBar.propTypes = {
   title: p.string.isRequired,
   active: p.bool,
   icon: p.string,
+  height: p.number,
   onMinimize: p.func,
   onMaximize: p.func,
-  onClose: p.func
+  onClose: p.func,
 };
 
 export default TitleBar;

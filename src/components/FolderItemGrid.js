@@ -1,18 +1,23 @@
 import React from 'react';
+import cx from 'classnames';
 
 import p from 'prop-types';
 
 import styles from './folderItemGrid.scss';
 
-const FolderItemGrid = ({ children, onBackgroundClick }) => (
-  <div className={styles.container} onClick={onBackgroundClick}>
+const FolderItemGrid = ({ children, onBackgroundClick, columnLayout }) => (
+  <div
+    className={cx(styles.container, { [styles.columnLayout]: columnLayout })}
+    onClick={onBackgroundClick}
+  >
     {children}
   </div>
 );
 
 FolderItemGrid.propTypes = {
   children: p.node,
-  onBackgroundClick: p.func
+  onBackgroundClick: p.func,
+  columnLayout: p.bool
 };
 
 export default FolderItemGrid;

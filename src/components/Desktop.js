@@ -3,7 +3,6 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import p from 'prop-types';
 
-import myComputer from '../../resources/icon-my-computer.png';
 import {
   primarySelectedItemIdForFolder,
   folderSelectionState,
@@ -13,11 +12,9 @@ import {
   inactive_folder_state
 } from '../state/explorer';
 
-import Folder from './Folder';
 import FolderItem from './FolderItem';
 import FolderItemGrid from './FolderItemGrid';
 
-const testLog = msg => () => console.log(msg);
 
 const Desktop = ({
   items = [],
@@ -26,6 +23,8 @@ const Desktop = ({
   selectItem,
   deselectItem
 }) => (
+  // FIXME -- can probably reuse this stuff for <Folder>s -- make a generic
+  // component
   <div style={{ height: '100%' }}>
     <FolderItemGrid onBackgroundClick={() => deselectItem('desktop')}>
       {items.map(item => (
@@ -33,24 +32,11 @@ const Desktop = ({
           {...item}
           key={item.id}
           selected={selectedItemId === item.id}
-          partialSelection={selectionState === inactive_folder_state}
+          partialSelected={selectionState === inactive_folder_state}
           onClick={() => selectItem({ folderId: 'desktop', itemId: item.id })}
         />
       ))}
     </FolderItemGrid>
-
-    {false && (
-      <Folder
-        title="My Computer"
-        active
-        icon={myComputer}
-        top={30}
-        left={30}
-        onMinimize={() => console.log('Minimize')}
-        onMaximize={() => console.log('Maximize')}
-        onClose={testLog('Close')}
-      />
-    )}
   </div>
 );
 
