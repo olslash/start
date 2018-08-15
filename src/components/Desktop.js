@@ -15,7 +15,6 @@ import {
 import FolderItem from './FolderItem';
 import FolderItemGrid from './FolderItemGrid';
 
-
 const Desktop = ({
   items = [],
   selectedItemId,
@@ -26,7 +25,10 @@ const Desktop = ({
   // FIXME -- can probably reuse this stuff for <Folder>s -- make a generic
   // component
   <div style={{ height: '100%' }}>
-    <FolderItemGrid onBackgroundClick={() => deselectItem('desktop')}>
+    <FolderItemGrid
+      onBackgroundClick={() => deselectItem('desktop')}
+      columnLayout
+    >
       {items.map(item => (
         <FolderItem
           {...item}

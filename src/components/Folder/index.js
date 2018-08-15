@@ -17,7 +17,7 @@ const Folder = ({
   icon,
   active = false,
   height = 200,
-  width = 200,
+  width = 300,
   top = 0,
   left = 0,
   onMinimize,
@@ -60,8 +60,9 @@ const Folder = ({
       style={{
         height: `calc(100% - ${titleBarHeight}px)`,
       }}
+      scrollable
     >
-      <FolderItemGrid columnLayout>
+      <FolderItemGrid>
         {range(10).map((x, i) => (
           <FolderItem
             title="test long tieaw f alwejfleaw"

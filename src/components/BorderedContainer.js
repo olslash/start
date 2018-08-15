@@ -23,6 +23,7 @@ class BorderedContainer extends Component {
     style: p.objectOf(p.any),
     handlers: p.objectOf(p.func),
     iconSrc: p.string,
+    scrollable: p.bool,
     children: p.node
   };
 
@@ -49,6 +50,7 @@ class BorderedContainer extends Component {
       classes,
       style,
       iconSrc,
+      scrollable,
       children,
       handlers
     } = this.props;
@@ -80,7 +82,8 @@ class BorderedContainer extends Component {
               style={{
                 borderLeft: `1px solid ${borderColors[1].topLeft}`,
                 borderTop: `1px solid ${borderColors[1].topLeft}`,
-                boxShadow: `0.5px 0.5px 0 0.5px ${borderColors[1].bottomRight}`
+                boxShadow: `0.5px 0.5px 0 0.5px ${borderColors[1].bottomRight}`,
+                overflowY: this.props.scrollable ? 'scroll' : 'initial'
               }}
             >
               {children}
