@@ -83,7 +83,7 @@ class BorderedContainer extends Component {
                 borderLeft: `1px solid ${borderColors[1].topLeft}`,
                 borderTop: `1px solid ${borderColors[1].topLeft}`,
                 boxShadow: `0.5px 0.5px 0 0.5px ${borderColors[1].bottomRight}`,
-                overflowY: this.props.scrollable ? 'scroll' : 'initial'
+                overflowY: scrollable ? 'scroll' : 'initial'
               }}
             >
               {children}

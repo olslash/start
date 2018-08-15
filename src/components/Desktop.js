@@ -22,8 +22,6 @@ const Desktop = ({
   selectItem,
   deselectItem
 }) => (
-  // FIXME -- can probably reuse this stuff for <Folder>s -- make a generic
-  // component
   <div style={{ height: '100%' }}>
     <FolderItemGrid
       onBackgroundClick={() => deselectItem('desktop')}
