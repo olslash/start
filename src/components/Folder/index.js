@@ -1,6 +1,9 @@
 import React from 'react';
 import p from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 
+import { focusPane, focusedPaneId } from '../../state/explorer';
 import BorderedContainer from '../BorderedContainer';
 import TitleBar from './TitleBar';
 import FolderContents from './FolderContents';
@@ -21,14 +24,23 @@ const Folder = ({
   left = 0,
   onMinimize,
   onMaximize,
-  onClose
+  onClose,
+  focusPane
 }) => (
+  // todo: clicking anywhere in the container focuses the pane
+  // (click also does whatever it would do ie selecting a specific item)
   <BorderedContainer
     style={{ height, width, top, left, zIndex: 100 }}
     depth={2}
     classes={{
       root: styles.container,
       inner: styles.containerInner
+    }}
+    handlers={{
+      onClick: e => {
+        // focus this pane via click on titlebar, edges, etc
+        focusPane(id);
+      }
     }}
   >
     <TitleBar
@@ -83,7 +95,15 @@ Folder.propTypes = {
   width: p.number,
   onMinimize: p.func,
   onMaximize: p.func,
-  onClose: p.func
+  onClose: p.func,
+  focusPane: p.func.isRequired
 };
 
-export default Folder;
+export default compose(
+  connect(
+    (state, ownProps) => ({
+      active: focusedPaneId(state) === ownProps.id
+    }),
+    { focusPane }
+  )
+)(Folder);

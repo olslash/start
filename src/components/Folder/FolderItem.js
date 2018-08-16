@@ -20,19 +20,16 @@ class FolderItem extends Component {
     selected: p.bool,
     partialSelected: p.bool,
     darkTitle: p.bool,
-    onClick: p.func.isRequired
+    onClick: p.func.isRequired,
+    onMouseDown: p.func.isRequired
   };
 
   handleMouseDown = e => {
-    e.stopPropagation();
-    this.props.onClick(this.props.id);
+    this.props.onMouseDown(e, this.props.id);
   };
 
   handleClick = e => {
-    // we handle clicks via mouseDown, but still need to prevent
-    // propagation of the full click event thru this icon because
-    // folderItemGrid clicks are handled via onClick.
-    e.stopPropagation();
+    this.props.onClick(e, this.props.id);
   };
 
   render() {

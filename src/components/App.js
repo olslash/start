@@ -21,7 +21,6 @@ const App = () => (
     <Folder
       id="test-my-computer-folder"
       title="My Computer"
-      active
       items={folderItems.myComputer}
       icon={myComputer}
       top={30}

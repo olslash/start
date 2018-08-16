@@ -5,8 +5,9 @@ const CLOSE_START_MENU = 'Close the start menu';
 const SET_START_MENU_ACTIVE_FOLDER_PATH =
   'Set the active path of the start menu as the user navigates';
 const SELECT_ITEM = 'Select a desktop/folder item';
-const DESELECT_ITEM = 'Deselect a desktop/folder item';
 const FOCUS_PANE = 'Focus a folder, the desktop, the taskbar, etc';
+const CLICK_FOLDER_ITEM_GRID_BACKGROUND =
+  'The item grid of a folder was' + ' clicked';
 
 export const active_folder_state = 'active';
 export const inactive_folder_state = 'inactive';
@@ -71,17 +72,27 @@ export const reducer = createReducer(
         }
       };
     },
-    [DESELECT_ITEM](state, { payload: { folderId } }) {
-      return {
-        ...state,
-        // item not actually deselected, just go back to inactive folder state
-        folderSelectionStateByFolderId: {
-          ...state.folderSelectionStateByFolderId,
-          [folderId]: inactive_folder_state
-        }
-      };
-    },
 
+    [CLICK_FOLDER_ITEM_GRID_BACKGROUND](state, { payload: { folderId } }) {
+      const folderIsFocused = state.focusedPaneId === folderId;
+
+      if (folderIsFocused) {
+        // if the folder is focused move to inactive mode
+        return {
+          ...state,
+          folderSelectionStateByFolderId: {
+            ...state.folderSelectionStateByFolderId,
+            [folderId]: inactive_folder_state
+          }
+        };
+      } else {
+        // if the folder is unfocused, focus the pane
+        return {
+          ...state,
+          focusedPaneId: folderId
+        };
+      }
+    },
     [FOCUS_PANE](state, { payload: { id } }) {
       return {
         ...state,
@@ -119,9 +130,9 @@ export function selectItem({ folderId, itemId }) {
   };
 }
 
-export function deselectItem(folderId) {
+export function clickFolderItemGridBackground(folderId) {
   return {
-    type: DESELECT_ITEM,
+    type: CLICK_FOLDER_ITEM_GRID_BACKGROUND,
     payload: { folderId }
   };
 }
@@ -130,7 +141,7 @@ export function focusPane(id) {
   return {
     type: FOCUS_PANE,
     payload: { id }
-  }
+  };
 }
 
 function local(state) {
@@ -158,7 +169,5 @@ export function folderSelectionState(state, folderId) {
 }
 
 export function focusedPaneId(state) {
-  return (
-    local(state).focusedPaneId
-  );
+  return local(state).focusedPaneId;
 }

@@ -6,8 +6,9 @@ import p from 'prop-types';
 import {
   primarySelectedItemIdForFolder,
   folderSelectionState,
+  focusedPaneId,
   selectItem,
-  deselectItem,
+  clickFolderItemGridBackground,
   active_folder_state,
   inactive_folder_state
 } from '../../state/explorer';
@@ -21,13 +22,17 @@ const FolderContents = ({
   darkItemTitles,
   selectedItemId,
   selectionState,
+  folderActive,
   selectItem,
-  deselectItem
+  clickFolderItemGridBackground,
+  columnLayout
 }) => (
   <div style={{ height: '100%' }}>
     <FolderItemGrid
-      onBackgroundClick={() => deselectItem(folderId)}
-      columnLayout
+      onBackgroundClick={() => {
+        clickFolderItemGridBackground(folderId);
+      }}
+      columnLayout={columnLayout}
     >
       {items.map(item => (
         <FolderItem
@@ -35,9 +40,22 @@ const FolderContents = ({
           id={item.id}
           key={item.id}
           darkTitle={darkItemTitles}
-          selected={selectedItemId === item.id}
-          partialSelected={selectionState === inactive_folder_state}
-          onClick={itemId => selectItem({ folderId, itemId })}
+          selected={selectedItemId === item.id && folderActive}
+          partialSelected={
+            selectionState === inactive_folder_state && folderActive
+          }
+          onClick={(e, itemId) => {
+            if (!folderActive) {
+              selectItem({ folderId, itemId });
+            } else {
+              e.stopPropagation();
+            }
+          }}
+          onMouseDown={(e, itemId) => {
+            if (folderActive) {
+              selectItem({ folderId, itemId });
+            }
+          }}
         />
       ))}
     </FolderItemGrid>
@@ -56,16 +74,19 @@ FolderContents.propTypes = {
   selectedItemId: p.string,
   selectionState: p.oneOf([active_folder_state, inactive_folder_state])
     .isRequired,
+  folderActive: p.bool,
+  columnLayout: p.bool,
   selectItem: p.func.isRequired,
-  deselectItem: p.func.isRequired
+  clickFolderItemGridBackground: p.func.isRequired
 };
 
 export default compose(
   connect(
     (state, ownProps) => ({
       selectedItemId: primarySelectedItemIdForFolder(state, ownProps.folderId),
-      selectionState: folderSelectionState(state, ownProps.folderId)
+      selectionState: folderSelectionState(state, ownProps.folderId),
+      folderActive: focusedPaneId(state) === ownProps.folderId
     }),
-    { selectItem, deselectItem }
+    { selectItem, clickFolderItemGridBackground }
   )
 )(FolderContents);

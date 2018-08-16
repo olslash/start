@@ -74,7 +74,7 @@ TitleBar.propTypes = {
   height: p.number,
   onMinimize: p.func,
   onMaximize: p.func,
-  onClose: p.func,
+  onClose: p.func
 };
 
 export default TitleBar;
