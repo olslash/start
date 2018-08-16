@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { noop } from 'lodash';
 import cx from 'classnames';
 import p from 'prop-types';
 
@@ -20,8 +21,13 @@ class FolderItem extends Component {
     selected: p.bool,
     partialSelected: p.bool,
     darkTitle: p.bool,
-    onClick: p.func.isRequired,
-    onMouseDown: p.func.isRequired
+    onClick: p.func,
+    onMouseDown: p.func
+  };
+
+  static defaultProps = {
+    onClick: noop,
+    onMouseDown: noop
   };
 
   handleMouseDown = e => {
