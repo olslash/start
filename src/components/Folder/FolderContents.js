@@ -44,17 +44,11 @@ const FolderContents = ({
           partialSelected={
             selectionState === inactive_folder_state && folderActive
           }
-          onClick={(e, itemId) => {
-            if (!folderActive) {
-              selectItem({ folderId, itemId });
-            } else {
-              e.stopPropagation();
-            }
-          }}
           onMouseDown={(e, itemId) => {
             if (folderActive) {
-              selectItem({ folderId, itemId });
+              e.stopPropagation();
             }
+            selectItem({ folderId, itemId });
           }}
         />
       ))}

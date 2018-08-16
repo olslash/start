@@ -8,7 +8,7 @@ import styles from './folderItemGrid.scss';
 const FolderItemGrid = ({ children, onBackgroundClick, columnLayout }) => (
   <div
     className={cx(styles.container, { [styles.columnLayout]: columnLayout })}
-    onClick={onBackgroundClick}
+    onMouseDown={onBackgroundClick}
   >
     {children}
   </div>
