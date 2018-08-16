@@ -4,9 +4,9 @@ import { withProps } from 'recompose';
 import p from 'prop-types';
 import withClickOutHandler from 'react-onclickoutside';
 
-import startMenuLogo from '../../resources/startmenu-logo.png';
+import startMenuLogo from '../../../resources/startmenu-logo.png';
 
-import BorderedContainer from './BorderedContainer';
+import BorderedContainer from '../BorderedContainer';
 import StartMenuItem from './StartMenuItem';
 import StartSubMenu from './StartSubMenu';
 

@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import p from 'prop-types';
 
-import { currentDate } from '../state/clock';
+import { currentDate } from '../../state/clock';
 import {
   focusPane,
   startMenuOpen,
@@ -11,10 +11,10 @@ import {
   openStartMenu,
   closeStartMenu,
   setStartMenuActiveFolderPath
-} from '../state/explorer';
+} from '../../state/explorer';
 
-import StartButton from './StartButton';
-import StartMenu from './StartMenu';
+import StartButton from '../StartButton';
+import StartMenu from '../StartMenu';
 import Clock from './Clock';
 
 import styles from './taskBar.scss';

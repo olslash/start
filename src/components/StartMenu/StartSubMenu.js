@@ -1,7 +1,7 @@
 import React from 'react';
 import p from 'prop-types';
 
-import BorderedContainer from './BorderedContainer';
+import BorderedContainer from '../BorderedContainer';
 
 import styles from './startSubMenu.scss';
 
