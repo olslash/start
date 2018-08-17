@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  font-size: 10px;
+  max-width: 75px;
+  flex-grow: 1;
+  flex-basis: 0;
+  margin-right: 4px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.button {
+  width: 100%;
+}
+
+.title {
+  position: absolute;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

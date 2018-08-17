@@ -15,6 +15,7 @@ import {
 
 import StartButton from '../StartButton';
 import StartMenu from '../StartMenu';
+import TaskBarItem from './TaskBarItem';
 import Clock from './Clock';
 
 import styles from './taskBar.scss';
@@ -37,13 +38,18 @@ const TaskBar = ({ height = 20, ...props }) => (
           activeFolderPath={props.startMenuActiveFolderPath}
         />
       )}
-      <div className={styles.leftMenuItems}>
+      <div className={styles.startButtonContainer}>
         <StartButton
           down={props.startMenuOpen}
           onClick={
             props.startMenuOpen ? props.closeStartMenu : props.openStartMenu
           }
         />
+      </div>
+      <div className={styles.taskBarItems}>
+        <TaskBarItem title="My Computer"/>
+        <TaskBarItem title="Some Application long name"/>
+        <TaskBarItem title="Some other app"/>
       </div>
       <div className={styles.rightMenuItems}>
         <Clock currentDate={props.currentDate} />
