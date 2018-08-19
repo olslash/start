@@ -21,4 +21,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  top: 1px; // fix alignment because of weird border buttons
+
+  &.active {
+    font-weight: bold;
+  }
 }

@@ -47,9 +47,8 @@ const TaskBar = ({ height = 20, ...props }) => (
         />
       </div>
       <div className={styles.taskBarItems}>
-        <TaskBarItem title="My Computer"/>
-        <TaskBarItem title="Some Application long name"/>
-        <TaskBarItem title="Some other app"/>
+        <TaskBarItem title="My Computer" active />
+        <TaskBarItem title="My Computer" />
       </div>
       <div className={styles.rightMenuItems}>
         <Clock currentDate={props.currentDate} />

@@ -20,7 +20,9 @@ class ButtonBase extends Component {
     innerStyle: p.objectOf(p.any),
     children: p.node,
     iconSrc: p.string,
-    onClick: p.func
+    onClick: p.func,
+    // force button to always be depressed
+    depressed: p.bool
   };
 
   static defaultProps = {
@@ -89,7 +91,8 @@ class ButtonBase extends Component {
         className={cx(
           styles.container,
           {
-            [styles.containerDepressed]: this.state.depressed
+            [styles.containerDepressed]:
+              this.state.depressed || this.props.depressed
           },
           classes.root
         )}
@@ -104,7 +107,8 @@ class ButtonBase extends Component {
             <img
               src={iconSrc}
               className={cx(classes.icon, {
-                [styles.iconImgDepressed]: this.state.depressed
+                [styles.iconImgDepressed]:
+                  this.state.depressed || this.props.depressed
               })}
               draggable={false}
             />
@@ -114,13 +118,14 @@ class ButtonBase extends Component {
           className={cx(
             styles.outerBorder,
             {
-              [styles.outerBorderDepressed]: this.state.depressed
+              [styles.outerBorderDepressed]:
+                this.state.depressed || this.props.depressed
             },
             classes.outer
           )}
         >
           <div className={cx(styles.innerBorder, classes.inner)}>
-            {children}
+              {children}
           </div>
         </div>
       </div>
