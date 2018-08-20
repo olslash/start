@@ -1,3 +1,4 @@
+import { find } from 'lodash';
 import { eventChannel } from 'redux-saga';
 
 export function createReducer(initialState, handlers) {
@@ -26,4 +27,20 @@ export function uuid() {
   }
 
   return `${s4()}-${s4()}`;
+}
+
+export function treeFind(tree, pattern) {
+  const result = find(tree, pattern);
+
+  if (result) {
+    return result;
+  }
+
+  for (const { children } of tree) {
+    const result = treeFind(children, pattern);
+
+    if (result) {
+      return result;
+    }
+  }
 }

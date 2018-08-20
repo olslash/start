@@ -16,8 +16,10 @@ const Desktop = ({ items = [], focusDesktop }) => (
 Desktop.propTypes = {
   items: p.arrayOf(
     p.shape({
-      title: p.string.isRequired,
-      icon: p.string.isRequired
+      type: p.string,
+      id: p.string,
+      title: p.string,
+      icon: p.string
     })
   ),
   focusDesktop: p.func.isRequired

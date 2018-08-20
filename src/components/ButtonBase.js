@@ -125,7 +125,7 @@ class ButtonBase extends Component {
           )}
         >
           <div className={cx(styles.innerBorder, classes.inner)}>
-              {children}
+            {children}
           </div>
         </div>
       </div>

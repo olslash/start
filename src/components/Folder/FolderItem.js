@@ -10,7 +10,12 @@ import styles from './folderItem.scss';
 
 const icons = {
   myComputer,
-  recycleBin
+  recycleBin,
+  // fixme:
+  diskDrive: recycleBin,
+  controlPanel: recycleBin,
+  folder: recycleBin,
+  appNotepad: recycleBin
 };
 
 class FolderItem extends Component {

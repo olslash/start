@@ -3,7 +3,7 @@ import p from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
-import { focusPane, focusedPaneId } from '../../state/explorer';
+import { focusPane, focusedPaneId, itemsForFolder } from '../../state/explorer';
 import BorderedContainer from '../BorderedContainer';
 import TitleBar from './TitleBar';
 import FolderContents from './FolderContents';
@@ -102,7 +102,8 @@ Folder.propTypes = {
 export default compose(
   connect(
     (state, ownProps) => ({
-      active: focusedPaneId(state) === ownProps.id
+      active: focusedPaneId(state) === ownProps.id,
+      items: itemsForFolder(state, ownProps.id)
     }),
     { focusPane }
   )

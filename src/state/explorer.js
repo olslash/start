@@ -1,4 +1,12 @@
+import { pickBy, mapValues } from 'lodash';
+
 import { createReducer } from '../helpers/index';
+import { uuid, treeFind } from '../helpers';
+
+import {
+  fileTree as initialFileTree,
+  itemsById as initialItemsByID
+} from '../initialHDDState';
 
 const OPEN_START_MENU = 'Open the start menu';
 const CLOSE_START_MENU = 'Close the start menu';
@@ -12,11 +20,40 @@ const CLICK_FOLDER_ITEM_GRID_BACKGROUND =
 export const active_folder_state = 'active';
 export const inactive_folder_state = 'inactive';
 
+export const file_item_type = 'file';
+export const folder_item_type = 'folder';
+
+export function item({ type, id = uuid(), title, icon }) {
+  return {
+    type,
+    id,
+    title,
+    icon
+  };
+}
+
+const defaultPaneState = {
+  open: false,
+  minimized: false,
+  maximized: false,
+  width: 200,
+  height: 200,
+  left: 50,
+  top: 50
+};
+
 export const reducer = createReducer(
   {
     startMenuOpen: false,
     startMenuActiveFolderPath: [],
-    // pane means folder/desktop or other entities that can be active (taskbar)
+    itemsById: initialItemsByID,
+    fileTree: initialFileTree,
+    paneStateByItemId: {
+      // fixme -- delete after testing
+      myComputer: { ...defaultPaneState, open: true }
+    },
+    // pane means folder/app or other special entities that can be
+    // active (taskbar, desktop)
     focusedPaneId: 'desktop',
     // which item within each folder/the desktop is currently selected?
     // (primary selection, not including multi-select)
@@ -170,4 +207,31 @@ export function folderSelectionState(state, folderId) {
 
 export function focusedPaneId(state) {
   return local(state).focusedPaneId;
+}
+
+export function itemById(state, itemId) {
+  return local(state).itemsById[itemId];
+}
+
+export function itemsForFolder(state, folderId) {
+  const treeResult = treeFind(local(state).fileTree, { id: folderId });
+
+  if (!treeResult) {
+    console.warn('Folder', folderId, 'was not found in state');
+    return null;
+  }
+  // populate first-level children
+  return treeResult.children.map(child => itemById(state, child.id));
+}
+
+export function openPaneItems(state) {
+  const openPanes = pickBy(local(state).paneStateByItemId, {
+    open: true,
+    minimized: false
+  });
+
+  return mapValues(openPanes, (pane, id) => ({
+    ...pane,
+    ...itemById(state, id)
+  }));
 }

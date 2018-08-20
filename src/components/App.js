@@ -1,9 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { filter } from 'lodash';
+import p from 'prop-types';
 
 import startMenuItems from '../startMenuItems';
-import folderItems from '../itemsByFolderId';
-
-import myComputer from '../../resources/icon-my-computer.png';
+import { itemsForFolder, openPaneItems } from '../state/explorer';
 
 import SVGDefinitions from './SVGDefinitions';
 import TaskBar from './TaskBar';
@@ -12,26 +13,28 @@ import Desktop from './Desktop';
 import styles from './app.scss';
 import Folder from './Folder';
 
-const testLog = msg => () => console.log(msg);
-
-const App = () => (
+const App = ({ desktopItems = [], openPaneItems = [] }) => (
   <div className={styles.container}>
     <SVGDefinitions />
-
-    <Folder
-      id="test-my-computer-folder"
-      title="My Computer"
-      items={folderItems.myComputer}
-      icon={myComputer}
-      top={30}
-      left={30}
-      onMinimize={() => console.log('Minimize')}
-      onMaximize={() => console.log('Maximize')}
-      onClose={testLog('Close')}
-    />
-    <Desktop items={folderItems.desktop} />
+    {filter(openPaneItems, { type: 'folder' }).map(folder => (
+      <Folder {...folder} key={folder.id} />
+    ))}
+    <Desktop items={desktopItems} />
     <TaskBar startMenuItems={startMenuItems} />
   </div>
 );
 
-export default App;
+App.propTypes = {
+  openPaneItems: p.objectOf(
+    p.shape({
+      type: p.string.isRequired,
+      id: p.string.isRequired
+    })
+  ),
+  desktopItems: p.arrayOf(p.object)
+};
+
+export default connect(state => ({
+  openPaneItems: openPaneItems(state),
+  desktopItems: itemsForFolder(state, 'desktop')
+}))(App);
