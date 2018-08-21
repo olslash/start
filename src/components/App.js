@@ -4,7 +4,13 @@ import { filter } from 'lodash';
 import p from 'prop-types';
 
 import startMenuItems from '../startMenuItems';
-import { itemsForFolder, openPaneItems } from '../state/explorer';
+import {
+  focusPane,
+  itemsForFolder,
+  openPaneItems,
+  minimizePane,
+  maximizePane
+} from '../state/explorer';
 
 import SVGDefinitions from './SVGDefinitions';
 import TaskBar from './TaskBar';
@@ -13,14 +19,26 @@ import Desktop from './Desktop';
 import styles from './app.scss';
 import Folder from './Folder';
 
-const App = ({ desktopItems = [], openPaneItems = [] }) => (
+const App = ({
+  desktopItems = [],
+  openPaneItems = [],
+  focusPane,
+  minimizePane,
+  maximizePane
+}) => (
   <div className={styles.container}>
     <SVGDefinitions />
     {filter(openPaneItems, { type: 'folder' }).map(folder => (
-      <Folder {...folder} key={folder.id} />
+      <Folder
+        {...folder}
+        key={folder.id}
+        onFocus={focusPane}
+        onMinimize={minimizePane}
+        onMaximize={maximizePane}
+      />
     ))}
-    <Desktop items={desktopItems} />
-    <TaskBar startMenuItems={startMenuItems} />
+    <Desktop items={desktopItems} onFocus={focusPane} />
+    <TaskBar startMenuItems={startMenuItems} onFocus={focusPane} />
   </div>
 );
 
@@ -31,10 +49,16 @@ App.propTypes = {
       id: p.string.isRequired
     })
   ),
-  desktopItems: p.arrayOf(p.object)
+  desktopItems: p.arrayOf(p.object),
+  focusPane: p.func.isRequired,
+  minimizePane: p.func.isRequired,
+  maximizePane: p.func.isRequired
 };
 
-export default connect(state => ({
-  openPaneItems: openPaneItems(state),
-  desktopItems: itemsForFolder(state, 'desktop')
-}))(App);
+export default connect(
+  state => ({
+    openPaneItems: openPaneItems(state),
+    desktopItems: itemsForFolder(state, 'desktop')
+  }),
+  { focusPane, minimizePane, maximizePane }
+)(App);

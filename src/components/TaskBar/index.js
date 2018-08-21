@@ -5,7 +5,6 @@ import p from 'prop-types';
 
 import { currentDate } from '../../state/clock';
 import {
-  focusPane,
   startMenuOpen,
   startMenuActiveFolderPath,
   openStartMenu,
@@ -26,7 +25,7 @@ const TaskBar = ({ height = 20, ...props }) => (
     style={{
       height
     }}
-    onClick={() => props.focusPane('taskbar')}
+    onClick={() => props.onFocus('taskbar')}
   >
     <div className={styles.inner}>
       {props.startMenuOpen && (
@@ -62,7 +61,7 @@ TaskBar.propTypes = {
   startMenuItems: p.arrayOf(p.object).isRequired,
   startMenuOpen: p.bool,
   startMenuActiveFolderPath: p.arrayOf(p.number).isRequired,
-  focusPane: p.func.isRequired,
+  onFocus: p.func.isRequired,
   openStartMenu: p.func.isRequired,
   closeStartMenu: p.func.isRequired,
   setStartMenuActiveFolderPath: p.func.isRequired,
@@ -78,7 +77,6 @@ export default compose(
       startMenuActiveFolderPath: startMenuActiveFolderPath(state)
     }),
     {
-      focusPane,
       openStartMenu,
       closeStartMenu,
       setStartMenuActiveFolderPath

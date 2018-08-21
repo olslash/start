@@ -3,20 +3,9 @@ import { noop } from 'lodash';
 import cx from 'classnames';
 import p from 'prop-types';
 
-import myComputer from '../../../resources/icon-my-computer.png';
-import recycleBin from '../../../resources/icon-recycle-bin.png';
+import icons from '../../../resources/icons'
 
 import styles from './folderItem.scss';
-
-const icons = {
-  myComputer,
-  recycleBin,
-  // fixme:
-  diskDrive: recycleBin,
-  controlPanel: recycleBin,
-  folder: recycleBin,
-  appNotepad: recycleBin
-};
 
 class FolderItem extends Component {
   static propTypes = {

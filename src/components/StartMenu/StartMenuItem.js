@@ -2,27 +2,10 @@ import React, { Component } from 'react';
 import cx from 'classnames';
 import p from 'prop-types';
 
-import documents from '../../../resources/icon-documents.png';
-import find from '../../../resources/icon-find.png';
-import help from '../../../resources/icon-help.png';
-import programs from '../../../resources/icon-programs.png';
-import run from '../../../resources/icon-run.png';
-import settings from '../../../resources/icon-settings.png';
-import shutdown from '../../../resources/icon-shutdown.png';
-
+import icons from '../../../resources/icons';
 import MoreIconRight from '../MoreIconRight';
 
 import styles from './startMenuItem.scss';
-
-const icons = {
-  documents,
-  find,
-  help,
-  programs,
-  run,
-  settings,
-  shutdown
-};
 
 class StartMenuItem extends Component {
   static propTypes = {

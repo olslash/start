@@ -16,6 +16,8 @@ const SELECT_ITEM = 'Select a desktop/folder item';
 const FOCUS_PANE = 'Focus a folder, the desktop, the taskbar, etc';
 const CLICK_FOLDER_ITEM_GRID_BACKGROUND =
   'The item grid of a folder was' + ' clicked';
+const TOGGLE_MINIMIZE_PANE = 'minimize a pane (toggle)';
+const TOGGLE_MAXIMIZE_PANE = 'maximize a pane (toggle)';
 
 export const active_folder_state = 'active';
 export const inactive_folder_state = 'inactive';
@@ -135,6 +137,30 @@ export const reducer = createReducer(
         ...state,
         focusedPaneId: id
       };
+    },
+    [TOGGLE_MINIMIZE_PANE](state, { payload: { id } }) {
+      return {
+        ...state,
+        paneStateByItemId: {
+          ...state.paneStateByItemId,
+          [id]: {
+            ...state.paneStateByItemId[id],
+            minimized: true
+          }
+        }
+      };
+    },
+    [TOGGLE_MAXIMIZE_PANE](state, { payload: { id } }) {
+      return {
+        ...state,
+        paneStateByItemId: {
+          ...state.paneStateByItemId,
+          [id]: {
+            ...state.paneStateByItemId[id],
+            maximized: !state.paneStateByItemId[id].maximized
+          }
+        }
+      };
     }
   }
 );
@@ -180,6 +206,21 @@ export function focusPane(id) {
     payload: { id }
   };
 }
+
+export function minimizePane(id) {
+  return {
+    type: TOGGLE_MINIMIZE_PANE,
+    payload: { id }
+  };
+}
+
+export function maximizePane(id) {
+  return {
+    type: TOGGLE_MAXIMIZE_PANE,
+    payload: { id }
+  };
+}
+
 
 function local(state) {
   return state.explorer;

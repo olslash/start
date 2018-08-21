@@ -4,13 +4,12 @@ import p from 'prop-types';
 
 import ButtonBase from '../ButtonBase';
 
-import closeIcon from '../../../resources/button-close.png';
-import minimizeIcon from '../../../resources/button-minimize.png';
-import maximizeIcon from '../../../resources/button-maximize.png';
+import icons from '../../../resources/icons';
 
 import styles from './titleBar.scss';
 
 const TitleBar = ({
+  folderId,
   title,
   active = false,
   icon,
@@ -26,7 +25,9 @@ const TitleBar = ({
     style={{ height }}
   >
     <div className={styles.leftContainer}>
-      <div>{icon && <img src={icon} className={styles.icon} />}</div>
+      <div >
+        {icons[icon] && <img src={icons[icon]} className={styles.icon} />}
+      </div>
       <span className={styles.title}>{title}</span>
     </div>
     <div className={styles.rightContainer}>
@@ -37,8 +38,8 @@ const TitleBar = ({
             inner: styles.buttonIconContainer,
             icon: styles.buttonIcon
           }}
-          iconSrc={minimizeIcon}
-          onClick={onMinimize}
+          iconSrc={icons.buttonMinimize}
+          onClick={() => onMinimize(folderId)}
         />
       )}
       {onMaximize && (
@@ -48,8 +49,8 @@ const TitleBar = ({
             inner: styles.buttonIconContainer,
             icon: styles.buttonIcon
           }}
-          iconSrc={maximizeIcon}
-          onClick={onMaximize}
+          iconSrc={icons.buttonMaximize}
+          onClick={() => onMaximize(folderId)}
         />
       )}
       {onClose && (
@@ -59,8 +60,8 @@ const TitleBar = ({
             inner: styles.buttonIconContainer,
             icon: styles.buttonIcon
           }}
-          iconSrc={closeIcon}
-          onClick={onClose}
+          iconSrc={icons.buttonClose}
+          onClick={() => onClose(folderId)}
         />
       )}
     </div>
@@ -68,6 +69,7 @@ const TitleBar = ({
 );
 
 TitleBar.propTypes = {
+  folderId: p.string.isRequired,
   title: p.string.isRequired,
   active: p.bool,
   icon: p.string,
