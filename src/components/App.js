@@ -9,7 +9,8 @@ import {
   itemsForFolder,
   openPaneItems,
   minimizePane,
-  maximizePane
+  maximizePane,
+  closePane
 } from '../state/explorer';
 
 import SVGDefinitions from './SVGDefinitions';
@@ -24,7 +25,8 @@ const App = ({
   openPaneItems = [],
   focusPane,
   minimizePane,
-  maximizePane
+  maximizePane,
+  closePane
 }) => (
   <div className={styles.container}>
     <SVGDefinitions />
@@ -35,6 +37,7 @@ const App = ({
         onFocus={focusPane}
         onMinimize={minimizePane}
         onMaximize={maximizePane}
+        onClose={closePane}
       />
     ))}
     <Desktop items={desktopItems} onFocus={focusPane} />
@@ -52,7 +55,8 @@ App.propTypes = {
   desktopItems: p.arrayOf(p.object),
   focusPane: p.func.isRequired,
   minimizePane: p.func.isRequired,
-  maximizePane: p.func.isRequired
+  maximizePane: p.func.isRequired,
+  closePane: p.func.isRequired
 };
 
 export default connect(
@@ -60,5 +64,5 @@ export default connect(
     openPaneItems: openPaneItems(state),
     desktopItems: itemsForFolder(state, 'desktop')
   }),
-  { focusPane, minimizePane, maximizePane }
+  { focusPane, minimizePane, maximizePane, closePane }
 )(App);

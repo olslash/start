@@ -3,7 +3,7 @@ import { noop } from 'lodash';
 import cx from 'classnames';
 import p from 'prop-types';
 
-import icons from '../../../resources/icons'
+import icons from '../../../resources/icons';
 
 import styles from './folderItem.scss';
 
@@ -15,21 +15,46 @@ class FolderItem extends Component {
     selected: p.bool,
     partialSelected: p.bool,
     darkTitle: p.bool,
-    onClick: p.func,
-    onMouseDown: p.func
+    doubleClickDelayMax: p.number,
+    // onClick: p.func,
+    onMouseDown: p.func,
+    onDoubleClick: p.func
   };
 
   static defaultProps = {
-    onClick: noop,
+    doubleClickDelayMax: 400,
+    onDoubleClick: noop,
     onMouseDown: noop
   };
 
-  handleMouseDown = e => {
-    this.props.onMouseDown(e, this.props.id);
+  state = {
+    shouldDoubleClick: false
   };
 
-  handleClick = e => {
-    this.props.onClick(e, this.props.id);
+  handleMouseDown = e => {
+    // double click is mousedown-mouseup-<mousedown>
+
+    if (this.state.shouldDoubleClick) {
+      this.setState({ shouldDoubleClick: false });
+      return this.handleDoubleClick(e);
+    }
+
+    this.props.onMouseDown(e, this.props.id);
+
+    this.setState(
+      {
+        shouldDoubleClick: true
+      },
+      () => {
+        setTimeout(() => {
+          this.setState({ shouldDoubleClick: false });
+        }, this.props.doubleClickDelayMax);
+      }
+    );
+  };
+
+  handleDoubleClick = e => {
+    this.props.onDoubleClick(e, this.props.id);
   };
 
   render() {
@@ -40,7 +65,7 @@ class FolderItem extends Component {
       <div
         className={cx(styles.container)}
         onMouseDown={this.handleMouseDown}
-        onClick={this.handleClick}
+        // onClick={this.handleClick}
       >
         <img
           src={icons[icon]}

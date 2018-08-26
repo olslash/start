@@ -18,6 +18,8 @@ const CLICK_FOLDER_ITEM_GRID_BACKGROUND =
   'The item grid of a folder was' + ' clicked';
 const TOGGLE_MINIMIZE_PANE = 'minimize a pane (toggle)';
 const TOGGLE_MAXIMIZE_PANE = 'maximize a pane (toggle)';
+const OPEN_PANE = 'create a new open pane for an item';
+const CLOSE_PANE = 'close a pane';
 
 export const active_folder_state = 'active';
 export const inactive_folder_state = 'inactive';
@@ -52,7 +54,7 @@ export const reducer = createReducer(
     fileTree: initialFileTree,
     paneStateByItemId: {
       // fixme -- delete after testing
-      myComputer: { ...defaultPaneState, open: true }
+      // myComputer: { ...defaultPaneState, open: true }
     },
     // pane means folder/app or other special entities that can be
     // active (taskbar, desktop)
@@ -161,6 +163,34 @@ export const reducer = createReducer(
           }
         }
       };
+    },
+
+    [OPEN_PANE](state, { payload: { id } }) {
+      return {
+        ...state,
+        paneStateByItemId: {
+          ...state.paneStateByItemId,
+          [id]: {
+            ...defaultPaneState,
+            ...state.paneStateByItemId[id],
+            open: true,
+            minimized: false
+          }
+        }
+      };
+    },
+
+    [CLOSE_PANE](state, { payload: { id } }) {
+      return {
+        ...state,
+        paneStateByItemId: {
+          ...state.paneStateByItemId,
+          [id]: {
+            ...state.paneStateByItemId[id],
+            open: false
+          }
+        }
+      };
     }
   }
 );
@@ -221,6 +251,19 @@ export function maximizePane(id) {
   };
 }
 
+export function openPane(id) {
+  return {
+    type: OPEN_PANE,
+    payload: { id }
+  };
+}
+
+export function closePane(id) {
+  return {
+    type: CLOSE_PANE,
+    payload: { id }
+  };
+}
 
 function local(state) {
   return state.explorer;

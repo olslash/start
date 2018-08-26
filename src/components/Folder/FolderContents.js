@@ -9,6 +9,7 @@ import {
   focusedPaneId,
   selectItem,
   clickFolderItemGridBackground,
+  openPane,
   active_folder_state,
   inactive_folder_state
 } from '../../state/explorer';
@@ -24,6 +25,7 @@ const FolderContents = ({
   selectionState,
   folderActive,
   selectItem,
+  openPane,
   clickFolderItemGridBackground,
   columnLayout
 }) => (
@@ -50,6 +52,13 @@ const FolderContents = ({
             }
             selectItem({ folderId, itemId });
           }}
+          onDoubleClick={(e, itemId) => {
+            if (folderActive) {
+              e.stopPropagation();
+            }
+
+            openPane(itemId);
+          }}
         />
       ))}
     </FolderItemGrid>
@@ -71,6 +80,7 @@ FolderContents.propTypes = {
   folderActive: p.bool,
   columnLayout: p.bool,
   selectItem: p.func.isRequired,
+  openPane: p.func.isRequired,
   clickFolderItemGridBackground: p.func.isRequired
 };
 
@@ -81,6 +91,6 @@ export default compose(
       selectionState: folderSelectionState(state, ownProps.folderId),
       folderActive: focusedPaneId(state) === ownProps.folderId
     }),
-    { selectItem, clickFolderItemGridBackground }
+    { selectItem, clickFolderItemGridBackground, openPane }
   )
 )(FolderContents);
