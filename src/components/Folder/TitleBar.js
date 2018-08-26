@@ -25,7 +25,7 @@ const TitleBar = ({
     style={{ height }}
   >
     <div className={styles.leftContainer}>
-      <div >
+      <div>
         {icons[icon] && <img src={icons[icon]} className={styles.icon} />}
       </div>
       <span className={styles.title}>{title}</span>

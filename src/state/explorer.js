@@ -168,6 +168,7 @@ export const reducer = createReducer(
     [OPEN_PANE](state, { payload: { id } }) {
       return {
         ...state,
+        focusedPaneId: id,
         paneStateByItemId: {
           ...state.paneStateByItemId,
           [id]: {
