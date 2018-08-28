@@ -34,7 +34,7 @@ class FolderItem extends Component {
   doubleClickTimeout = null; // eslint-disable-line
 
   componentWillUnmount() {
-    clearTimeout(this.doubleClickTimeout)
+    clearTimeout(this.doubleClickTimeout);
   }
 
   handleMouseDown = e => {

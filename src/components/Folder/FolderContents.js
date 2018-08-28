@@ -50,6 +50,7 @@ const FolderContents = ({
             if (folderActive) {
               e.stopPropagation();
             }
+
             selectItem({ folderId, itemId });
           }}
           onDoubleClick={(e, itemId) => {
