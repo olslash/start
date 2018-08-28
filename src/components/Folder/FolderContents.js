@@ -58,7 +58,7 @@ const FolderContents = ({
               e.stopPropagation();
             }
 
-            openPane(itemId);
+            openPane(itemId, folderId);
           }}
         />
       ))}

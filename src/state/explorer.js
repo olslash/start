@@ -1,4 +1,4 @@
-import { pickBy, mapValues } from 'lodash';
+import { pickBy, mapValues, pick } from 'lodash';
 
 import { createReducer } from '../helpers/index';
 import { uuid, treeFind } from '../helpers';
@@ -165,17 +165,38 @@ export const reducer = createReducer(
       };
     },
 
-    [OPEN_PANE](state, { payload: { id } }) {
+    [OPEN_PANE](state, { payload: { id, openerId } }) {
+      const openerPaneState = state.paneStateByItemId[openerId] || {};
+      const openerPanePosition = pick(openerPaneState, [
+        'height',
+        'width',
+        'top',
+        'left',
+        'maximized'
+      ]);
+
       return {
         ...state,
         focusedPaneId: id,
         paneStateByItemId: {
           ...state.paneStateByItemId,
+          [openerId]: {
+            ...state.paneStateByItemId[openerId],
+            // while navigating between folders, use the "same" window by
+            // closing the opener and replacing it with the new pane, inheriting
+            // the previous position
+            // fixme -- this state needs to be transient
+            open: false
+          },
           [id]: {
             ...defaultPaneState,
             ...state.paneStateByItemId[id],
+
             open: true,
-            minimized: false
+            minimized: false,
+
+            // inherit size/position of opener if it exists
+            ...openerPanePosition
           }
         }
       };
@@ -252,10 +273,10 @@ export function maximizePane(id) {
   };
 }
 
-export function openPane(id) {
+export function openPane(id, openerId) {
   return {
     type: OPEN_PANE,
-    payload: { id }
+    payload: { id, openerId }
   };
 }
 
