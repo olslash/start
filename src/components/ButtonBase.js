@@ -97,7 +97,10 @@ class ButtonBase extends Component {
           classes.root
         )}
         style={style}
-        onMouseEnter={this.handleMouseEnter}
+        // "over" seems to prevent issues where mouseEnter never fires if a
+        // button immediately over this one is clicked, its window closes,
+        // and the mouse doesn't out and back.
+        onMouseOver={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}
