@@ -30,7 +30,7 @@ const App = ({
 }) => (
   <div className={styles.container}>
     <SVGDefinitions />
-    {filter(openPaneItems, { type: 'folder' }).map(folder => (
+    {filter(openPaneItems, { type: 'folder', minimized: false }).map(folder => (
       <Folder
         {...folder}
         key={folder.id}

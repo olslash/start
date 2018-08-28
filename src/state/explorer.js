@@ -311,8 +311,7 @@ export function itemsForFolder(state, folderId) {
 
 export function openPaneItems(state) {
   const openPanes = pickBy(local(state).paneStateByItemId, {
-    open: true,
-    minimized: false
+    open: true
   });
 
   return mapValues(openPanes, (pane, id) => ({
