@@ -31,6 +31,12 @@ class FolderItem extends Component {
     shouldDoubleClick: false
   };
 
+  doubleClickTimeout = null; // eslint-disable-line
+
+  componentWillUnmount() {
+    clearTimeout(this.doubleClickTimeout)
+  }
+
   handleMouseDown = e => {
     // double click is mousedown-mouseup-<mousedown>
 
@@ -46,7 +52,7 @@ class FolderItem extends Component {
         shouldDoubleClick: true
       },
       () => {
-        setTimeout(() => {
+        this.doubleClickTimeout = setTimeout(() => {
           this.setState({ shouldDoubleClick: false });
         }, this.props.doubleClickDelayMax);
       }
