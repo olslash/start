@@ -73,9 +73,7 @@ class FolderItem extends Component {
             [styles.iconSelected]: isActiveSelection
           })}
           style={{
-            WebkitMaskImage: isActiveSelection
-              ? `url(${icons[icon]})`
-              : undefined
+            WebkitMaskImage: `url(${icons[icon]})`
           }}
         />
         <div className={styles.titleContainer}>
