@@ -49,11 +49,11 @@ const TaskBar = ({ height = 20, items = {}, ...props }) => (
         />
       </div>
       <div className={styles.taskBarItems}>
-        {map(items, ({ title, icon, id }) => (
+        {map(items, ({ title, icon, id, minimized }) => (
           <TaskBarItem
             title={title}
             icon={icon}
-            active={props.focusedPaneId === id}
+            active={props.focusedPaneId === id && !minimized}
             key={id}
           />
         ))}
