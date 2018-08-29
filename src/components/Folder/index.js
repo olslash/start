@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
-import { focusedPaneId, itemsForFolder } from '../../state/explorer';
+import { itemsForFolder } from '../../state/explorer';
 import BorderedContainer from '../BorderedContainer';
 import TitleBar from './TitleBar';
 import FolderContents from './FolderContents';
@@ -17,7 +17,7 @@ const Folder = ({
   id,
   title,
   icon,
-  active = false,
+  focused = false,
   items = [],
   height = 200,
   width = 300,
@@ -29,8 +29,6 @@ const Folder = ({
   onClose,
   onFocus
 }) => (
-  // todo: clicking anywhere in the container focuses the pane
-  // (click also does whatever it would do ie selecting a specific item)
   <BorderedContainer
     style={{ height, width, top, left, zIndex: 100 }}
     depth={2}
@@ -49,7 +47,7 @@ const Folder = ({
   >
     <TitleBar
       title={title}
-      active={active}
+      active={focused}
       icon={icon}
       height={titleBarHeight}
       onMinimize={onMinimize}
@@ -87,7 +85,7 @@ Folder.propTypes = {
   id: p.string.isRequired,
   title: p.string.isRequired,
   icon: p.string,
-  active: p.bool,
+  focused: p.bool,
   items: p.arrayOf(
     p.shape({
       title: p.string.isRequired,
@@ -107,7 +105,6 @@ Folder.propTypes = {
 
 export default compose(
   connect((state, ownProps) => ({
-    active: focusedPaneId(state) === ownProps.id,
     items: itemsForFolder(state, ownProps.id)
   }))
 )(Folder);

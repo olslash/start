@@ -54,6 +54,7 @@ const TaskBar = ({ height = 20, items = {}, ...props }) => (
             title={title}
             icon={icon}
             active={props.focusedPaneId === id && !minimized}
+            onClick={() => props.onFocus(id)}
             key={id}
           />
         ))}

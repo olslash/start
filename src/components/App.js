@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { filter } from 'lodash';
+import { filter, get, sortBy } from 'lodash';
 import p from 'prop-types';
 
 import startMenuItems from '../startMenuItems';
 import {
   focusPane,
+  focusedPaneId,
+  focusedPaneOrder,
   itemsForFolder,
   openPaneItems,
   minimizePane,
@@ -23,6 +25,8 @@ import Folder from './Folder';
 const App = ({
   desktopItems = [],
   openPaneItems = [],
+  focusedPaneId,
+  focusedPaneOrder,
   focusPane,
   minimizePane,
   maximizePane,
@@ -30,18 +34,37 @@ const App = ({
 }) => (
   <div className={styles.container}>
     <SVGDefinitions />
-    {filter(openPaneItems, { type: 'folder', minimized: false }).map(folder => (
-      <Folder
-        {...folder}
-        key={folder.id}
-        onFocus={focusPane}
-        onMinimize={minimizePane}
-        onMaximize={maximizePane}
-        onClose={closePane}
-      />
-    ))}
+    {sortBy(
+      filter(openPaneItems, { type: 'folder', minimized: false }),
+      // sort folders (for z-index precedence) by their index in focusedPaneOrder
+      ({ id }) => focusedPaneOrder.indexOf(id)
+    )
+      .reverse()
+      .map(folder => (
+        <Folder
+          {...folder}
+          focused={focusedPaneId === folder.id}
+          key={folder.id}
+          onFocus={focusPane}
+          onMinimize={minimizePane}
+          onMaximize={maximizePane}
+          onClose={closePane}
+        />
+      ))}
     <Desktop items={desktopItems} onFocus={focusPane} />
-    <TaskBar startMenuItems={startMenuItems} onFocus={focusPane} />
+    <TaskBar
+      startMenuItems={startMenuItems}
+      onFocus={id => {
+        focusPane(id);
+
+        const paneIsMinimized = !!get(openPaneItems, [id, 'minimized']);
+        if (paneIsMinimized) {
+          // win95 behavior: clicking a taskbar item doesn't minimize the pane
+          // like it would in later releases
+          minimizePane(id);
+        }
+      }}
+    />
   </div>
 );
 
@@ -53,16 +76,24 @@ App.propTypes = {
     })
   ),
   desktopItems: p.arrayOf(p.object),
+  focusedPaneId: p.string,
+  focusedPaneOrder: p.arrayOf(p.string),
   focusPane: p.func.isRequired,
   minimizePane: p.func.isRequired,
   maximizePane: p.func.isRequired,
   closePane: p.func.isRequired
 };
 
+App.defaultProps = {
+  focusedPaneOrder: []
+};
+
 export default connect(
   state => ({
     openPaneItems: openPaneItems(state),
-    desktopItems: itemsForFolder(state, 'desktop')
+    desktopItems: itemsForFolder(state, 'desktop'),
+    focusedPaneId: focusedPaneId(state),
+    focusedPaneOrder: focusedPaneOrder(state)
   }),
   { focusPane, minimizePane, maximizePane, closePane }
 )(App);

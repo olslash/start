@@ -1,7 +1,7 @@
 import { pickBy, mapValues, pick } from 'lodash';
 
 import { createReducer } from '../helpers/index';
-import { uuid, treeFind } from '../helpers';
+import { uuid, treeFind, moveOrPrependToFront } from '../helpers';
 
 import {
   fileTree as initialFileTree,
@@ -52,13 +52,10 @@ export const reducer = createReducer(
     startMenuActiveFolderPath: [],
     itemsById: initialItemsByID,
     fileTree: initialFileTree,
-    paneStateByItemId: {
-      // fixme -- delete after testing
-      // myComputer: { ...defaultPaneState, open: true }
-    },
+    paneStateByItemId: {},
     // pane means folder/app or other special entities that can be
     // active (taskbar, desktop)
-    focusedPaneId: 'desktop',
+    focusedPaneOrder: ['desktop'],
     // which item within each folder/the desktop is currently selected?
     // (primary selection, not including multi-select)
     primarySelectedFolderItemByFolderId: {},
@@ -115,7 +112,7 @@ export const reducer = createReducer(
     },
 
     [CLICK_FOLDER_ITEM_GRID_BACKGROUND](state, { payload: { folderId } }) {
-      const folderIsFocused = state.focusedPaneId === folderId;
+      const folderIsFocused = state.focusedPaneOrder[0] === folderId;
 
       if (folderIsFocused) {
         // if the folder is focused move to inactive mode
@@ -130,14 +127,17 @@ export const reducer = createReducer(
         // if the folder is unfocused, focus the pane
         return {
           ...state,
-          focusedPaneId: folderId
+          focusedPaneOrder: moveOrPrependToFront(
+            state.focusedPaneOrder,
+            folderId
+          )
         };
       }
     },
     [FOCUS_PANE](state, { payload: { id } }) {
       return {
         ...state,
-        focusedPaneId: id
+        focusedPaneOrder: moveOrPrependToFront(state.focusedPaneOrder, id)
       };
     },
     [TOGGLE_MINIMIZE_PANE](state, { payload: { id } }) {
@@ -147,7 +147,7 @@ export const reducer = createReducer(
           ...state.paneStateByItemId,
           [id]: {
             ...state.paneStateByItemId[id],
-            minimized: true
+            minimized: !state.paneStateByItemId[id].minimized
           }
         }
       };
@@ -177,7 +177,7 @@ export const reducer = createReducer(
 
       return {
         ...state,
-        focusedPaneId: id,
+        focusedPaneOrder: moveOrPrependToFront(state.focusedPaneOrder, id),
         paneStateByItemId: {
           ...state.paneStateByItemId,
           [openerId]: {
@@ -312,7 +312,11 @@ export function folderSelectionState(state, folderId) {
 }
 
 export function focusedPaneId(state) {
-  return local(state).focusedPaneId;
+  return local(state).focusedPaneOrder[0];
+}
+
+export function focusedPaneOrder(state) {
+  return local(state).focusedPaneOrder;
 }
 
 export function itemById(state, itemId) {

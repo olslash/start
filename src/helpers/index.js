@@ -1,4 +1,4 @@
-import { find } from 'lodash';
+import { find, flatten, partition } from 'lodash';
 import { eventChannel } from 'redux-saga';
 
 export function createReducer(initialState, handlers) {
@@ -43,4 +43,10 @@ export function treeFind(tree, pattern) {
       return result;
     }
   }
+}
+
+export function moveOrPrependToFront(array, searchString) {
+  const ordered = flatten(partition(array, o => o === searchString));
+
+  return ordered[0] === searchString ? ordered : [searchString, ...ordered];
 }

@@ -22,7 +22,10 @@ class ButtonBase extends Component {
     iconSrc: p.string,
     onClick: p.func,
     // force button to always be depressed
-    depressed: p.bool
+    depressed: p.bool,
+    // because we trigger on mouseUp, should the onClick event's propagation
+    // also be stopped?
+    stopClickPropagation: p.bool
   };
 
   static defaultProps = {
@@ -69,7 +72,7 @@ class ButtonBase extends Component {
   handleMouseUp = e => {
     e.stopPropagation();
     if (this.state.mouseOver && this.state.active) {
-      this.props.onClick();
+      this.props.onClick(e);
     }
 
     this.setState({
@@ -104,6 +107,7 @@ class ButtonBase extends Component {
         onMouseLeave={this.handleMouseLeave}
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}
+        onClick={e => this.props.stopClickPropagation && e.stopPropagation()}
       >
         {this.props.iconSrc && (
           <div className={styles.iconImgContainer}>
