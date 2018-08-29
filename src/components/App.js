@@ -26,7 +26,7 @@ const App = ({
   desktopItems = [],
   openPaneItems = [],
   focusedPaneId,
-  focusedPaneOrder,
+  panes,
   focusPane,
   minimizePane,
   maximizePane,
@@ -34,23 +34,17 @@ const App = ({
 }) => (
   <div className={styles.container}>
     <SVGDefinitions />
-    {sortBy(
-      filter(openPaneItems, { type: 'folder', minimized: false }),
-      // sort folders (for z-index precedence) by their index in focusedPaneOrder
-      ({ id }) => focusedPaneOrder.indexOf(id)
-    )
-      .reverse()
-      .map(folder => (
-        <Folder
-          {...folder}
-          focused={focusedPaneId === folder.id}
-          key={folder.id}
-          onFocus={focusPane}
-          onMinimize={minimizePane}
-          onMaximize={maximizePane}
-          onClose={closePane}
-        />
-      ))}
+    {filter(panes, { type: 'folder' }).map(folder => (
+      <Folder
+        {...folder}
+        focused={focusedPaneId === folder.id}
+        key={folder.id}
+        onFocus={focusPane}
+        onMinimize={minimizePane}
+        onMaximize={maximizePane}
+        onClose={closePane}
+      />
+    ))}
     <Desktop items={desktopItems} onFocus={focusPane} />
     <TaskBar
       startMenuItems={startMenuItems}
@@ -68,24 +62,20 @@ const App = ({
   </div>
 );
 
+const paneType = p.shape({
+  type: p.string.isRequired,
+  id: p.string.isRequired
+});
+
 App.propTypes = {
-  openPaneItems: p.objectOf(
-    p.shape({
-      type: p.string.isRequired,
-      id: p.string.isRequired
-    })
-  ),
+  openPaneItems: p.objectOf(paneType),
   desktopItems: p.arrayOf(p.object),
   focusedPaneId: p.string,
-  focusedPaneOrder: p.arrayOf(p.string),
+  panes: p.arrayOf(paneType),
   focusPane: p.func.isRequired,
   minimizePane: p.func.isRequired,
   maximizePane: p.func.isRequired,
   closePane: p.func.isRequired
-};
-
-App.defaultProps = {
-  focusedPaneOrder: []
 };
 
 export default connect(
@@ -93,7 +83,11 @@ export default connect(
     openPaneItems: openPaneItems(state),
     desktopItems: itemsForFolder(state, 'desktop'),
     focusedPaneId: focusedPaneId(state),
-    focusedPaneOrder: focusedPaneOrder(state)
+    panes: sortBy(
+      filter(openPaneItems(state), { minimized: false }),
+      // sort panes (for z-index precedence) by their index in focusedPaneOrder
+      ({ id }) => focusedPaneOrder(state).indexOf(id)
+    ).reverse()
   }),
   { focusPane, minimizePane, maximizePane, closePane }
 )(App);
