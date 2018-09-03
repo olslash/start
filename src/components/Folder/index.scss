@@ -20,3 +20,10 @@
 .folderContentContainerContent {
   background-color: white;
 }
+
+.rndContainer {
+  z-index: 9999;
+  // thicker double-dotted border
+  border: 1px dotted #868a8e;
+  outline: 1px dotted #868a8e;
+}

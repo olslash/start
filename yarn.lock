@@ -5786,6 +5786,10 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+re-resizable@4.8.0:
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/re-resizable/-/re-resizable-4.8.0.tgz#abd1ef535ceaaa19dda902ed39ced29ed5ff7a98"
+
 react-dom@^16.2.0:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.2.0.tgz#69003178601c0ca19b709b33a83369fe6124c044"
@@ -5793,6 +5797,13 @@ react-dom@^16.2.0:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
+    prop-types "^15.6.0"
+
+react-draggable@3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/react-draggable/-/react-draggable-3.0.5.tgz#c031e0ed4313531f9409d6cd84c8ebcec0ddfe2d"
+  dependencies:
+    classnames "^2.2.5"
     prop-types "^15.6.0"
 
 react-onclickoutside@^6.7.1:
@@ -5809,6 +5820,14 @@ react-redux@^5.0.7:
     lodash-es "^4.17.5"
     loose-envify "^1.1.0"
     prop-types "^15.6.0"
+
+react-rnd@^9.0.2:
+  version "9.0.2"
+  resolved "https://registry.yarnpkg.com/react-rnd/-/react-rnd-9.0.2.tgz#8fc29c3ea169b3b317b63eb3d987be6c5d3163fb"
+  dependencies:
+    re-resizable "4.8.0"
+    react-draggable "3.0.5"
+    tslib "1.9.3"
 
 react@^16.2.0:
   version "16.2.0"
@@ -6980,6 +6999,10 @@ trim-right@^1.0.1:
   resolved "https://registry.yarnpkg.com/true-case-path/-/true-case-path-1.0.2.tgz#7ec91130924766c7f573be3020c34f8fdfd00d62"
   dependencies:
     glob "^6.0.4"
+
+tslib@1.9.3:
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.3.tgz#d7e4dd79245d85428c4d7e4822a79917954ca286"
 
 tty-browserify@0.0.0:
   version "0.0.0"

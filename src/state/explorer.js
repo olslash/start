@@ -20,6 +20,7 @@ const TOGGLE_MINIMIZE_PANE = 'minimize a pane (toggle)';
 const TOGGLE_MAXIMIZE_PANE = 'maximize a pane (toggle)';
 const OPEN_PANE = 'create a new open pane for an item';
 const CLOSE_PANE = 'close a pane';
+const MOVE_PANE = 'change the position of a pane';
 
 export const active_folder_state = 'active';
 export const inactive_folder_state = 'inactive';
@@ -74,6 +75,7 @@ export const reducer = createReducer(
         startMenuOpen: true
       };
     },
+
     [CLOSE_START_MENU](state) {
       return {
         ...state,
@@ -81,6 +83,7 @@ export const reducer = createReducer(
         startMenuActiveFolderPath: []
       };
     },
+
     [SET_START_MENU_ACTIVE_FOLDER_PATH](state, { payload: { depth, index } }) {
       if (depth > state.startMenuActiveFolderPath.length) {
         console.warn('depth is out of bounds');
@@ -97,6 +100,7 @@ export const reducer = createReducer(
               [...state.startMenuActiveFolderPath, index]
       };
     },
+
     [SELECT_ITEM](state, { payload: { itemId, folderId } }) {
       return {
         ...state,
@@ -134,12 +138,14 @@ export const reducer = createReducer(
         };
       }
     },
+
     [FOCUS_PANE](state, { payload: { id } }) {
       return {
         ...state,
         focusedPaneOrder: moveOrPrependToFront(state.focusedPaneOrder, id)
       };
     },
+
     [TOGGLE_MINIMIZE_PANE](state, { payload: { id } }) {
       return {
         ...state,
@@ -152,6 +158,7 @@ export const reducer = createReducer(
         }
       };
     },
+
     [TOGGLE_MAXIMIZE_PANE](state, { payload: { id } }) {
       return {
         ...state,
@@ -210,6 +217,20 @@ export const reducer = createReducer(
           [id]: {
             ...state.paneStateByItemId[id],
             open: false
+          }
+        }
+      };
+    },
+
+    [MOVE_PANE](state, { payload: { id, left, top } }) {
+      return {
+        ...state,
+        paneStateByItemId: {
+          ...state.paneStateByItemId,
+          [id]: {
+            ...state.paneStateByItemId[id],
+            left,
+            top
           }
         }
       };
@@ -284,6 +305,13 @@ export function closePane(id) {
   return {
     type: CLOSE_PANE,
     payload: { id }
+  };
+}
+
+export function movePane(id, { left, top }) {
+  return {
+    type: MOVE_PANE,
+    payload: { id, left, top }
   };
 }
 
