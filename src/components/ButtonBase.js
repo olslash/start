@@ -71,8 +71,8 @@ class ButtonBase extends Component {
   };
 
   handleMouseUp = e => {
-    e.stopPropagation();
     if (this.state.mouseOver && this.state.active) {
+      e.stopPropagation();
       this.props.onClick(e);
     }
 
