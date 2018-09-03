@@ -69,40 +69,62 @@ class Folder extends Component {
     this.props.onMove(this.props.id, { left: x, top: y });
   };
 
+  handleResize = () => {
+    this.setState({ isDragging: true });
+  };
+
+  handleResizeStop = (e, direction, ref, delta, { x, y }) => {
+    this.props.onMove(this.props.id, {
+      left: x,
+      top: y,
+      width: ref.offsetWidth,
+      height: ref.offsetHeight
+    });
+
+    this.setState({ isDragging: false });
+  };
+
   render() {
     return (
       <Fragment>
-        <Rnd
-          default={{
-            x: this.props.left,
-            y: this.props.top,
-            width: this.props.width,
-            height: this.props.height
-          }}
-          style={{
-            zIndex: 9999,
-            // don't block pointer events for the rest of the folder
-            pointerEvents: 'none'
-          }}
-          className={cx({ [styles.rndContainer]: this.state.isDragging })}
-          onDragStart={this.handleDragStart}
-          onDrag={this.handleDrag}
-          onDragStop={this.handleDragStop}
-          dragHandleClassName="draghandle"
-        >
-          <div
-            className="draghandle"
-            style={{
-              position: 'absolute',
-              height: titleBarHeight,
-              // background: 'red',
-              top: 4,
-              left: 4,
-              right: 50, // clear buttons (hack),
-              pointerEvents: 'all'
+        {!this.props.maximized && (
+          <Rnd
+            default={{
+              x: this.props.left,
+              y: this.props.top,
+              width: this.props.width,
+              height: this.props.height
             }}
-          />
-        </Rnd>
+            style={{
+              zIndex: 9999,
+              // don't block pointer events for the rest of the folder
+              pointerEvents: 'none'
+            }}
+            className={cx({ [styles.rndContainer]: this.state.isDragging })}
+            onDragStart={this.handleDragStart}
+            onDrag={this.handleDrag}
+            onDragStop={this.handleDragStop}
+            dragHandleClassName=".draghandle"
+            onResize={this.handleResize}
+            onResizeStop={this.handleResizeStop}
+            resizeHandleWrapperStyle={{
+              pointerEvents: 'auto'
+            }}
+          >
+            <div
+              className="draghandle"
+              style={{
+                position: 'absolute',
+                height: titleBarHeight,
+                // background: 'red',
+                top: 4,
+                left: 4,
+                right: 50, // clear buttons (hack),
+                pointerEvents: 'auto'
+              }}
+            />
+          </Rnd>
+        )}
 
         <BorderedContainer
           style={{

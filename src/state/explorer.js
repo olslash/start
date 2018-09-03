@@ -229,15 +229,19 @@ export const reducer = createReducer(
       };
     },
 
-    [MOVE_PANE](state, { payload: { id, left, top } }) {
+    [MOVE_PANE](state, { payload: { id, left, top, width, height } }) {
+      const paneState = state.paneStateByItemId[id]
+
       return {
         ...state,
         paneStateByItemId: {
           ...state.paneStateByItemId,
           [id]: {
-            ...state.paneStateByItemId[id],
-            left,
-            top
+            ...paneState,
+            left: left || paneState.left,
+            top: top || paneState.top,
+            width: width || paneState.width,
+            height: height || paneState.height
           }
         }
       };
@@ -315,10 +319,10 @@ export function closePane(id) {
   };
 }
 
-export function movePane(id, { left, top }) {
+export function movePane(id, { left, top, width, height }) {
   return {
     type: MOVE_PANE,
-    payload: { id, left, top }
+    payload: { id, left, top, width, height }
   };
 }
 
