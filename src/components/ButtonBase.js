@@ -18,6 +18,7 @@ class ButtonBase extends Component {
     }),
     style: p.objectOf(p.any),
     innerStyle: p.objectOf(p.any),
+    outerStyle: p.objectOf(p.any),
     children: p.node,
     iconSrc: p.string,
     onClick: p.func,
@@ -87,7 +88,14 @@ class ButtonBase extends Component {
   };
 
   render() {
-    const { classes, style = {}, children, iconSrc } = this.props;
+    const {
+      classes,
+      style = {},
+      innerStyle = {},
+      outerStyle = {},
+      children,
+      iconSrc
+    } = this.props;
 
     return (
       <div
@@ -130,8 +138,12 @@ class ButtonBase extends Component {
             },
             classes.outer
           )}
+          style={outerStyle}
         >
-          <div className={cx(styles.innerBorder, classes.inner)}>
+          <div
+            style={innerStyle}
+            className={cx(styles.innerBorder, classes.inner)}
+          >
             {children}
           </div>
         </div>
