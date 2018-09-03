@@ -3,7 +3,7 @@ import p from 'prop-types';
 import cx from 'classnames';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Rnd } from 'react-rnd';
+import Rnd from 'react-rnd';
 
 import { itemsForFolder } from '../../state/explorer';
 import BorderedContainer from '../BorderedContainer';
