@@ -1,4 +1,4 @@
-import { pickBy, mapValues, pick } from 'lodash';
+import { pickBy, mapValues, pick, sample, range } from 'lodash';
 
 import { createReducer } from '../helpers/index';
 import { uuid, treeFind, moveOrPrependToFront } from '../helpers';
@@ -182,6 +182,8 @@ export const reducer = createReducer(
         'maximized'
       ]);
 
+      const newWindowOffset = sample(range(10, 80, 10));
+
       return {
         ...state,
         focusedPaneOrder: moveOrPrependToFront(state.focusedPaneOrder, id),
@@ -197,6 +199,11 @@ export const reducer = createReducer(
           },
           [id]: {
             ...defaultPaneState,
+            // for new panes, choose a semi-random position for the new folder,
+            // since windows' behavior is inscrutable. seems to start at 0,0 and
+            // increment by x,x.
+            top: newWindowOffset,
+            left: newWindowOffset,
             ...state.paneStateByItemId[id],
 
             open: true,
