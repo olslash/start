@@ -13,6 +13,7 @@ import diskDrive from './icon-disk-drive.png';
 import controlPanel from './icon-control-panel.png';
 import appNotepad from './icon-app-notepad.png';
 import folder from './icon-folder-closed.png';
+import folderOpen from './icon-folder-open.png';
 
 import buttonClose from './button-close.png';
 import buttonMaximize from './button-maximize.png';
@@ -37,6 +38,7 @@ const icons = {
   floppyDrive,
   controlPanel,
   folder,
+  folderOpen,
   appNotepad
 };
 

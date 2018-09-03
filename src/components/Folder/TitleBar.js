@@ -1,6 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import p from 'prop-types';
+import { withProps } from 'recompose';
 
 import ButtonBase from '../ButtonBase';
 
@@ -79,4 +80,10 @@ TitleBar.propTypes = {
   onClose: p.func
 };
 
-export default TitleBar;
+const iconSpecialCaseReplacements = {
+  folder: 'folderOpen'
+};
+
+export default withProps(({ icon }) => ({
+  icon: iconSpecialCaseReplacements[icon] || icon
+}))(TitleBar);
