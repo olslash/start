@@ -86,7 +86,7 @@ export const fileTree = [
       {
         id: itemsById.testFolder.id,
         children: []
-      },
+      }
       // {
       //   id: itemsById.testFile.id,
       //   children: []

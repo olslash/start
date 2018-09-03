@@ -85,7 +85,7 @@ class StartMenuItem extends Component {
         <span
           className={cx(styles.label, {
             [styles.labelHovered]: this.state.hovered || active,
-            [styles.labelShort]: short,
+            [styles.labelShort]: short
           })}
         >
           {label}
