@@ -85,6 +85,11 @@ class Folder extends Component {
   };
 
   render() {
+    const cornerDragHandleStyles = {
+      width: 5,
+      height: 5
+    };
+
     return (
       <Fragment>
         {!this.props.maximized && (
@@ -109,6 +114,28 @@ class Folder extends Component {
             onResizeStop={this.handleResizeStop}
             resizeHandleWrapperStyle={{
               pointerEvents: 'auto'
+            }}
+            resizeHandleStyles={{
+              left: {
+                width: 5,
+                left: 0
+              },
+              right: {
+                width: 5,
+                right: 0
+              },
+              top: {
+                height: 5,
+                top: 0
+              },
+              bottom: {
+                height: 5,
+                bottom: 0
+              },
+              topLeft: {...cornerDragHandleStyles, left: 0, top: 0},
+              topRight: {...cornerDragHandleStyles, right: 0, top: 0},
+              bottomLeft: {...cornerDragHandleStyles, left: 0, bottom: 0},
+              bottomRight: { ...cornerDragHandleStyles, right: 0, bottom: 0 }
             }}
           >
             <div
