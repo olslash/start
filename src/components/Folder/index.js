@@ -53,18 +53,20 @@ class Folder extends Component {
 
   handleDragStart = () => {
     this.props.onFocus(this.props.id);
+  };
 
-    this.setState({ isDragging: true });
+  handleDrag = (e, { x, y }) => {
+    // don't display dragging state on mouse down; only once user actually
+    // starts dragging.
+    if (x !== this.props.left || y !== this.props.left) {
+      this.setState({ isDragging: true });
+    }
   };
 
   handleDragStop = (e, { x, y }) => {
     this.setState({ isDragging: false });
 
     this.props.onMove(this.props.id, { left: x, top: y });
-  };
-
-  handleRndMouseDown = () => {
-    console.log('down');
   };
 
   render() {
@@ -84,6 +86,7 @@ class Folder extends Component {
           }}
           className={cx({ [styles.rndContainer]: this.state.isDragging })}
           onDragStart={this.handleDragStart}
+          onDrag={this.handleDrag}
           onDragStop={this.handleDragStop}
           dragHandleClassName="draghandle"
         >
@@ -120,8 +123,7 @@ class Folder extends Component {
             onClick: () => {
               // focus this pane via click on titlebar, edges, etc
               this.props.onFocus(this.props.id);
-            },
-            onMouseDown: this.handleRndMouseDown
+            }
           }}
         >
           <TitleBar
