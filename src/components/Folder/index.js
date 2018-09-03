@@ -52,7 +52,8 @@ class Folder extends Component {
   };
 
   handleDragStart = () => {
-    console.log('drag');
+    this.props.onFocus(this.props.id);
+
     this.setState({ isDragging: true });
   };
 
