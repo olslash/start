@@ -66,13 +66,13 @@ class StartMenuItem extends Component {
   };
 
   render() {
-    const { icon, label, short, children } = this.props;
+    const { icon, label, short, active, children } = this.props;
     // fixme -- should only be able to activate folder items
     return (
       <div
         className={cx(styles.container, {
-          [styles.active]: this.state.hovered || this.props.active,
-          [styles.short]: short
+          [styles.active]: this.state.hovered || active,
+          [styles.containerShort]: short
         })}
         onMouseOver={this.setHovered}
         onMouseLeave={this.setUnHovered}
@@ -84,7 +84,8 @@ class StartMenuItem extends Component {
 
         <span
           className={cx(styles.label, {
-            [styles.labelHovered]: this.state.hovered || this.props.active
+            [styles.labelHovered]: this.state.hovered || active,
+            [styles.labelShort]: short,
           })}
         >
           {label}

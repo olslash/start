@@ -16,7 +16,8 @@ export const itemsById = addIdFields({
   recycleBin: {
     type: 'folder',
     title: 'Recycle Bin',
-    icon: 'recycleBin'
+    icon: 'recycleBinEmpty'
+    // fixme -- full icon
   },
   controlPanel: {
     type: 'folder',
@@ -30,8 +31,8 @@ export const itemsById = addIdFields({
   },
   driveA: {
     type: 'folder',
-    title: 'Removable Disk (A:)',
-    icon: 'diskDrive'
+    title: '3½ Floppy (A:)',
+    icon: 'floppyDrive'
   },
   driveC: {
     type: 'folder',
@@ -65,7 +66,12 @@ export const fileTree = [
           },
           {
             id: itemsById.driveC.id,
-            children: []
+            children: [
+              {
+                id: itemsById.testFile.id,
+                children: []
+              }
+            ]
           },
           {
             id: itemsById.controlPanel.id,
@@ -81,10 +87,10 @@ export const fileTree = [
         id: itemsById.testFolder.id,
         children: []
       },
-      {
-        id: itemsById.testFile.id,
-        children: []
-      }
+      // {
+      //   id: itemsById.testFile.id,
+      //   children: []
+      // }
     ]
   }
 ];

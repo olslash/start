@@ -5,13 +5,13 @@
   height: 30px;
   width: 100%;
   font-size: 10px;
-  padding: 5px 10px;
+  padding: 2px 5px;
   padding-right: 0;
 }
 
-.short {
+.containerShort {
   height: 20px;
-  padding: 3px 10px;
+  padding: 0 5px;
 }
 
 .iconCol {
@@ -33,6 +33,10 @@
 .label {
   flex-grow: 1;
   padding-left: 10px;
+}
+
+.labelShort {
+  padding-left: 3px;
 }
 
 .labelHovered {
