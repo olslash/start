@@ -1,6 +1,8 @@
 import React from 'react';
 import p from 'prop-types';
 
+import BorderedContainer from '../BorderedContainer';
+
 import styles from './clock.scss';
 
 const formatTime = date => {
@@ -18,11 +20,18 @@ const formatTime = date => {
 };
 
 const Clock = ({ currentDate }) => (
-  <div className={styles.container}>
-    <div className={styles.background}>
-      <span className={styles.time}>{formatTime(currentDate)}</span>
-    </div>
-  </div>
+  <BorderedContainer
+    depth={1}
+    classes={{ root: styles.container, outer: styles.content }}
+    borderColors={[
+      {
+        topLeft: '#868a8e',
+        bottomRight: 'white'
+      }
+    ]}
+  >
+    <span className={styles.time}>{formatTime(currentDate)}</span>
+  </BorderedContainer>
 );
 
 Clock.propTypes = {

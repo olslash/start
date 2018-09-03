@@ -1,12 +1,9 @@
 .container {
   width: 42px;
+  height: 100%;
 }
 
-.background {
-  height: 100%;
-  /* fixme - use css border instead of background image */
-  background: url('resources/clock-inset-blank.png') no-repeat left center;
-  background-size: contain;
+.content {
   display: flex;
   justify-content: flex-end;
   align-items: center;
