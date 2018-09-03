@@ -29,6 +29,10 @@
 }
 
 .icon {
+  // avoid weird rendering from the windows icons at very small sizes
+  // (folder titlebar) when rendering in pixelated mode, specifically
+  // the folder icon
+  image-rendering: initial;
   height: 100%;
   width: 12px;
 }
