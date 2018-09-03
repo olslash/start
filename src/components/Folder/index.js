@@ -122,6 +122,7 @@ class Folder extends Component {
                 right: 50, // clear buttons (hack),
                 pointerEvents: 'auto'
               }}
+              onDoubleClick={() => this.props.onMaximize(this.props.id)}
             />
           </Rnd>
         )}
@@ -155,6 +156,7 @@ class Folder extends Component {
             height={titleBarHeight}
             onMinimize={this.props.onMinimize}
             onMaximize={this.props.onMaximize}
+            onDoubleClick={this.props.onMaximize}
             onClose={this.props.onClose}
             folderId={this.props.id}
           />

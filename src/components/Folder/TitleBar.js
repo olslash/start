@@ -17,7 +17,8 @@ const TitleBar = ({
   height = 14,
   onMinimize,
   onMaximize,
-  onClose
+  onClose,
+  onDoubleClick
 }) => (
   <div
     className={cx(styles.container, {
@@ -25,7 +26,10 @@ const TitleBar = ({
     })}
     style={{ height }}
   >
-    <div className={styles.leftContainer}>
+    <div
+      className={styles.leftContainer}
+      onDoubleClick={() => onDoubleClick(folderId)}
+    >
       <div>
         {icons[icon] && <img src={icons[icon]} className={styles.icon} />}
       </div>
@@ -77,7 +81,8 @@ TitleBar.propTypes = {
   height: p.number,
   onMinimize: p.func,
   onMaximize: p.func,
-  onClose: p.func
+  onClose: p.func,
+  onDoubleClick: p.func
 };
 
 const iconSpecialCaseReplacements = {
