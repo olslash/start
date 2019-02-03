@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import { createStore, compose, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 
 import App from './components/App';
 
@@ -15,7 +16,7 @@ const store = createStore(
   rootReducer,
   composeEnhancers({
     actionsBlacklist: ['CLOCK_TICK']
-  })(applyMiddleware(sagaMiddleware))
+  })(applyMiddleware(sagaMiddleware, thunk))
 );
 sagaMiddleware.run(rootSaga);
 

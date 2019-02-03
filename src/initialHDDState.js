@@ -48,8 +48,9 @@ export const itemsById = addIdFields({
     type: 'file',
     title: 'my cool test file',
     icon: 'appNotepad',
-    opensWith: 'AppNotepad'
-    // todo: "apps", file contents, etc
+    opensWith: 'AppNotepad',
+    contentUrl:
+      'https://raw.githubusercontent.com/olslash/olslash.github.io/master/resume-plaintext.txt'
   }
 });
 

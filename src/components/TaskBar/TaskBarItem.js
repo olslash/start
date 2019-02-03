@@ -3,7 +3,7 @@ import p from 'prop-types';
 import cx from 'classnames';
 
 // import screenDoor from '../../../resources/selected-overlay-screen-inverse-40.svg';
-import icons from '../../../resources/icons'
+import icons from '../../../resources/icons';
 import ButtonBase from '../ButtonBase';
 import styles from './taskBarItem.scss';
 
@@ -17,10 +17,7 @@ const TaskBarItem = ({ title, active, onClick, icon }) => (
       onClick={onClick}
       stopClickPropagation
     >
-      <div
-        className={cx(styles.title, { [styles.active]: active })}
-
-      >
+      <div className={cx(styles.title, { [styles.active]: active })}>
         <img src={icons[icon]} />
         <span>{title}</span>
       </div>

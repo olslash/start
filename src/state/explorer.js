@@ -1,12 +1,15 @@
 import { pickBy, mapValues, pick, sample, range } from 'lodash';
+import { put, takeEvery, select } from 'redux-saga/effects'; // eslint-disable-line
 
 import { createReducer } from '../helpers/index';
-import { uuid, treeFind, moveOrPrependToFront } from '../helpers';
+import { treeFind, moveOrPrependToFront } from '../helpers';
 
 import {
   fileTree as initialFileTree,
   itemsById as initialItemsByID
 } from '../initialHDDState';
+
+import { fetchTextFile } from './remoteFile';
 
 const OPEN_START_MENU = 'Open the start menu';
 const CLOSE_START_MENU = 'Close the start menu';
@@ -230,7 +233,7 @@ export const reducer = createReducer(
     },
 
     [MOVE_PANE](state, { payload: { id, left, top, width, height } }) {
-      const paneState = state.paneStateByItemId[id]
+      const paneState = state.paneStateByItemId[id];
 
       return {
         ...state,
@@ -249,7 +252,18 @@ export const reducer = createReducer(
   }
 );
 
-// export function* saga() {}
+export function* saga() {
+  yield takeEvery(action => action.type === OPEN_PANE, function*({
+    payload: { id }
+  }) {
+    const file = yield select(itemById, id);
+
+    // fetch content for panes that have data requirements on opening
+    if (file.contentUrl) {
+      yield put(fetchTextFile(file.contentUrl));
+    }
+  });
+}
 
 export function openStartMenu() {
   return {
