@@ -4,7 +4,7 @@ import p from 'prop-types';
 import Folder from './Folder';
 import AppNotepad from './AppNotepad';
 
-const apps = { AppNotepad };
+const windowsApps = { AppNotepad };
 
 export default class WindowContainer extends Component {
   static propTypes = {
@@ -14,12 +14,12 @@ export default class WindowContainer extends Component {
   };
 
   render() {
-    const App = apps[this.props.opensWith];
+    const WindowsApplication = windowsApps[this.props.opensWith];
 
     return this.props.type === 'folder' ? (
       <Folder {...this.props} />
     ) : (
-      <App {...this.props} />
+      <WindowsApplication {...this.props} />
     );
   }
 }
