@@ -1,6 +1,7 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { find } from 'lodash'
 import p from 'prop-types';
 
 import {

@@ -186,6 +186,7 @@ export const reducer = createReducer(
       ]);
 
       const newWindowOffset = sample(range(10, 80, 10));
+      const openInNewWindow = state.itemsById[id].type === 'file';
 
       return {
         ...state,
@@ -197,8 +198,9 @@ export const reducer = createReducer(
             // while navigating between folders, use the "same" window by
             // closing the opener and replacing it with the new pane, inheriting
             // the previous position
+            // fixme: apps need to open in a new window
             // fixme -- this state needs to be transient
-            open: false
+            open: openInNewWindow
           },
           [id]: {
             ...defaultPaneState,
@@ -212,8 +214,9 @@ export const reducer = createReducer(
             open: true,
             minimized: false,
 
-            // inherit size/position of opener if it exists
-            ...openerPanePosition
+            // inherit size/position of opener if it exists, and we are opening
+            // in its place
+            ...openInNewWindow ? {} : openerPanePosition
           }
         }
       };

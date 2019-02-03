@@ -16,8 +16,6 @@ class AppNotepad extends Component {
     loading: p.bool
   };
 
-  // static defaultProps = {};
-
   getTitle = () => `${this.props.title} - Notepad`;
 
   render() {
@@ -35,8 +33,8 @@ class AppNotepad extends Component {
             className={styles.textContent}
             contentEditable
             // onInput={e => console.log(e.target.innerText)}
-            // required for contentEditable, can't let React manage children
-            // safe, however, because contentEditable content isn't evaluated
+            // required for contentEditable, can't let React manage children.
+            // Safe, however, because contentEditable content isn't evaluated
             dangerouslySetInnerHTML={{ __html: this.props.fileData }}
           />
         )}
