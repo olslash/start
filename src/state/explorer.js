@@ -200,7 +200,7 @@ export const reducer = createReducer(
             // the previous position
             // fixme: apps need to open in a new window
             // fixme -- this state needs to be transient
-            open: openInNewWindow
+            open: openerPaneState.open && openInNewWindow
           },
           [id]: {
             ...defaultPaneState,
