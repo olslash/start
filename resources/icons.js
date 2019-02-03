@@ -12,6 +12,7 @@ import floppyDrive from './icon-floppy-drive.png';
 import diskDrive from './icon-disk-drive.png';
 import controlPanel from './icon-control-panel.png';
 import appNotepad from './icon-app-notepad.png';
+import appImageViewer from './icon-app-imageviewer.png';
 import folder from './icon-folder-closed.png';
 import folderOpen from './icon-folder-open.png';
 
@@ -39,7 +40,8 @@ const icons = {
   controlPanel,
   folder,
   folderOpen,
-  appNotepad
+  appNotepad,
+  appImageViewer
 };
 
 export default icons;

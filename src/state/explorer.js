@@ -262,7 +262,7 @@ export function* saga() {
     const file = yield select(itemById, id);
 
     // fetch content for panes that have data requirements on opening
-    if (file.contentUrl) {
+    if (file.contentUrl && file.opensWith === 'AppNotepad') {
       yield put(fetchTextFile(file.contentUrl));
     }
   });

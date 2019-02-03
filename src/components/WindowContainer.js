@@ -3,8 +3,9 @@ import p from 'prop-types';
 
 import Folder from './Folder';
 import AppNotepad from './AppNotepad';
+import AppImageViewer from './AppImageViewer';
 
-const windowsApps = { AppNotepad };
+const windowsApps = { AppNotepad, AppImageViewer };
 
 export default class WindowContainer extends Component {
   static propTypes = {

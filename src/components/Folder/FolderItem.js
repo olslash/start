@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { noop } from 'lodash';
+import { noop, truncate } from 'lodash';
 import cx from 'classnames';
 import p from 'prop-types';
 
@@ -63,8 +63,15 @@ class FolderItem extends Component {
     this.props.onDoubleClick(e, this.props.id);
   };
 
+  getTruncatedTitle = () => {
+    return this.props.title
+      .split(' ')
+      .map(word => truncate(word, { length: 12 }))
+      .join(' ');
+  };
+
   render() {
-    const { icon, title, selected, partialSelected, darkTitle } = this.props;
+    const { icon, selected, partialSelected, darkTitle } = this.props;
     const isActiveSelection = selected && !partialSelected;
 
     return (
@@ -90,7 +97,7 @@ class FolderItem extends Component {
               [styles.titleSelectedInactive]: selected && !isActiveSelection
             })}
           >
-            {title}
+            {this.getTruncatedTitle()}
           </div>
         </div>
       </div>
