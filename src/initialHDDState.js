@@ -119,6 +119,22 @@ export const itemsById = Object.assign(
       opensWith: 'AppNotepad',
       contentUrl:
         'https://raw.githubusercontent.com/olslash/olslash.github.io/master/resume-plaintext.txt'
+    },
+    tannerRecommendationFile: {
+      type: 'file',
+      title: 'Zack Tanner, Software Engineer.txt',
+      icon: 'appNotepad',
+      opensWith: 'AppNotepad',
+      contentUrl:
+        'https://raw.githubusercontent.com/olslash/olslash.github.io/master/recommendation-tanner-plaintext.txt'
+    },
+    gujaratiRecommendationFile: {
+      type: 'file',
+      title: 'Kshitij “Gio” Gujarati, Director of Product.txt',
+      icon: 'appNotepad',
+      opensWith: 'AppNotepad',
+      contentUrl:
+        'https://raw.githubusercontent.com/olslash/olslash.github.io/master/recommendation-gujarati-plaintext.txt'
     }
   }),
   resumeScreenshots
@@ -139,8 +155,7 @@ export const fileTree = [
             id: itemsById.driveC.id,
             children: [
               {
-                id: itemsById.resumeFile.id,
-                children: []
+                id: itemsById.resumeFile.id
               }
             ]
           },
@@ -160,7 +175,14 @@ export const fileTree = [
       },
       {
         id: itemsById.recommendationsFolder.id,
-        children: []
+        children: [
+          {
+            id: 'tannerRecommendationFile'
+          },
+          {
+            id: 'gujaratiRecommendationFile'
+          }
+        ]
       }
       // {
       //   id: itemsById.resumeFile.id,
