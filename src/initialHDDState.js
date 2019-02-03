@@ -48,7 +48,7 @@ export const itemsById = addIdFields({
     type: 'file',
     title: 'my cool test file',
     icon: 'appNotepad',
-    opensWith: 'app-notepad'
+    opensWith: 'AppNotepad'
     // todo: "apps", file contents, etc
   }
 });

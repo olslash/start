@@ -25,17 +25,17 @@ const MOVE_PANE = 'change the position of a pane';
 export const active_folder_state = 'active';
 export const inactive_folder_state = 'inactive';
 
-export const file_item_type = 'file';
-export const folder_item_type = 'folder';
-
-export function item({ type, id = uuid(), title, icon }) {
-  return {
-    type,
-    id,
-    title,
-    icon
-  };
-}
+// export const file_item_type = 'file';
+// export const folder_item_type = 'folder';
+//
+// export function item({ type, id = uuid(), title, icon }) {
+//   return {
+//     type,
+//     id,
+//     title,
+//     icon
+//   };
+// }
 
 const defaultPaneState = {
   open: false,

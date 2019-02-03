@@ -5,9 +5,8 @@ import { connect } from 'react-redux';
 
 import { itemsForFolder } from '../../state/explorer';
 import WindowBase from '../WindowBase';
-import FolderContents from './FolderContents';
 
-class Folder extends Component {
+class AppNotepad extends Component {
   static propTypes = {
     id: p.string.isRequired,
     items: p.arrayOf(
@@ -18,20 +17,10 @@ class Folder extends Component {
     )
   };
 
-  static defaultProps = {
-    items: []
-  };
+  static defaultProps = {};
 
   render() {
-    return (
-      <WindowBase {...this.props}>
-        <FolderContents
-          items={this.props.items}
-          folderId={this.props.id}
-          darkItemTitles
-        />
-      </WindowBase>
-    );
+    return <WindowBase {...this.props}>Notepad app</WindowBase>;
   }
 }
 
@@ -39,4 +28,4 @@ export default compose(
   connect((state, ownProps) => ({
     items: itemsForFolder(state, ownProps.id)
   }))
-)(Folder);
+)(AppNotepad);

@@ -21,13 +21,13 @@ import TaskBar from './TaskBar';
 import Desktop from './Desktop';
 
 import styles from './app.scss';
-import Folder from './Folder';
+import WindowContainer from './WindowContainer';
 
 const App = ({
   desktopItems = [],
   openPaneItems = [],
   focusedPaneId,
-  panes,
+  visiblePanes,
   focusPane,
   minimizePane,
   maximizePane,
@@ -36,11 +36,11 @@ const App = ({
 }) => (
   <div className={styles.container}>
     <SVGDefinitions />
-    {filter(panes, { type: 'folder' }).map(folder => (
-      <Folder
-        {...folder}
-        focused={focusedPaneId === folder.id}
-        key={folder.id}
+    {visiblePanes.map(pane => (
+      <WindowContainer
+        {...pane}
+        focused={focusedPaneId === pane.id}
+        key={pane.id}
         onFocus={focusPane}
         onMinimize={minimizePane}
         onMaximize={maximizePane}
@@ -74,7 +74,7 @@ App.propTypes = {
   openPaneItems: p.objectOf(paneType),
   desktopItems: p.arrayOf(p.object),
   focusedPaneId: p.string,
-  panes: p.arrayOf(paneType),
+  visiblePanes: p.arrayOf(paneType),
   focusPane: p.func.isRequired,
   minimizePane: p.func.isRequired,
   maximizePane: p.func.isRequired,
@@ -87,7 +87,7 @@ export default connect(
     openPaneItems: openPaneItems(state),
     desktopItems: itemsForFolder(state, 'desktop'),
     focusedPaneId: focusedPaneId(state),
-    panes: sortBy(
+    visiblePanes: sortBy(
       filter(openPaneItems(state), { minimized: false }),
       // sort panes (for z-index precedence) by their index in focusedPaneOrder
       ({ id }) => focusedPaneOrder(state).indexOf(id)

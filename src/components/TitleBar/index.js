@@ -7,10 +7,10 @@ import ButtonBase from '../ButtonBase';
 
 import icons from '../../../resources/icons';
 
-import styles from './titleBar.scss';
+import styles from './index.scss';
 
 const TitleBar = ({
-  folderId,
+  windowId,
   title,
   active = false,
   icon,
@@ -28,7 +28,7 @@ const TitleBar = ({
   >
     <div
       className={styles.leftContainer}
-      onDoubleClick={() => onDoubleClick(folderId)}
+      onDoubleClick={() => onDoubleClick(windowId)}
     >
       <div>
         {icons[icon] && <img src={icons[icon]} className={styles.icon} />}
@@ -44,7 +44,7 @@ const TitleBar = ({
             icon: styles.buttonIcon
           }}
           iconSrc={icons.buttonMinimize}
-          onClick={() => onMinimize(folderId)}
+          onClick={() => onMinimize(windowId)}
         />
       )}
       {onMaximize && (
@@ -55,7 +55,7 @@ const TitleBar = ({
             icon: styles.buttonIcon
           }}
           iconSrc={icons.buttonMaximize}
-          onClick={() => onMaximize(folderId)}
+          onClick={() => onMaximize(windowId)}
         />
       )}
       {onClose && (
@@ -66,7 +66,7 @@ const TitleBar = ({
             icon: styles.buttonIcon
           }}
           iconSrc={icons.buttonClose}
-          onClick={() => onClose(folderId)}
+          onClick={() => onClose(windowId)}
         />
       )}
     </div>
@@ -74,7 +74,7 @@ const TitleBar = ({
 );
 
 TitleBar.propTypes = {
-  folderId: p.string.isRequired,
+  windowId: p.string.isRequired,
   title: p.string.isRequired,
   active: p.bool,
   icon: p.string,
