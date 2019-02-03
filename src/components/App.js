@@ -36,9 +36,10 @@ const App = ({
 }) => (
   <div className={styles.container}>
     <SVGDefinitions />
-    {visiblePanes.map(pane => (
+    {visiblePanes.map((pane, i) => (
       <WindowContainer
         {...pane}
+        zIndex={i + 100}
         focused={focusedPaneId === pane.id}
         key={pane.id}
         onFocus={focusPane}

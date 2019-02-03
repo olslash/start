@@ -14,6 +14,7 @@ class WindowBase extends Component {
   static propTypes = {
     children: p.node,
     id: p.string.isRequired,
+    zIndex: p.number.isRequired,
     title: p.string.isRequired,
     icon: p.string,
     focused: p.bool,
@@ -91,7 +92,7 @@ class WindowBase extends Component {
               height: this.props.height
             }}
             style={{
-              zIndex: 9999,
+              zIndex: this.props.zIndex + 1,
               // don't block pointer events for the rest of the window
               pointerEvents: 'none'
             }}
@@ -150,7 +151,7 @@ class WindowBase extends Component {
             width: this.props.width,
             top: this.props.top,
             left: this.props.left,
-            zIndex: 100
+            zIndex: this.props.zIndex
           }}
           depth={2}
           classes={{
