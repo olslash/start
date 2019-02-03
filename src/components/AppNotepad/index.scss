@@ -1,3 +1,9 @@
 .textContent {
   font-size: 10px;
+  padding: 2px;
+  margin: 0;
+
+  &:focus {
+    outline: none;
+  }
 }

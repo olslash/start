@@ -2,15 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import p from 'prop-types';
 
-import { fileData } from '../../state/remoteFile';
+import fetchingStatus from '../../helpers/fetchingStatus';
+import { fileData, fileDataFetchingStatus } from '../../state/remoteFile';
 import WindowBase from '../WindowBase';
+import DelayedLoadingIndicator from '../DelayedLoadingIndicator';
 import styles from './index.scss';
 
 class AppNotepad extends Component {
   static propTypes = {
     title: p.string.isRequired,
     contentUrl: p.string.isRequired,
-    fileData: p.string
+    fileData: p.string,
+    loading: p.bool
   };
 
   // static defaultProps = {};
@@ -18,17 +21,33 @@ class AppNotepad extends Component {
   getTitle = () => `${this.props.title} - Notepad`;
 
   render() {
-    console.log(this.props);
     return (
       <WindowBase {...this.props} title={this.getTitle()}>
-        <pre className={styles.textContent}>
-          {this.props.fileData && this.props.fileData}
-        </pre>
+        {this.props.loading ? (
+          <DelayedLoadingIndicator>
+            <pre className={styles.textContent}>Loading...</pre>
+          </DelayedLoadingIndicator>
+        ) : (
+          <pre
+            autoCorrect="false"
+            autoCapitalize="false"
+            spellCheck={false}
+            className={styles.textContent}
+            contentEditable
+            // onInput={e => console.log(e.target.innerText)}
+            // required for contentEditable, can't let React manage children
+            // safe, however, because contentEditable content isn't evaluated
+            dangerouslySetInnerHTML={{ __html: this.props.fileData }}
+          />
+        )}
       </WindowBase>
     );
   }
 }
 
 export default connect((state, ownProps) => ({
-  fileData: fileData(state, ownProps.contentUrl)
+  fileData: fileData(state, ownProps.contentUrl),
+  loading:
+    fileDataFetchingStatus(state, ownProps.contentUrl) ===
+    fetchingStatus.fetching
 }))(AppNotepad);
