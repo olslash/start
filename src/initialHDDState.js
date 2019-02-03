@@ -153,11 +153,7 @@ export const fileTree = [
           },
           {
             id: itemsById.driveC.id,
-            children: [
-              {
-                id: itemsById.resumeFile.id
-              }
-            ]
+            children: []
           },
           {
             id: itemsById.controlPanel.id,
@@ -170,8 +166,8 @@ export const fileTree = [
         children: []
       },
       {
-        id: itemsById.workSamplesFolder.id,
-        children: map(resumeScreenshots, v => ({ id: v.id }))
+        id: itemsById.resumeFile.id,
+        children: []
       },
       {
         id: itemsById.recommendationsFolder.id,
@@ -183,7 +179,12 @@ export const fileTree = [
             id: 'gujaratiRecommendationFile'
           }
         ]
+      },
+      {
+        id: itemsById.workSamplesFolder.id,
+        children: map(resumeScreenshots, v => ({ id: v.id }))
       }
+
       // {
       //   id: itemsById.resumeFile.id,
       //   children: []
