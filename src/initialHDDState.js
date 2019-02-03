@@ -44,9 +44,9 @@ export const itemsById = addIdFields({
     title: 'my cool test folder',
     icon: 'folder'
   },
-  testFile: {
+  resumeFile: {
     type: 'file',
-    title: 'my cool test file',
+    title: 'My Resume',
     icon: 'appNotepad',
     opensWith: 'AppNotepad',
     contentUrl:
@@ -69,7 +69,7 @@ export const fileTree = [
             id: itemsById.driveC.id,
             children: [
               {
-                id: itemsById.testFile.id,
+                id: itemsById.resumeFile.id,
                 children: []
               }
             ]
@@ -89,7 +89,7 @@ export const fileTree = [
         children: []
       }
       // {
-      //   id: itemsById.testFile.id,
+      //   id: itemsById.resumeFile.id,
       //   children: []
       // }
     ]
