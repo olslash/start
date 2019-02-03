@@ -240,6 +240,7 @@ export const reducer = createReducer(
 
       return {
         ...state,
+        focusedPaneOrder: moveOrPrependToFront(state.focusedPaneOrder, id),
         paneStateByItemId: {
           ...state.paneStateByItemId,
           [id]: {
