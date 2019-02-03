@@ -216,7 +216,7 @@ export const reducer = createReducer(
 
             // inherit size/position of opener if it exists, and we are opening
             // in its place
-            ...openInNewWindow ? {} : openerPanePosition
+            ...(openInNewWindow ? {} : openerPanePosition)
           }
         }
       };

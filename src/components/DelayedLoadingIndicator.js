@@ -25,7 +25,7 @@ export default class DelayedLoadingIndicator extends Component {
   }
 
   componentWillUnmount() {
-    clearTimeout(this.loadingDelay)
+    clearTimeout(this.loadingDelay);
   }
 
   loadingDelayPassed = () => {
