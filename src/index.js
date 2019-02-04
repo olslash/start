@@ -10,13 +10,16 @@ import App from './components/App';
 import rootReducer from './state/rootReducer';
 import rootSaga from './state/rootSaga';
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+      actionsBlacklist: ['CLOCK_TICK']
+    })
+  : compose;
+
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
   rootReducer,
-  composeEnhancers({
-    actionsBlacklist: ['CLOCK_TICK']
-  })(applyMiddleware(sagaMiddleware, thunk))
+  composeEnhancers(applyMiddleware(sagaMiddleware, thunk))
 );
 sagaMiddleware.run(rootSaga);
 
