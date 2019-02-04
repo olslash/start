@@ -96,6 +96,8 @@ class WindowBase extends Component {
               // don't block pointer events for the rest of the window
               pointerEvents: 'none'
             }}
+            minWidth={100}
+            minHeight={80}
             className={cx({ [styles.rndContainer]: this.state.isDragging })}
             onDragStart={this.handleDragStart}
             onDrag={this.handleDrag}

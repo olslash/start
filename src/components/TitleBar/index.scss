@@ -17,6 +17,7 @@
   display: flex;
   flex-grow: 1;
   justify-content: flex-start;
+  min-width: 0;
 }
 
 .rightContainer {
@@ -26,6 +27,9 @@
 
 .title {
   padding-left: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .icon {

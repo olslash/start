@@ -58,13 +58,13 @@ const resumeScreenshots = [
   }
 ].reduce(
   (result, v) => ({
+    ...result,
     [v.title]: {
       ...v,
       type: 'file',
       icon: 'appImageViewer',
       id: v.title
-    },
-    ...result
+    }
   }),
   {}
 );
