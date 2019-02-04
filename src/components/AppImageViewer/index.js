@@ -17,7 +17,7 @@ class AppImageViewer extends Component {
       <WindowBase {...this.props} title={this.getTitle()}>
         <img
           src={this.props.contentUrl}
-          alt={`project screenshot for ${this.props.title}`}
+          // alt={`project screenshot for ${this.props.title}`}
           className={styles.image}
         />
       </WindowBase>
