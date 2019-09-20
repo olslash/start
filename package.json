@@ -1,14 +1,14 @@
 {
   "name": "windows",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.tsx",
   "author": "Mitch Robb <olordhux+github@gmail.com>",
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server",
     "build": "NODE_ENV=production webpack",
-    "format": "prettier --write \"./src/**/*.js\"",
-    "lint": "eslint src/** --ext .js"
+    "format": "prettier --write \"./src/**/*.tsx?\"",
+    "lint": "eslint src/** --ext .tsx"
   },
   "resolutions": {
     "terser": "3.14.1"
@@ -36,6 +36,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.3.1",
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.6.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.0",
@@ -48,7 +49,9 @@
     "node-sass": "^4.11.0",
     "prettier": "^1.11.1",
     "sass-loader": "^7.1.0",
+    "source-map-loader": "^0.2.4",
     "style-loader": "^0.23.1",
+    "typescript": "^3.6.3",
     "url-loader": "^1.1.2",
     "veritone-dev-env": "^1.0.2",
     "webpack": "^4.29.0",

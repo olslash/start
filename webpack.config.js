@@ -2,16 +2,28 @@ const HTMLPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-  entry: ['@babel/polyfill', './src/index.js'],
+  entry: ['@babel/polyfill', './src/index.tsx'],
   output: {
     filename: 'dist/bundle.js'
   },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
+  },
+  devtool: 'eval-source-map',
   module: {
     rules: [
       {
         include: __dirname + '/src',
+        test: /\.tsx?$/,
+        use: {
+          loader: 'babel-loader'
+        }
+      },
+      {
+        include: __dirname + '/src',
         test: /\.js$/,
-        use: { loader: 'babel-loader' }
+        use: { loader: 'source-map-loader' },
+        enforce: 'pre'
       },
       {
         include: __dirname + '/resources',
@@ -27,8 +39,8 @@ module.exports = {
             loader: 'css-loader',
             options: {
               modules: true,
-              localIdentName: '[local]--[hash:base64:5]',
-              // alias: {
+              localIdentName: '[local]--[hash:base64:5]'
+              // alias: {a
               //   resources: __dirname + '/resources'
               // }
             }
