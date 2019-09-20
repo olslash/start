@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const HTMLPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -7,7 +8,7 @@ module.exports = {
     filename: 'dist/bundle.js'
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx']
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss']
   },
   devtool: 'eval-source-map',
   module: {
@@ -35,6 +36,8 @@ module.exports = {
         test: /\.scss$/,
         loaders: [
           'style-loader',
+
+          '@teamsupercell/typings-for-css-modules-loader',
           {
             loader: 'css-loader',
             options: {
@@ -50,5 +53,5 @@ module.exports = {
       }
     ]
   },
-  plugins: [new HTMLPlugin()]
+  plugins: [new HTMLPlugin(), new webpack.WatchIgnorePlugin([/css\.d\.ts$/])]
 };

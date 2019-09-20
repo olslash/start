@@ -1,9 +1,20 @@
-const env = require('veritone-dev-env');
+module.exports = {
+  extends: [
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended'
+  ],
+  parser: '@typescript-eslint/parser',
 
-module.exports = Object.assign({}, env.eslintReact, {
-  plugins: env.eslintReact.plugins.concat('import'),
-  rules: Object.assign({}, env.eslintReact.rules, {
+  plugins: ['import', '@typescript-eslint'],
+  rules: {
     'import/order': 2,
-    'react/jsx-no-bind': 0
-  })
-});
+    'react/jsx-no-bind': 0,
+    '@typescript-eslint/explicit-function-return-type': 0,
+    '@typescript-eslint/camelcase': 0
+  },
+  settings: {
+    react: {
+      version: 'detect'
+    }
+  }
+};
