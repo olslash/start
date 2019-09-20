@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { filter, get, sortBy } from 'lodash';
-import p from 'prop-types';
+import * as p from 'prop-types';
 
 import startMenuItems from '../startMenuItems';
 import {

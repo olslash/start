@@ -1,9 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 
 import startUp from '../../resources/start-up.png';
 import startDown from '../../resources/start-down.png';
 import ImageButton from './ImageButton';
-import { clickoutIgnoreClassname } from './StartMenu/index';
+import { clickoutIgnoreClassname } from './StartMenu';
 
 const StartButtonUp = () => <img style={{ height: '100%' }} src={startUp} />;
 

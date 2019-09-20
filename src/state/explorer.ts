@@ -1,7 +1,7 @@
 import { pickBy, mapValues, pick, sample, range } from 'lodash';
 import { put, takeEvery, select } from 'redux-saga/effects'; // eslint-disable-line
 
-import { createReducer } from '../helpers/index';
+import { createReducer } from '../helpers';
 import { treeFind, moveOrPrependToFront } from '../helpers';
 
 import {

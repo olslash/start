@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import screenDoorOverlay from '../../resources/selected-overlay-screen-40.svg';
 
 const SVGDefinitions = () => (

@@ -1,4 +1,4 @@
-import { createReducer } from '../helpers/index';
+import { createReducer } from '../helpers';
 import fetchingStatus from '../helpers/fetchingStatus';
 
 const FETCH_FILE = 'Fetch a remote file';

@@ -1,5 +1,5 @@
-import React from 'react';
-import p from 'prop-types';
+import * as React from 'react';
+import * as p from 'prop-types'
 
 import FolderContents from './Folder/FolderContents';
 

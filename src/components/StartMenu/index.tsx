@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { compose } from 'redux';
 import { withProps } from 'recompose';
-import p from 'prop-types';
+import * as p from 'prop-types'
 import withClickOutHandler from 'react-onclickoutside';
 
 import startMenuLogo from '../../../resources/startmenu-logo.png';
@@ -14,7 +14,7 @@ import styles from './startMenu.scss';
 
 export const clickoutIgnoreClassname = 'start-clickout-ignore';
 
-class StartMenu extends Component {
+class StartMenu extends React.Component {
   static propTypes = {
     items: p.arrayOf(p.object).isRequired,
     bottom: p.number.isRequired,

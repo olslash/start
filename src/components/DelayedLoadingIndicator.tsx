@@ -1,7 +1,7 @@
-import { Component } from 'react';
-import p from 'prop-types';
+import * as React from 'react';
+import * as p from 'prop-types'
 
-export default class DelayedLoadingIndicator extends Component {
+export default class DelayedLoadingIndicator extends React.Component {
   static propTypes = {
     children: p.node.isRequired,
     delay: p.number

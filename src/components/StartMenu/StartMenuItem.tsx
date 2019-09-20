@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import cx from 'classnames';
-import p from 'prop-types';
+import * as p from 'prop-types'
 
 import icons from '../../../resources/icons';
 import MoreIconRight from '../MoreIconRight';
 
 import styles from './startMenuItem.scss';
 
-class StartMenuItem extends Component {
+class StartMenuItem extends React.Component {
   static propTypes = {
     label: p.string.isRequired,
     icon: p.oneOf(Object.keys(icons)),

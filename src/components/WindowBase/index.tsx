@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react';
-import p from 'prop-types';
+import * as React from 'react';
+import * as p from 'prop-types'
 import cx from 'classnames';
 import Rnd from 'react-rnd';
 
@@ -10,7 +10,7 @@ import styles from './index.scss';
 
 const titleBarHeight = 14;
 
-class WindowBase extends Component {
+class WindowBase extends React.Component {
   static propTypes = {
     children: p.node,
     id: p.string.isRequired,
@@ -82,7 +82,7 @@ class WindowBase extends Component {
     };
 
     return (
-      <Fragment>
+      <React.Fragment>
         {!this.props.maximized && (
           <Rnd
             default={{
@@ -204,7 +204,7 @@ class WindowBase extends Component {
             {this.props.children}
           </BorderedContainer>
         </BorderedContainer>
-      </Fragment>
+      </React.Fragment>
     );
   }
 }

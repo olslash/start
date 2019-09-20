@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { noop, truncate } from 'lodash';
 import cx from 'classnames';
-import p from 'prop-types';
+import * as p from 'prop-types'
 
 import icons from '../../../resources/icons';
 
 import styles from './folderItem.scss';
 
-class FolderItem extends Component {
+class FolderItem extends React.Component {
   static propTypes = {
     title: p.string.isRequired,
     icon: p.oneOf(Object.keys(icons)),

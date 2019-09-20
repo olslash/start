@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import p from 'prop-types';
+import * as React from 'react';
+import * as p from 'prop-types'
 
 import WindowBase from '../WindowBase';
 import styles from './index.scss';
 
-class AppImageViewer extends Component {
+class AppImageViewer extends React.Component {
   static propTypes = {
     title: p.string.isRequired,
     contentUrl: p.string.isRequired

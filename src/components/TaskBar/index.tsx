@@ -1,8 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 import { map } from 'lodash';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import p from 'prop-types';
+import * as p from 'prop-types'
 
 import { currentDate } from '../../state/clock';
 import {

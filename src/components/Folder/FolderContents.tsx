@@ -1,8 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { find } from 'lodash';
-import p from 'prop-types';
+import * as p from 'prop-types'
 
 import {
   primarySelectedItemIdForFolder,
