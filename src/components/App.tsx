@@ -6,7 +6,7 @@ import * as p from 'prop-types';
 import startMenuItems from '../startMenuItems';
 import {
   focusPane,
-  focusedPaneId,
+  focusedPaneName,
   focusedPaneOrder,
   itemsForFolder,
   openPaneItems,
@@ -87,7 +87,7 @@ export default connect(
   state => ({
     openPaneItems: openPaneItems(state),
     desktopItems: itemsForFolder(state, 'desktop'),
-    focusedPaneId: focusedPaneId(state),
+    focusedPaneId: focusedPaneName(state),
     visiblePanes: sortBy(
       filter(openPaneItems(state), { minimized: false }),
       // sort panes (for z-index precedence) by their index in focusedPaneOrder

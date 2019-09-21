@@ -2,9 +2,7 @@ import { intervalChan } from '../helpers';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { GlobalState } from './globalState';
 
-enum Actions {
-  ClockTick = 'CLOCK_TICK'
-}
+export const CLOCK_TICK = 'CLOCK_TICK';
 
 const initialState = {
   currentDate: new Date()
@@ -15,7 +13,7 @@ type Action = ReturnType<typeof clockTick>;
 
 export function reducer(state: State = initialState, action: Action): State {
   switch (action.type) {
-    case Actions.ClockTick:
+    case CLOCK_TICK:
       return { ...state, currentDate: action.payload.date };
     default:
       return state;
@@ -31,8 +29,8 @@ export function* saga() {
 }
 
 export function clockTick(date: Date) {
-  return {
-    type: Actions.ClockTick,
+  return <const>{
+    type: CLOCK_TICK,
     payload: { date }
   };
 }

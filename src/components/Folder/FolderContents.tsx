@@ -2,12 +2,12 @@ import * as React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { find } from 'lodash';
-import * as p from 'prop-types'
+import * as p from 'prop-types';
 
 import {
-  primarySelectedItemIdForFolder,
+  primarySelectedItemNameForFolder,
   folderSelectionState,
-  focusedPaneId,
+  focusedPaneName,
   selectItem,
   clickFolderItemGridBackground,
   openPane,
@@ -89,9 +89,12 @@ FolderContents.propTypes = {
 export default compose(
   connect(
     (state, ownProps) => ({
-      selectedItemId: primarySelectedItemIdForFolder(state, ownProps.folderId),
+      selectedItemId: primarySelectedItemNameForFolder(
+        state,
+        ownProps.folderId
+      ),
       selectionState: folderSelectionState(state, ownProps.folderId),
-      folderActive: focusedPaneId(state) === ownProps.folderId
+      folderActive: focusedPaneName(state) === ownProps.folderId
     }),
     { selectItem, clickFolderItemGridBackground, openPane }
   )

@@ -1,15 +1,16 @@
 import { pickBy, mapValues, pick, sample, range } from 'lodash';
 import { put, takeEvery, select } from 'redux-saga/effects'; // eslint-disable-line
 
-import { createReducer } from '../helpers';
 import { treeFind, moveOrPrependToFront } from '../helpers';
 
 import {
   fileTree as initialFileTree,
-  itemsById as initialItemsByID
+  itemsByName as initialItemsByName
 } from '../initialHDDState';
 
 import { fetchTextFile } from './remoteFile';
+import { WindowType } from 'start/types';
+import { GlobalState } from './globalState';
 
 const OPEN_START_MENU = 'Open the start menu';
 const CLOSE_START_MENU = 'Close the start menu';
@@ -18,27 +19,17 @@ const SET_START_MENU_ACTIVE_FOLDER_PATH =
 const SELECT_ITEM = 'Select a desktop/folder item';
 const FOCUS_PANE = 'Focus a folder, the desktop, the taskbar, etc';
 const CLICK_FOLDER_ITEM_GRID_BACKGROUND =
-  'The item grid of a folder was' + ' clicked';
+  'The item grid of a folder was clicked';
 const TOGGLE_MINIMIZE_PANE = 'minimize a pane (toggle)';
 const TOGGLE_MAXIMIZE_PANE = 'maximize a pane (toggle)';
 const OPEN_PANE = 'create a new open pane for an item';
 const CLOSE_PANE = 'close a pane';
 const MOVE_PANE = 'change the position of a pane';
 
-export const active_folder_state = 'active';
-export const inactive_folder_state = 'inactive';
-
-// export const file_item_type = 'file';
-// export const folder_item_type = 'folder';
-//
-// export function item({ type, id = uuid(), title, icon }) {
-//   return {
-//     type,
-//     id,
-//     title,
-//     icon
-//   };
-// }
+export enum FolderState {
+  ACTIVE,
+  INACTIVE
+}
 
 const defaultPaneState = {
   open: false,
@@ -50,44 +41,70 @@ const defaultPaneState = {
   top: 50
 };
 
-export const reducer = createReducer(
-  {
-    startMenuOpen: false,
-    startMenuActiveFolderPath: [],
-    itemsById: initialItemsByID,
-    fileTree: initialFileTree,
-    paneStateByItemId: {},
-    // pane means folder/app or other special entities that can be
-    // active (taskbar, desktop)
-    focusedPaneOrder: ['desktop'],
-    // which item within each folder/the desktop is currently selected?
-    // (primary selection, not including multi-select)
-    primarySelectedFolderItemByFolderId: {},
-    // Does the current folder have an active selection, or is it inactive?
-    // (once an item has been selected in a folder, it can't actually be
-    // de-selected; clicking the folder background makes the selection
-    // "inactive" but the previous selection remains half-selected in the UI)
-    // folders start "inactive", move to "active" when an item is selected,
-    // and back to "inactive" when the folder BG is clicked.
-    folderSelectionStateByFolderId: {}
-  },
-  {
-    [OPEN_START_MENU](state) {
+export interface State {
+  startMenuOpen: boolean;
+  startMenuActiveFolderPath: number[];
+  itemsByName: typeof initialItemsByName;
+  fileTree: typeof initialFileTree;
+  paneStateByItemName: { [name: string]: typeof defaultPaneState };
+  // pane means folder/app or other special entities that can be
+  // active (taskbar, desktop)
+  focusedPaneOrder: string[];
+  // which item within each folder/the desktop is currently selected?
+  // (primary selection, not including multi-select)
+  primarySelectedFolderItemNameByFolderName: { [name: string]: string };
+  // Does the current folder have an active selection, or is it inactive?
+  // (once an item has been selected in a folder, it can't actually be
+  // de-selected; clicking the folder background makes the selection
+  // "inactive" but the previous selection remains half-selected in the UI)
+  // folders start "inactive", move to "active" when an item is selected,
+  // and back to "inactive" when the folder BG is clicked.
+  folderSelectionStateByFolderName: { [name: string]: FolderState };
+}
+
+const initialState: State = {
+  startMenuOpen: false,
+  startMenuActiveFolderPath: [],
+  itemsByName: initialItemsByName,
+  fileTree: initialFileTree,
+  paneStateByItemName: {},
+  focusedPaneOrder: ['desktop'],
+  primarySelectedFolderItemNameByFolderName: {},
+  folderSelectionStateByFolderName: {}
+};
+
+type Action = ReturnType<
+  | typeof openStartMenu
+  | typeof closeStartMenu
+  | typeof setStartMenuActiveFolderPath
+  | typeof selectItem
+  | typeof clickFolderItemGridBackground
+  | typeof focusPane
+  | typeof minimizePane
+  | typeof maximizePane
+  | typeof openPane
+  | typeof closePane
+  | typeof movePane
+>;
+
+export function reducer(state: State = initialState, action: Action): State {
+  switch (action.type) {
+    case OPEN_START_MENU:
       return {
         ...state,
         startMenuOpen: true
       };
-    },
 
-    [CLOSE_START_MENU](state) {
+    case CLOSE_START_MENU:
       return {
         ...state,
         startMenuOpen: false,
         startMenuActiveFolderPath: []
       };
-    },
 
-    [SET_START_MENU_ACTIVE_FOLDER_PATH](state, { payload: { depth, index } }) {
+    case SET_START_MENU_ACTIVE_FOLDER_PATH: {
+      const { depth, index } = action.payload;
+
       if (depth > state.startMenuActiveFolderPath.length) {
         console.warn('depth is out of bounds');
         return state;
@@ -102,32 +119,35 @@ export const reducer = createReducer(
             : // add depth at index
               [...state.startMenuActiveFolderPath, index]
       };
-    },
+    }
 
-    [SELECT_ITEM](state, { payload: { itemId, folderId } }) {
+    case SELECT_ITEM: {
+      const { itemName, folderName } = action.payload;
+
       return {
         ...state,
-        primarySelectedFolderItemByFolderId: {
-          ...state.primarySelectedFolderItemByFolderId,
-          [folderId]: itemId
+        primarySelectedFolderItemNameByFolderName: {
+          ...state.primarySelectedFolderItemNameByFolderName,
+          [folderName]: itemName
         },
-        folderSelectionStateByFolderId: {
-          ...state.folderSelectionStateByFolderId,
-          [folderId]: active_folder_state
+        folderSelectionStateByFolderName: {
+          ...state.folderSelectionStateByFolderName,
+          [folderName]: FolderState.ACTIVE
         }
       };
-    },
+    }
 
-    [CLICK_FOLDER_ITEM_GRID_BACKGROUND](state, { payload: { folderId } }) {
-      const folderIsFocused = state.focusedPaneOrder[0] === folderId;
+    case CLICK_FOLDER_ITEM_GRID_BACKGROUND: {
+      const { folderName } = action.payload;
+      const folderIsFocused = state.focusedPaneOrder[0] === folderName;
 
       if (folderIsFocused) {
         // if the folder is focused move to inactive mode
         return {
           ...state,
-          folderSelectionStateByFolderId: {
-            ...state.folderSelectionStateByFolderId,
-            [folderId]: inactive_folder_state
+          folderSelectionStateByFolderName: {
+            ...state.folderSelectionStateByFolderName,
+            [folderName]: FolderState.INACTIVE
           }
         };
       } else {
@@ -136,47 +156,54 @@ export const reducer = createReducer(
           ...state,
           focusedPaneOrder: moveOrPrependToFront(
             state.focusedPaneOrder,
-            folderId
+            folderName
           )
         };
       }
-    },
+    }
 
-    [FOCUS_PANE](state, { payload: { id } }) {
+    case FOCUS_PANE: {
+      const { name } = action.payload;
+
       return {
         ...state,
-        focusedPaneOrder: moveOrPrependToFront(state.focusedPaneOrder, id)
+        focusedPaneOrder: moveOrPrependToFront(state.focusedPaneOrder, name)
       };
-    },
+    }
 
-    [TOGGLE_MINIMIZE_PANE](state, { payload: { id } }) {
+    case TOGGLE_MINIMIZE_PANE: {
+      const { name } = action.payload;
+
       return {
         ...state,
-        paneStateByItemId: {
-          ...state.paneStateByItemId,
-          [id]: {
-            ...state.paneStateByItemId[id],
-            minimized: !state.paneStateByItemId[id].minimized
+        paneStateByItemName: {
+          ...state.paneStateByItemName,
+          [name]: {
+            ...state.paneStateByItemName[name],
+            minimized: !state.paneStateByItemName[name].minimized
           }
         }
       };
-    },
+    }
 
-    [TOGGLE_MAXIMIZE_PANE](state, { payload: { id } }) {
+    case TOGGLE_MAXIMIZE_PANE: {
+      const { name } = action.payload;
+
       return {
         ...state,
-        paneStateByItemId: {
-          ...state.paneStateByItemId,
-          [id]: {
-            ...state.paneStateByItemId[id],
-            maximized: !state.paneStateByItemId[id].maximized
+        paneStateByItemName: {
+          ...state.paneStateByItemName,
+          [name]: {
+            ...state.paneStateByItemName[name],
+            maximized: !state.paneStateByItemName[name].maximized
           }
         }
       };
-    },
+    }
 
-    [OPEN_PANE](state, { payload: { id, openerId } }) {
-      const openerPaneState = state.paneStateByItemId[openerId] || {};
+    case OPEN_PANE: {
+      const { name, openerName } = action.payload;
+      const openerPaneState = state.paneStateByItemName[openerName] || {};
       const openerPanePosition = pick(openerPaneState, [
         'height',
         'width',
@@ -186,15 +213,15 @@ export const reducer = createReducer(
       ]);
 
       const newWindowOffset = sample(range(10, 80, 10));
-      const openInNewWindow = state.itemsById[id].type === 'file';
+      const openInNewWindow = state.itemsByName[name].type === WindowType.File;
 
       return {
         ...state,
-        focusedPaneOrder: moveOrPrependToFront(state.focusedPaneOrder, id),
-        paneStateByItemId: {
-          ...state.paneStateByItemId,
-          [openerId]: {
-            ...state.paneStateByItemId[openerId],
+        focusedPaneOrder: moveOrPrependToFront(state.focusedPaneOrder, name),
+        paneStateByItemName: {
+          ...state.paneStateByItemName,
+          [openerName]: {
+            ...state.paneStateByItemName[openerName],
             // while navigating between folders, use the "same" window by
             // closing the opener and replacing it with the new pane, inheriting
             // the previous position
@@ -202,14 +229,14 @@ export const reducer = createReducer(
             // fixme -- this state needs to be transient
             open: openerPaneState.open && openInNewWindow
           },
-          [id]: {
+          [name]: {
             ...defaultPaneState,
             // for new panes, choose a semi-random position for the new folder,
             // since windows' behavior is inscrutable. seems to start at 0,0 and
             // increment by x,x.
             top: newWindowOffset,
             left: newWindowOffset,
-            ...state.paneStateByItemId[id],
+            ...state.paneStateByItemName[name],
 
             open: true,
             minimized: false,
@@ -220,30 +247,33 @@ export const reducer = createReducer(
           }
         }
       };
-    },
+    }
 
-    [CLOSE_PANE](state, { payload: { id } }) {
+    case CLOSE_PANE: {
+      const { name } = action.payload;
+
       return {
         ...state,
-        paneStateByItemId: {
-          ...state.paneStateByItemId,
-          [id]: {
-            ...state.paneStateByItemId[id],
+        paneStateByItemName: {
+          ...state.paneStateByItemName,
+          [name]: {
+            ...state.paneStateByItemName[name],
             open: false
           }
         }
       };
-    },
+    }
 
-    [MOVE_PANE](state, { payload: { id, left, top, width, height } }) {
-      const paneState = state.paneStateByItemId[id];
+    case MOVE_PANE: {
+      const { name, left, top, width, height } = action.payload;
+      const paneState = state.paneStateByItemName[name];
 
       return {
         ...state,
-        focusedPaneOrder: moveOrPrependToFront(state.focusedPaneOrder, id),
-        paneStateByItemId: {
-          ...state.paneStateByItemId,
-          [id]: {
+        focusedPaneOrder: moveOrPrependToFront(state.focusedPaneOrder, name),
+        paneStateByItemName: {
+          ...state.paneStateByItemName,
+          [name]: {
             ...paneState,
             left: left || paneState.left,
             top: top || paneState.top,
@@ -253,151 +283,193 @@ export const reducer = createReducer(
         }
       };
     }
+
+    default:
+      return state;
   }
-);
+}
 
 export function* saga() {
-  yield takeEvery(action => action.type === OPEN_PANE, function*({
-    payload: { id }
-  }) {
-    const file = yield select(itemById, id);
+  yield takeEvery(
+    (action: { type: string }) => action.type === OPEN_PANE,
+    function*({ payload: { name } }: ReturnType<typeof openPane>) {
+      const file = yield select(itemByName, name);
 
-    // fetch content for panes that have data requirements on opening
-    if (file.contentUrl && file.opensWith === 'AppNotepad') {
-      yield put(fetchTextFile(file.contentUrl));
+      // fetch content for panes that have data requirements on opening
+      if (file.contentUrl && file.opensWith === 'AppNotepad') {
+        yield put(fetchTextFile(file.contentUrl));
+      }
     }
-  });
+  );
 }
 
 export function openStartMenu() {
-  return {
+  return <const>{
     type: OPEN_START_MENU
   };
 }
 
 export function closeStartMenu() {
-  return {
+  return <const>{
     type: CLOSE_START_MENU
   };
 }
 
-export function setStartMenuActiveFolderPath({ depth, index }) {
-  return {
+export function setStartMenuActiveFolderPath({
+  depth,
+  index
+}: {
+  depth: number;
+  index: number;
+}) {
+  return <const>{
     type: SET_START_MENU_ACTIVE_FOLDER_PATH,
     payload: { depth, index }
   };
 }
 
-export function selectItem({ folderId, itemId }) {
-  return {
+export function selectItem({
+  folderName,
+  itemName
+}: {
+  folderName: string;
+  itemName: string;
+}) {
+  return <const>{
     type: SELECT_ITEM,
-    payload: { folderId, itemId }
+    payload: { folderName, itemName }
   };
 }
 
-export function clickFolderItemGridBackground(folderId) {
-  return {
+export function clickFolderItemGridBackground(folderName: string) {
+  return <const>{
     type: CLICK_FOLDER_ITEM_GRID_BACKGROUND,
-    payload: { folderId }
+    payload: { folderName }
   };
 }
 
-export function focusPane(id) {
-  return {
+export function focusPane(name: string) {
+  return <const>{
     type: FOCUS_PANE,
-    payload: { id }
+    payload: { name }
   };
 }
 
-export function minimizePane(id) {
-  return {
+export function minimizePane(name: string) {
+  return <const>{
     type: TOGGLE_MINIMIZE_PANE,
-    payload: { id }
+    payload: { name }
   };
 }
 
-export function maximizePane(id) {
-  return {
+export function maximizePane(name: string) {
+  return <const>{
     type: TOGGLE_MAXIMIZE_PANE,
-    payload: { id }
+    payload: { name }
   };
 }
 
-export function openPane(id, openerId) {
-  return {
+export function openPane(name: string, openerName: string) {
+  return <const>{
     type: OPEN_PANE,
-    payload: { id, openerId }
+    payload: { name, openerName }
   };
 }
 
-export function closePane(id) {
-  return {
+export function closePane(name: string) {
+  return <const>{
     type: CLOSE_PANE,
-    payload: { id }
+    payload: { name }
   };
 }
 
-export function movePane(id, { left, top, width, height }) {
-  return {
+export function movePane(
+  name: string,
+  {
+    left,
+    top,
+    width,
+    height
+  }: {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  }
+) {
+  return <const>{
     type: MOVE_PANE,
-    payload: { id, left, top, width, height }
+    payload: { name, left, top, width, height }
   };
 }
 
-function local(state) {
+function local(state: GlobalState) {
   return state.explorer;
 }
 
-export function startMenuOpen(state) {
+export function startMenuOpen(state: GlobalState) {
   return local(state).startMenuOpen;
 }
 
-export function startMenuActiveFolderPath(state) {
+export function startMenuActiveFolderPath(state: GlobalState) {
   return local(state).startMenuActiveFolderPath;
 }
 
-export function primarySelectedItemIdForFolder(state, folderId) {
+export function primarySelectedItemNameForFolder(
+  state: GlobalState,
+  folderName: string
+) {
   // fixme: this needs to be the *first* folder item by default if none exists
-  return local(state).primarySelectedFolderItemByFolderId[folderId];
+  return local(state).primarySelectedFolderItemNameByFolderName[folderName];
 }
 
-export function folderSelectionState(state, folderId) {
+export function folderSelectionState(state: GlobalState, folderName: string) {
   return (
-    local(state).folderSelectionStateByFolderId[folderId] ||
-    inactive_folder_state
+    local(state).folderSelectionStateByFolderName[folderName] ||
+    FolderState.INACTIVE
   );
 }
 
-export function focusedPaneId(state) {
+export function focusedPaneName(state: GlobalState) {
   return local(state).focusedPaneOrder[0];
 }
 
-export function focusedPaneOrder(state) {
+export function focusedPaneOrder(state: GlobalState) {
   return local(state).focusedPaneOrder;
 }
 
-export function itemById(state, itemId) {
-  return local(state).itemsById[itemId];
+export function itemByName(state: GlobalState, itemName: string) {
+  return local(state).itemsByName[itemName];
 }
 
-export function itemsForFolder(state, folderId) {
-  const treeResult = treeFind(local(state).fileTree, { id: folderId });
+export function itemsForFolder(state: GlobalState, folderName: string) {
+  const treeResult = treeFind(local(state).fileTree, { name: folderName });
 
   if (!treeResult) {
-    console.warn('Folder', folderId, 'was not found in state');
+    console.warn('Folder', folderName, 'was not found in state');
     return null;
   }
+
+  if (!treeResult.children) {
+    console.warn(
+      'Folder',
+      folderName,
+      'was found, but did not have any children'
+    );
+    return null;
+  }
+
   // populate first-level children
-  return treeResult.children.map(child => itemById(state, child.id));
+  return treeResult.children.map(child => itemByName(state, child.name));
 }
 
-export function openPaneItems(state) {
-  const openPanes = pickBy(local(state).paneStateByItemId, {
+export function openPaneItems(state: GlobalState) {
+  const openPanes = pickBy(local(state).paneStateByItemName, {
     open: true
   });
 
-  return mapValues(openPanes, (pane, id) => ({
+  return mapValues(openPanes, (pane, name) => ({
     ...pane,
-    ...itemById(state, id)
+    ...itemByName(state, name)
   }));
 }

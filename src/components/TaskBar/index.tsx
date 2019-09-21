@@ -2,12 +2,12 @@ import * as React from 'react';
 import { map } from 'lodash';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import * as p from 'prop-types'
+import * as p from 'prop-types';
 
 import { currentDate } from '../../state/clock';
 import {
   openPaneItems,
-  focusedPaneId,
+  focusedPaneName,
   startMenuOpen,
   startMenuActiveFolderPath,
   openStartMenu,
@@ -95,7 +95,7 @@ export default compose(
       startMenuOpen: startMenuOpen(state),
       startMenuActiveFolderPath: startMenuActiveFolderPath(state),
       items: openPaneItems(state),
-      focusedPaneId: focusedPaneId(state)
+      focusedPaneId: focusedPaneName(state)
     }),
     {
       openStartMenu,

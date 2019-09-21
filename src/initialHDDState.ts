@@ -188,7 +188,7 @@ export const fileTree: FileTreeEntry[] = [
             name: 'Kshitij “Gio” Gujarati, Director of Product.txt'
           }
         ]
-      }
+      },
       {
         name: 'Work Samples',
         children: map(resumeScreenshots, v => ({ name: v.name }))
