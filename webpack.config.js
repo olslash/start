@@ -1,5 +1,6 @@
 /* eslint-disable */
 const webpack = require('webpack');
+const path = require('path');
 const HTMLPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -9,7 +10,11 @@ module.exports = {
     filename: 'dist/bundle.js'
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss']
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss'],
+    alias: {
+      resources: path.resolve(__dirname, 'resources'),
+      start: path.resolve(__dirname, 'src')
+    }
   },
   devtool: 'eval-source-map',
   module: {

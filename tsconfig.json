@@ -8,10 +8,14 @@
     "jsx": "react",
     "lib": ["es6", "dom"],
     "moduleResolution": "node",
-    "rootDir": "src",
+    // "rootDir": "src",
     "strictNullChecks": true,
     "noImplicitReturns": true,
-    "noImplicitThis": true
+    "noImplicitThis": true,
+    "baseUrl": "./",
+    "paths": {
+      "start/*": ["src/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "resources"]

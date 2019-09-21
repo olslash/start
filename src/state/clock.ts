@@ -1,21 +1,26 @@
-import { createReducer, intervalChan } from '../helpers';
+import { intervalChan } from '../helpers';
 import { call, put, takeEvery } from 'redux-saga/effects';
+import { GlobalState } from './globalState';
 
-const CLOCK_TICK = 'CLOCK_TICK';
+enum Actions {
+  ClockTick = 'CLOCK_TICK'
+}
 
-export const reducer = createReducer(
-  {
-    currentDate: new Date()
-  },
-  {
-    [CLOCK_TICK](state, action) {
-      return {
-        ...state,
-        currentDate: action.payload.date
-      };
-    }
+const initialState = {
+  currentDate: new Date()
+};
+
+export type State = typeof initialState;
+type Action = ReturnType<typeof clockTick>;
+
+export function reducer(state: State = initialState, action: Action): State {
+  switch (action.type) {
+    case Actions.ClockTick:
+      return { ...state, currentDate: action.payload.date };
+    default:
+      return state;
   }
-);
+}
 
 export function* saga() {
   const tick = yield call(intervalChan, 5000);
@@ -25,17 +30,17 @@ export function* saga() {
   });
 }
 
-export function clockTick(date) {
+export function clockTick(date: Date) {
   return {
-    type: CLOCK_TICK,
+    type: Actions.ClockTick,
     payload: { date }
   };
 }
 
-function local(state) {
+function local(state: GlobalState): State {
   return state.clock;
 }
 
-export function currentDate(state) {
+export function currentDate(state: GlobalState) {
   return local(state).currentDate;
 }

@@ -7,7 +7,10 @@ import { itemsForFolder } from '../../state/explorer';
 import WindowBase from '../WindowBase';
 import FolderContents from './FolderContents';
 
-interface Props {}
+interface Props {
+  id: string;
+  items:
+}
 
 class Folder extends React.Component<Props> {
   static propTypes = {

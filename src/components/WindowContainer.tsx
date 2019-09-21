@@ -1,17 +1,12 @@
 import * as React from 'react';
-import * as p from 'prop-types';
 
 import Folder from './Folder';
-import Notepad from './AppNotepad';
-import ImageViewer from './AppImageViewer';
-
-import { App, WindowType } from 'types';
-
-const windowsApps: Record<App, React.ComponentType> = { Notepad, ImageViewer };
+import { WindowType, Apps } from 'start/types';
+import { windowsApps } from 'start/initialHDDState';
 
 interface Props {
   type: WindowType;
-  opensWith?: App;
+  opensWith?: Apps;
   id: string;
 }
 
@@ -24,6 +19,11 @@ export default class WindowContainer extends React.Component<Props> {
       case WindowType.Folder:
         return <Folder {...this.props} />;
       default:
+        if (!this.props.opensWith || !windowsApps[this.props.opensWith]) {
+          console.warn("opensWith didn't exist");
+          return null;
+        }
+
         const WindowsApplication = windowsApps[this.props.opensWith];
         return <WindowsApplication {...this.props} />;
     }
