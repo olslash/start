@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as p from 'prop-types'
+import * as p from 'prop-types';
 
 import fetchingStatus from '../../helpers/fetchingStatus';
 import { fileData, fileDataFetchingStatus } from '../../state/remoteFile';
@@ -8,7 +8,7 @@ import WindowBase from '../WindowBase';
 import DelayedLoadingIndicator from '../DelayedLoadingIndicator';
 import styles from './index.scss';
 
-class AppNotepad extends React.Component {
+class AppNotepad extends React.Component<Props> {
   static propTypes = {
     title: p.string.isRequired,
     contentUrl: p.string.isRequired,

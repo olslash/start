@@ -1,4 +1,10 @@
-export default [
+interface StartMenuItem {
+  title: string;
+  icon: string;
+  children?: StartMenuItem[];
+}
+
+const items: StartMenuItem[] = [
   {
     title: 'Programs',
     icon: 'programs',
@@ -47,3 +53,5 @@ export default [
   { title: 'Help', icon: 'help' }, // todo: action
   { title: 'Run', icon: 'run' }
 ];
+
+export default items;

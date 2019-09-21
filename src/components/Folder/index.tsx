@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as p from 'prop-types'
+import * as p from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
@@ -7,7 +7,9 @@ import { itemsForFolder } from '../../state/explorer';
 import WindowBase from '../WindowBase';
 import FolderContents from './FolderContents';
 
-class Folder extends React.Component {
+interface Props {}
+
+class Folder extends React.Component<Props> {
   static propTypes = {
     id: p.string.isRequired,
     items: p.arrayOf(

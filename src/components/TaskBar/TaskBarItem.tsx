@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as p from 'prop-types'
+import * as p from 'prop-types';
 import cx from 'classnames';
 
 // import screenDoor from '../../../resources/selected-overlay-screen-inverse-40.svg';

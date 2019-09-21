@@ -1,8 +1,10 @@
 import * as React from 'react';
-import * as p from 'prop-types'
+import * as p from 'prop-types';
 import cx from 'classnames';
-import Rnd from 'react-rnd';
+import * as Rnd from 'react-rnd';
 
+import { Position } from 'types';
+import { Icon } from '../../../resources/icons';
 import BorderedContainer from '../BorderedContainer';
 import TitleBar from '../TitleBar';
 
@@ -10,26 +12,30 @@ import styles from './index.scss';
 
 const titleBarHeight = 14;
 
-class WindowBase extends React.Component {
-  static propTypes = {
-    children: p.node,
-    id: p.string.isRequired,
-    zIndex: p.number.isRequired,
-    title: p.string.isRequired,
-    icon: p.string,
-    focused: p.bool,
-    top: p.number,
-    left: p.number,
-    height: p.number,
-    width: p.number,
-    maximized: p.bool,
-    onMinimize: p.func,
-    onMaximize: p.func,
-    onClose: p.func,
-    onFocus: p.func.isRequired,
-    onMove: p.func.isRequired
-  };
+interface Props {
+  children: React.ReactNode;
+  id: string;
+  zIndex: number;
+  title: string;
+  icon: Icon;
+  focused: boolean;
+  top: number;
+  left: number;
+  height: number;
+  width: number;
+  maximized: boolean;
+  onMinimize: (windowId: string) => void;
+  onMaximize: (windowId: string) => void;
+  onClose: (windowId: string) => void;
+  onFocus: (windowId: string) => void;
+  onMove: (windowId: string, position: Position) => void;
+}
 
+interface State {
+  isDragging: boolean;
+}
+
+class WindowBase extends React.Component<Props, State> {
   static defaultProps = {
     focused: false,
     height: 200,
@@ -42,11 +48,11 @@ class WindowBase extends React.Component {
     isDragging: false
   };
 
-  handleDragStart = () => {
+  handleDragStart: Rnd.DraggableEventHandler = () => {
     this.props.onFocus(this.props.id);
   };
 
-  handleDrag = (e, { x, y }) => {
+  handleDrag: Rnd.DraggableEventHandler = (e, { x, y }) => {
     // don't display dragging state on mouse down; only once user actually
     // starts dragging.
     if (x !== this.props.left || y !== this.props.left) {
@@ -54,7 +60,7 @@ class WindowBase extends React.Component {
     }
   };
 
-  handleDragStop = (e, { x, y }) => {
+  handleDragStop: Rnd.DraggableEventHandler = (e, { x, y }) => {
     this.setState({ isDragging: false });
 
     this.props.onMove(this.props.id, { left: x, top: y });
@@ -64,7 +70,13 @@ class WindowBase extends React.Component {
     this.setState({ isDragging: true });
   };
 
-  handleResizeStop = (e, direction, ref, delta, { x, y }) => {
+  handleResizeStop: Rnd.ResizeHandler = (
+    e,
+    direction,
+    ref,
+    delta,
+    { x, y }
+  ) => {
     this.props.onMove(this.props.id, {
       left: x,
       top: y,
@@ -84,7 +96,7 @@ class WindowBase extends React.Component {
     return (
       <React.Fragment>
         {!this.props.maximized && (
-          <Rnd
+          <Rnd.default
             default={{
               x: this.props.left,
               y: this.props.top,
@@ -144,7 +156,7 @@ class WindowBase extends React.Component {
               }}
               onDoubleClick={() => this.props.onMaximize(this.props.id)}
             />
-          </Rnd>
+          </Rnd.default>
         )}
 
         <BorderedContainer

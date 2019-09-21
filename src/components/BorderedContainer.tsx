@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as p from 'prop-types'
+import * as p from 'prop-types';
 import cx from 'classnames';
 
 import styles from './borderedContainer.scss';
@@ -9,7 +9,7 @@ const borderColorPropType = p.shape({
   bottomRight: p.string.isRequired
 });
 
-class BorderedContainer extends React.Component {
+class BorderedContainer extends React.Component<Props> {
   static propTypes = {
     depth: p.number,
     // array index = depth (+1)

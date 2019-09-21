@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as p from 'prop-types'
+import * as p from 'prop-types';
 import cx from 'classnames';
 
 import { compose } from 'redux';
@@ -8,7 +8,7 @@ import withClickOutHandler from 'react-onclickoutside';
 
 import styles from './buttonBase.scss';
 
-class ButtonBase extends React.Component {
+class ButtonBase extends React.Component<Props> {
   static propTypes = {
     classes: p.shape({
       root: p.string,

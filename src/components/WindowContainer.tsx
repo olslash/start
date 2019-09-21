@@ -1,26 +1,31 @@
 import * as React from 'react';
-import * as p from 'prop-types'
+import * as p from 'prop-types';
 
 import Folder from './Folder';
-import AppNotepad from './AppNotepad';
-import AppImageViewer from './AppImageViewer';
+import Notepad from './AppNotepad';
+import ImageViewer from './AppImageViewer';
 
-const windowsApps = { AppNotepad, AppImageViewer };
+import { App, WindowType } from 'types';
 
-export default class WindowContainer extends React.Component {
-  static propTypes = {
-    type: p.string.isRequired,
-    opensWith: p.string,
-    id: p.string.isRequired
-  };
+const windowsApps: Record<App, React.ComponentType> = { Notepad, ImageViewer };
+
+interface Props {
+  type: WindowType;
+  opensWith?: App;
+  id: string;
+}
+
+export default class WindowContainer extends React.Component<Props> {
+  // fixme -- this takes all the prop types of Folder or WindowsApplication and
+  // differentiates on `type`
 
   render() {
-    const WindowsApplication = windowsApps[this.props.opensWith];
-
-    return this.props.type === 'folder' ? (
-      <Folder {...this.props} />
-    ) : (
-      <WindowsApplication {...this.props} />
-    );
+    switch (this.props.type) {
+      case WindowType.Folder:
+        return <Folder {...this.props} />;
+      default:
+        const WindowsApplication = windowsApps[this.props.opensWith];
+        return <WindowsApplication {...this.props} />;
+    }
   }
 }

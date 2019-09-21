@@ -1,0 +1,20 @@
+diff --git a/node_modules/@types/react-rnd/index.d.ts b/node_modules/@types/react-rnd/index.d.ts
+index c16e444..fd16c45 100644
+--- a/node_modules/@types/react-rnd/index.d.ts
++++ b/node_modules/@types/react-rnd/index.d.ts
+@@ -93,6 +93,7 @@ export interface Options {
+     height?: number | string;
+   };
+   className: string;
++  dragHandleClassName: string;
+   style: any;
+   width: number | string;
+   height: number | string;
+@@ -104,6 +105,7 @@ export interface Options {
+   bounds: 'parent' | 'window' | 'body' | string;
+   resizeHandleClasses: HandleClasses;
+   resizeHandleStyles: HandleStyles;
++  resizeHandleWrapperStyle: Record<string, any>;
+   position?: {
+     x: number;
+     y: number;
