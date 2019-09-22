@@ -1,12 +1,6 @@
 import { map } from 'lodash';
-import Notepad from './components/AppNotepad';
-import ImageViewer from './components/AppImageViewer';
-import { File, Apps, Pane, Folder, WindowType } from 'start/types';
 import { Icon } from 'resources/icons';
-export const windowsApps: Record<Apps, React.ComponentType> = {
-  Notepad,
-  ImageViewer
-};
+import { Apps, File, Folder, Pane, WindowType } from 'start/types';
 
 const resumeScreenshots: File[] = [
   {

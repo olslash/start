@@ -1,16 +1,13 @@
-import { pickBy, mapValues, pick, sample, range } from 'lodash';
-import { put, takeEvery, select } from 'redux-saga/effects'; // eslint-disable-line
-
-import { treeFind, moveOrPrependToFront } from '../helpers';
-
+import { mapValues, pick, pickBy, range, sample } from 'lodash';
+import { put, select, takeEvery } from 'redux-saga/effects'; // eslint-disable-line
+import { Apps, Pane, PaneState, WindowType, Position } from 'start/types';
+import { moveOrPrependToFront, treeFind } from '../helpers';
 import {
   fileTree as initialFileTree,
   itemsByName as initialItemsByName
 } from '../initialHDDState';
-
-import { fetchTextFile } from './remoteFile';
-import { WindowType, Pane, Apps } from 'start/types';
 import { GlobalState } from './globalState';
+import { fetchTextFile } from './remoteFile';
 
 const OPEN_START_MENU = 'Open the start menu';
 const CLOSE_START_MENU = 'Close the start menu';
@@ -46,7 +43,7 @@ export interface State {
   startMenuActiveFolderPath: number[];
   itemsByName: typeof initialItemsByName;
   fileTree: typeof initialFileTree;
-  paneStateByItemName: { [name: string]: typeof defaultPaneState };
+  paneStateByItemName: { [name: string]: PaneState };
   // pane means folder/app or other special entities that can be
   // active (taskbar, desktop)
   focusedPaneOrder: string[];
@@ -387,27 +384,14 @@ export function closePane(name: string) {
   };
 }
 
-export function movePane(
-  name: string,
-  {
-    left,
-    top,
-    width,
-    height
-  }: {
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-  }
-) {
+export function movePane(name: string, { left, top, width, height }: Position) {
   return <const>{
     type: MOVE_PANE,
     payload: { name, left, top, width, height }
   };
 }
 
-function local(state: GlobalState) {
+function local(state: GlobalState): State {
   return state.explorer;
 }
 
@@ -451,7 +435,7 @@ export function itemsForFolder(state: GlobalState, folderName: string) {
 
   if (!treeResult) {
     console.warn('Folder', folderName, 'was not found in state');
-    return null;
+    return undefined;
   }
 
   if (!treeResult.children) {
@@ -460,14 +444,16 @@ export function itemsForFolder(state: GlobalState, folderName: string) {
       folderName,
       'was found, but did not have any children'
     );
-    return null;
+    return undefined;
   }
 
   // populate first-level children
   return treeResult.children.map(child => itemByName(state, child.name));
 }
 
-export function openPaneItems(state: GlobalState) {
+export function openPaneItems(
+  state: GlobalState
+): { [name: string]: Pane & PaneState } {
   const openPanes = pickBy(local(state).paneStateByItemName, {
     open: true
   });

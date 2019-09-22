@@ -1,26 +1,30 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as p from 'prop-types';
-
-import fetchingStatus from '../../helpers/fetchingStatus';
+import { GlobalState } from 'start/state/globalState';
+import { FetchingStatus } from 'start/types';
 import { fileData, fileDataFetchingStatus } from '../../state/remoteFile';
-import WindowBase from '../WindowBase';
 import DelayedLoadingIndicator from '../DelayedLoadingIndicator';
+import WindowBase, { Props as WindowBaseProps } from '../WindowBase';
 import styles from './index.scss';
 
-class AppNotepad extends React.Component<Props> {
-  static propTypes = {
-    title: p.string.isRequired,
-    contentUrl: p.string.isRequired,
-    fileData: p.string,
-    loading: p.bool
-  };
+interface OwnProps {
+  name: string;
+  contentUrl: string;
+}
 
-  getTitle = () => `${this.props.title} - Notepad`;
+interface StateProps {
+  fileData: string;
+  loading: boolean;
+}
+
+export type Props = OwnProps & StateProps & WindowBaseProps;
+
+class AppNotepad extends React.Component<Props> {
+  getFullName = () => `${this.props.name} - Notepad`;
 
   render() {
     return (
-      <WindowBase {...this.props} title={this.getTitle()}>
+      <WindowBase {...this.props} name={this.getFullName()}>
         {this.props.loading ? (
           <DelayedLoadingIndicator>
             <pre className={styles.textContent}>Loading...</pre>
@@ -43,9 +47,13 @@ class AppNotepad extends React.Component<Props> {
   }
 }
 
-export default connect((state, ownProps) => ({
-  fileData: fileData(state, ownProps.contentUrl),
-  loading:
-    fileDataFetchingStatus(state, ownProps.contentUrl) ===
-    fetchingStatus.fetching
-}))(AppNotepad);
+function mapStateToProps(state: GlobalState, ownProps: OwnProps): StateProps {
+  return {
+    fileData: fileData(state, ownProps.contentUrl),
+    loading:
+      fileDataFetchingStatus(state, ownProps.contentUrl) ===
+      FetchingStatus.Fetching
+  };
+}
+
+export default connect(mapStateToProps)(AppNotepad);

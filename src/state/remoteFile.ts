@@ -1,8 +1,6 @@
+import { ThunkAction } from 'redux-thunk';
 import { FetchingStatus } from 'start/types';
 import { GlobalState } from './globalState';
-
-import { ActionCreator } from 'redux';
-import { ThunkAction } from 'redux-thunk';
 
 const FETCH_FILE = 'Fetch a remote file';
 const FETCH_FILE_SUCCESS = 'Successfully fetched a remote file';
@@ -122,7 +120,10 @@ export function fileData(state: GlobalState, contentUrl: string) {
   return local(state).fileDataByContentUrl[contentUrl];
 }
 
-export function fileDataFetchingStatus(state: GlobalState, contentUrl: string) {
+export function fileDataFetchingStatus(
+  state: GlobalState,
+  contentUrl: string
+): FetchingStatus {
   return (
     local(state).fileFetchingStatusByContentUrl[contentUrl] ||
     FetchingStatus.Default

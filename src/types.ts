@@ -1,4 +1,5 @@
 import { Icon } from 'resources/icons';
+import { maximizePane } from './state/explorer';
 
 declare global {
   interface Window {
@@ -35,7 +36,7 @@ export interface Folder {
   name: string;
 }
 
-export type Pane = File | App | Folder;
+export type Pane = File | Folder;
 
 export interface Position {
   top?: number;
@@ -49,4 +50,14 @@ export enum FetchingStatus {
   Failure,
   Success,
   Default
+}
+
+export interface PaneState {
+  open: boolean;
+  minimized: boolean;
+  maximized: boolean;
+  width: number;
+  height: number;
+  left: number;
+  top: number;
 }
