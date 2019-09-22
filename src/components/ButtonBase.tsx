@@ -1,38 +1,28 @@
-import * as React from 'react';
-import * as p from 'prop-types';
 import cx from 'classnames';
-
-import { compose } from 'redux';
-import { withProps } from 'recompose';
+import * as React from 'react';
 import withClickOutHandler from 'react-onclickoutside';
-
+import { withProps } from 'recompose';
+import { compose } from 'redux';
 import styles from './buttonBase.scss';
 
+interface Props {
+  classes: {
+    root?: string;
+    icon?: string;
+    outer?: string;
+    inner?: string;
+  };
+  style?: { [property: string]: any };
+  innerStyle?: { [property: string]: any };
+  outerStyle?: { [property: string]: any };
+  children?: React.ReactNode;
+  iconSrc?: string;
+  onClick?(e?: React.MouseEvent<any, any>): void;
+  depressed?: boolean;
+  stopClickPropagation?: boolean;
+}
+
 class ButtonBase extends React.Component<Props> {
-  static propTypes = {
-    classes: p.shape({
-      root: p.string,
-      icon: p.string,
-      outer: p.string,
-      inner: p.string
-    }),
-    style: p.objectOf(p.any),
-    innerStyle: p.objectOf(p.any),
-    outerStyle: p.objectOf(p.any),
-    children: p.node,
-    iconSrc: p.string,
-    onClick: p.func,
-    // force button to always be depressed
-    depressed: p.bool,
-    // because we trigger on mouseUp, should the onClick event's propagation
-    // also be stopped?
-    stopClickPropagation: p.bool
-  };
-
-  static defaultProps = {
-    onClick: () => {}
-  };
-
   // win95 behavior:
   // if mouse is depressed then leaves the button, the button raises.
   // but if the mouse button is held down, re-enters the button, then is
@@ -43,7 +33,7 @@ class ButtonBase extends React.Component<Props> {
     depressed: false
   };
 
-  handleMouseEnter = e => {
+  handleMouseEnter = (e: React.MouseEvent<any, any>) => {
     e.stopPropagation();
 
     this.setState({
@@ -52,7 +42,7 @@ class ButtonBase extends React.Component<Props> {
     });
   };
 
-  handleMouseLeave = e => {
+  handleMouseLeave = (e: React.MouseEvent<any, any>) => {
     e.stopPropagation();
 
     this.setState({
@@ -61,7 +51,7 @@ class ButtonBase extends React.Component<Props> {
     });
   };
 
-  handleMouseDown = e => {
+  handleMouseDown = (e: React.MouseEvent<any, any>) => {
     e.stopPropagation();
 
     this.setState({
@@ -70,10 +60,13 @@ class ButtonBase extends React.Component<Props> {
     });
   };
 
-  handleMouseUp = e => {
+  handleMouseUp = (e: React.MouseEvent<any, any>) => {
     if (this.state.mouseOver && this.state.active) {
       e.stopPropagation();
-      this.props.onClick(e);
+
+      if (this.props.onClick) {
+        this.props.onClick(e);
+      }
     }
 
     this.setState({
@@ -83,7 +76,7 @@ class ButtonBase extends React.Component<Props> {
   };
 
   // "mouseUpOutside"
-  handleClickOutside = e => {
+  handleClickOutside = (e: React.MouseEvent<any, any>) => {
     this.handleMouseUp(e);
   };
 
@@ -152,7 +145,7 @@ class ButtonBase extends React.Component<Props> {
   }
 }
 
-export default compose(
+export default compose<React.ComponentType<Props>>(
   withProps({
     eventTypes: 'mouseup'
   }),

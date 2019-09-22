@@ -1,22 +1,18 @@
-import * as React from 'react';
-import * as p from 'prop-types';
 import cx from 'classnames';
+import * as React from 'react';
 import * as Rnd from 'react-rnd';
-
-import { Position } from 'types';
-import { Icon } from '../../../resources/icons';
-import BorderedContainer from '../BorderedContainer';
-import TitleBar from '../TitleBar';
-
+import { Position } from 'start/types';
+import { Icon } from 'resources/icons';
+import BorderedContainer from 'start/components/BorderedContainer';
+import TitleBar from 'start/components/TitleBar';
 import styles from './index.scss';
 
 const titleBarHeight = 14;
 
-interface Props {
+export interface Props {
   children: React.ReactNode;
-  id: string;
+  name: string;
   zIndex: number;
-  title: string;
   icon: Icon;
   focused: boolean;
   top: number;
@@ -24,11 +20,11 @@ interface Props {
   height: number;
   width: number;
   maximized: boolean;
-  onMinimize: (windowId: string) => void;
-  onMaximize: (windowId: string) => void;
-  onClose: (windowId: string) => void;
-  onFocus: (windowId: string) => void;
-  onMove: (windowId: string, position: Position) => void;
+  onMinimize(windowName: string): void;
+  onMaximize(windowName: string): void;
+  onClose(windowName: string): void;
+  onFocus(windowName: string): void;
+  onMove(windowName: string, position: Position): void;
 }
 
 interface State {
@@ -49,7 +45,7 @@ class WindowBase extends React.Component<Props, State> {
   };
 
   handleDragStart: Rnd.DraggableEventHandler = () => {
-    this.props.onFocus(this.props.id);
+    this.props.onFocus(this.props.name);
   };
 
   handleDrag: Rnd.DraggableEventHandler = (e, { x, y }) => {
@@ -63,7 +59,7 @@ class WindowBase extends React.Component<Props, State> {
   handleDragStop: Rnd.DraggableEventHandler = (e, { x, y }) => {
     this.setState({ isDragging: false });
 
-    this.props.onMove(this.props.id, { left: x, top: y });
+    this.props.onMove(this.props.name, { left: x, top: y });
   };
 
   handleResize = () => {
@@ -77,7 +73,7 @@ class WindowBase extends React.Component<Props, State> {
     delta,
     { x, y }
   ) => {
-    this.props.onMove(this.props.id, {
+    this.props.onMove(this.props.name, {
       left: x,
       top: y,
       width: ref.offsetWidth,
@@ -154,7 +150,7 @@ class WindowBase extends React.Component<Props, State> {
                 right: 50, // clear buttons (hack),
                 pointerEvents: 'auto'
               }}
-              onDoubleClick={() => this.props.onMaximize(this.props.id)}
+              onDoubleClick={() => this.props.onMaximize(this.props.name)}
             />
           </Rnd.default>
         )}
@@ -177,12 +173,11 @@ class WindowBase extends React.Component<Props, State> {
           handlers={{
             onClick: () => {
               // focus this pane via click on titlebar, edges, etc
-              this.props.onFocus(this.props.id);
+              this.props.onFocus(this.props.name);
             }
           }}
         >
           <TitleBar
-            title={this.props.title}
             active={this.props.focused}
             icon={this.props.icon}
             height={titleBarHeight}
@@ -190,7 +185,7 @@ class WindowBase extends React.Component<Props, State> {
             onMaximize={this.props.onMaximize}
             onDoubleClick={this.props.onMaximize}
             onClose={this.props.onClose}
-            windowId={this.props.id}
+            windowName={this.props.name}
           />
           <BorderedContainer
             depth={2}
