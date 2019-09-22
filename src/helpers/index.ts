@@ -49,7 +49,7 @@ export function treeFind(
   return undefined;
 }
 
-export function moveOrPrependToFront(array, searchString) {
+export function moveOrPrependToFront(array: string[], searchString: string) {
   const ordered = flatten(partition(array, o => o === searchString));
 
   return ordered[0] === searchString ? ordered : [searchString, ...ordered];

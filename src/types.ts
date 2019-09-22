@@ -35,9 +35,18 @@ export interface Folder {
   name: string;
 }
 
+export type Pane = File | App | Folder;
+
 export interface Position {
   top?: number;
   left?: number;
   width?: number;
   height?: number;
+}
+
+export enum FetchingStatus {
+  Fetching,
+  Failure,
+  Success,
+  Default
 }

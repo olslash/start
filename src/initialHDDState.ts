@@ -1,8 +1,8 @@
-import { mapValues, map } from 'lodash';
+import { map } from 'lodash';
 import Notepad from './components/AppNotepad';
 import ImageViewer from './components/AppImageViewer';
-import { File, Apps, App, Folder, WindowType } from 'start/types';
-import icons, { Icon } from 'resources/icons';
+import { File, Apps, Pane, Folder, WindowType } from 'start/types';
+import { Icon } from 'resources/icons';
 export const windowsApps: Record<Apps, React.ComponentType> = {
   Notepad,
   ImageViewer
@@ -135,9 +135,9 @@ const folders: Folder[] = [
 ];
 
 export const itemsByName: {
-  [name: string]: File | App | Folder;
+  [name: string]: Pane;
 } = [...textFiles, ...resumeScreenshots, ...folders].reduce(
-  (result, item: File | App | Folder) => ({
+  (result, item: Pane) => ({
     ...result,
     [item.name]: item
   }),

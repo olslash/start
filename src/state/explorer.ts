@@ -9,7 +9,7 @@ import {
 } from '../initialHDDState';
 
 import { fetchTextFile } from './remoteFile';
-import { WindowType } from 'start/types';
+import { WindowType, Pane, Apps } from 'start/types';
 import { GlobalState } from './globalState';
 
 const OPEN_START_MENU = 'Open the start menu';
@@ -293,11 +293,15 @@ export function* saga() {
   yield takeEvery(
     (action: { type: string }) => action.type === OPEN_PANE,
     function*({ payload: { name } }: ReturnType<typeof openPane>) {
-      const file = yield select(itemByName, name);
+      const pane: Pane = yield select(itemByName, name);
 
       // fetch content for panes that have data requirements on opening
-      if (file.contentUrl && file.opensWith === 'AppNotepad') {
-        yield put(fetchTextFile(file.contentUrl));
+      if (
+        pane.type === WindowType.File &&
+        pane.contentUrl &&
+        pane.opensWith === Apps.Notepad
+      ) {
+        yield put(fetchTextFile(pane.contentUrl) as any);
       }
     }
   );
