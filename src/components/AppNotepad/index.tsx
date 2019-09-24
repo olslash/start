@@ -17,9 +17,10 @@ interface StateProps {
   loading: boolean;
 }
 
-export type Props = OwnProps & StateProps & WindowBaseProps;
+export type Props = OwnProps & WindowBaseProps;
+type InternalProps = StateProps & Props;
 
-class AppNotepad extends React.Component<Props> {
+class AppNotepad extends React.Component<InternalProps> {
   getFullName = () => `${this.props.name} - Notepad`;
 
   render() {

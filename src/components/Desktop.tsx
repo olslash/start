@@ -1,24 +1,21 @@
 import * as React from 'react';
-import * as p from 'prop-types'
+import * as p from 'prop-types';
 
 import FolderContents from './Folder/FolderContents';
+import { Pane } from 'start/types';
 
-const Desktop = ({ items = [], onFocus }) => (
-  <div onMouseDown={() => onFocus('desktop')} style={{ height: '100%' }}>
-    <FolderContents items={items} folderId="desktop" columnLayout />
+interface Props {
+  items: Pane[];
+  onFocus(paneName: string): void;
+}
+
+const Desktop: React.FunctionComponent<Props> = ({
+  items = [],
+  onFocus
+}: Props) => (
+  <div onMouseDown={() => onFocus('Desktop')} style={{ height: '100%' }}>
+    <FolderContents items={items} folderName="Desktop" columnLayout />
   </div>
 );
-
-Desktop.propTypes = {
-  items: p.arrayOf(
-    p.shape({
-      type: p.string,
-      id: p.string,
-      title: p.string,
-      icon: p.string
-    })
-  ),
-  onFocus: p.func.isRequired
-};
 
 export default Desktop;

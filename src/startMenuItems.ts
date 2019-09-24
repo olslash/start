@@ -1,8 +1,4 @@
-interface StartMenuItem {
-  title: string;
-  icon: string;
-  children?: StartMenuItem[];
-}
+import { StartMenuItem } from 'start/types';
 
 const items: StartMenuItem[] = [
   {

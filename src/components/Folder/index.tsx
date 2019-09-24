@@ -22,7 +22,7 @@ class Folder extends React.Component<Props> {
       <WindowBase {...this.props}>
         <FolderContents
           items={this.props.items || []}
-          folderId={this.props.name}
+          folderName={this.props.name}
           darkItemTitles
         />
       </WindowBase>

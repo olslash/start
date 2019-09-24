@@ -384,7 +384,10 @@ export function closePane(name: string) {
   };
 }
 
-export function movePane(name: string, { left, top, width, height }: Position) {
+export function movePane(
+  name: string,
+  { left, top, width, height }: Partial<Position>
+) {
   return <const>{
     type: MOVE_PANE,
     payload: { name, left, top, width, height }

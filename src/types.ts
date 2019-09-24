@@ -6,6 +6,11 @@ declare global {
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any;
   }
 }
+export interface StartMenuItem {
+  title: string;
+  icon: string;
+  children?: StartMenuItem[];
+}
 
 export enum Apps {
   ImageViewer = 'ImageViewer',
@@ -32,17 +37,17 @@ export interface App {
 
 export interface Folder {
   type: WindowType.Folder;
-  icon?: Icon;
+  icon: Icon;
   name: string;
 }
 
 export type Pane = File | Folder;
 
 export interface Position {
-  top?: number;
-  left?: number;
-  width?: number;
-  height?: number;
+  top: number;
+  left: number;
+  width: number;
+  height: number;
 }
 
 export enum FetchingStatus {
@@ -52,12 +57,10 @@ export enum FetchingStatus {
   Default
 }
 
-export interface PaneState {
+interface _PaneState {
   open: boolean;
   minimized: boolean;
   maximized: boolean;
-  width: number;
-  height: number;
-  left: number;
-  top: number;
 }
+
+export type PaneState = _PaneState & Position;

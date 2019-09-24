@@ -10,7 +10,7 @@ import styles from './index.scss';
 const titleBarHeight = 14;
 
 export interface Props {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   name: string;
   zIndex: number;
   icon: Icon;
@@ -24,7 +24,7 @@ export interface Props {
   onMaximize(windowName: string): void;
   onClose(windowName: string): void;
   onFocus(windowName: string): void;
-  onMove(windowName: string, position: Position): void;
+  onMove(windowName: string, position: Partial<Position>): void;
 }
 
 interface State {

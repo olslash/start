@@ -104,7 +104,8 @@ const folders: Folder[] = [
   },
   {
     type: WindowType.Folder,
-    name: 'Desktop'
+    name: 'Desktop',
+    icon: Icon.DiskDrive // this shouldn't ever be visible
   },
   {
     type: WindowType.Folder,

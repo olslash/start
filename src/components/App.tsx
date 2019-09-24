@@ -20,15 +20,16 @@ import TaskBar from './TaskBar';
 import Desktop from './Desktop';
 
 import styles from './app.scss';
-import WindowContainer from './WindowContainer';
-import { Pane, Position } from 'start/types';
+import Folder from './Folder';
+import { Pane, Position, WindowType, PaneState, File } from 'start/types';
 import { GlobalState } from 'start/state/globalState';
+import { windowsApps, windowsAppIcons } from 'start/windowsApps';
 
 interface StateProps {
   openPaneItems: ReturnType<typeof openPaneItems>;
   desktopItems: Pane[];
   focusedPaneName: string;
-  visiblePanes: Pane[];
+  visiblePanes: (Pane & PaneState)[];
 }
 
 interface DispatchProps {
@@ -41,35 +42,30 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps;
 
-const App: React.FunctionComponent<Props> = ({
-  desktopItems,
-  openPaneItems,
-  focusedPaneName,
-  visiblePanes,
-  focusPane,
-  minimizePane,
-  maximizePane,
-  closePane,
-  movePane
-}: Props) => (
+const App: React.FunctionComponent<Props> = (props: Props) => (
   <div className={styles.container}>
     <SVGDefinitions />
 
-    {visiblePanes.map((pane, i) => (
-      <WindowContainer
-        {...pane}
-        zIndex={i + 100}
-        focused={focusedPaneName === pane.name}
-        key={pane.name}
-        onFocus={focusPane}
-        onMinimize={minimizePane}
-        onMaximize={maximizePane}
-        onClose={closePane}
-        onMove={movePane}
-      />
-    ))}
+    {props.visiblePanes.map((pane, i) =>
+      pane.type === WindowType.Folder ? (
+        <Folder
+          {...props}
+          {...pane}
+          zIndex={i + 100}
+          focused={props.focusedPaneName === pane.name}
+          key={pane.name}
+          onFocus={focusPane}
+          onMinimize={minimizePane}
+          onMaximize={maximizePane}
+          onClose={closePane}
+          onMove={movePane}
+        />
+      ) : (
+        renderApp(pane, i, props)
+      )
+    )}
 
-    <Desktop items={desktopItems} onFocus={focusPane} />
+    <Desktop items={props.desktopItems} onFocus={props.focusPane} />
 
     <TaskBar
       startMenuItems={startMenuItems}
@@ -86,6 +82,25 @@ const App: React.FunctionComponent<Props> = ({
     />
   </div>
 );
+
+function renderApp(pane: File & PaneState, i: number, props: Props) {
+  const AppComponent = windowsApps[pane.opensWith];
+
+  return (
+    <AppComponent
+      {...pane}
+      icon={windowsAppIcons[pane.opensWith]}
+      zIndex={i + 100}
+      focused={props.focusedPaneName === pane.name}
+      key={pane.name}
+      onFocus={focusPane}
+      onMinimize={minimizePane}
+      onMaximize={maximizePane}
+      onClose={closePane}
+      onMove={movePane}
+    />
+  );
+}
 
 function mapStateToProps(state: GlobalState): StateProps {
   return {
