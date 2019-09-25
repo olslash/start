@@ -1,5 +1,4 @@
 import { Icon } from 'resources/icons';
-import { maximizePane } from './state/explorer';
 
 declare global {
   interface Window {

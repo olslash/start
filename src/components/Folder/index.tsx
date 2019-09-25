@@ -36,4 +36,6 @@ function mapStateToProps(state: GlobalState, ownProps: Props): StateProps {
   };
 }
 
-export default connect(mapStateToProps)(Folder);
+export default connect<StateProps, {}, OwnProps, GlobalState>(mapStateToProps)(
+  Folder
+);

@@ -104,7 +104,7 @@ function mapStateToProps(state: GlobalState): StateProps {
   };
 }
 
-export default connect(
+export default connect<StateProps, DispatchProps, OwnProps, GlobalState>(
   mapStateToProps,
   {
     openStartMenu,

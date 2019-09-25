@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as p from 'prop-types';
 
 import FolderContents from './Folder/FolderContents';
 import { Pane } from 'start/types';

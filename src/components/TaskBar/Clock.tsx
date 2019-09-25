@@ -1,8 +1,5 @@
 import * as React from 'react';
-import * as p from 'prop-types';
-
 import BorderedContainer from '../BorderedContainer';
-
 import styles from './clock.scss';
 
 const formatTime = (date: Date) => {

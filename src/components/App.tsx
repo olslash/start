@@ -115,7 +115,7 @@ function mapStateToProps(state: GlobalState): StateProps {
   };
 }
 
-export default connect(
+export default connect<StateProps, DispatchProps, {}, GlobalState>(
   mapStateToProps,
   {
     focusPane,

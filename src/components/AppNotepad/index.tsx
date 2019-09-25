@@ -57,4 +57,6 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps): StateProps {
   };
 }
 
-export default connect(mapStateToProps)(AppNotepad);
+export default connect<StateProps, {}, OwnProps, GlobalState>(mapStateToProps)(
+  AppNotepad
+);

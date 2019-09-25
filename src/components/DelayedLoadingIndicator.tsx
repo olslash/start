@@ -1,12 +1,17 @@
 import * as React from 'react';
-import * as p from 'prop-types';
 
-export default class DelayedLoadingIndicator extends React.Component<Props> {
-  static propTypes = {
-    children: p.node.isRequired,
-    delay: p.number
-  };
+interface Props {
+  delay?: number;
+}
 
+interface State {
+  delaying: boolean;
+}
+
+export default class DelayedLoadingIndicator extends React.Component<
+  Props,
+  State
+> {
   static defaultProps = {
     delay: 1000
   };
@@ -15,7 +20,7 @@ export default class DelayedLoadingIndicator extends React.Component<Props> {
     delaying: true
   };
 
-  loadingDelay = null; // eslint-disable-line
+  loadingDelay = 0;
 
   componentDidMount() {
     this.loadingDelay = setTimeout(

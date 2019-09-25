@@ -1,19 +1,16 @@
-import * as React from 'react';
 import cx from 'classnames';
-import * as p from 'prop-types'
-
+import * as React from 'react';
 import styles from './moreIconRight.scss';
 
-const MoreIconRight = ({ inverted }) => (
+interface Props {
+  inverted: boolean;
+}
+const MoreIconRight: React.FunctionComponent<Props> = ({ inverted }: Props) => (
   <div
     className={cx(styles.arrowRight, {
       [styles.inverted]: inverted
     })}
   />
 );
-
-MoreIconRight.propTypes = {
-  inverted: p.bool
-};
 
 export default MoreIconRight;

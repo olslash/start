@@ -1,43 +1,41 @@
-import * as React from 'react';
-import { noop, truncate } from 'lodash';
 import cx from 'classnames';
-import * as p from 'prop-types';
-
-import icons from '../../../resources/icons';
-
+import { truncate } from 'lodash';
+import * as React from 'react';
+import icons, { Icon } from 'resources/icons';
 import styles from './folderItem.scss';
 
-class FolderItem extends React.Component<Props> {
-  static propTypes = {
-    title: p.string.isRequired,
-    icon: p.oneOf(Object.keys(icons)),
-    id: p.string.isRequired,
-    selected: p.bool,
-    partialSelected: p.bool,
-    darkTitle: p.bool,
-    doubleClickDelayMax: p.number,
-    // onClick: p.func,
-    onMouseDown: p.func,
-    onDoubleClick: p.func
-  };
+interface Props {
+  icon: Icon;
+  name: string;
+  selected?: boolean;
+  partialSelected?: boolean;
+  darkTitle?: boolean;
+  doubleClickDelayMax?: number;
+  // onClick(): void;
+  onMouseDown?(e: React.MouseEvent<any, any>, name: string): void;
+  onDoubleClick?(e: React.MouseEvent<any, any>, name: string): void;
+}
 
+interface State {
+  shouldDoubleClick: boolean;
+}
+
+class FolderItem extends React.Component<Props, State> {
   static defaultProps = {
-    doubleClickDelayMax: 400,
-    onDoubleClick: noop,
-    onMouseDown: noop
+    doubleClickDelayMax: 400
   };
 
   state = {
     shouldDoubleClick: false
   };
 
-  doubleClickTimeout = null; // eslint-disable-line
+  doubleClickTimeout = 0;
 
   componentWillUnmount() {
     clearTimeout(this.doubleClickTimeout);
   }
 
-  handleMouseDown = e => {
+  handleMouseDown = (e: React.MouseEvent<any, any>) => {
     // double click is mousedown-mouseup-<mousedown>
 
     if (this.state.shouldDoubleClick) {
@@ -45,7 +43,9 @@ class FolderItem extends React.Component<Props> {
       return this.handleDoubleClick(e);
     }
 
-    this.props.onMouseDown(e, this.props.id);
+    if (this.props.onMouseDown) {
+      this.props.onMouseDown(e, this.props.name);
+    }
 
     this.setState(
       {
@@ -59,12 +59,14 @@ class FolderItem extends React.Component<Props> {
     );
   };
 
-  handleDoubleClick = e => {
-    this.props.onDoubleClick(e, this.props.id);
+  handleDoubleClick = (e: React.MouseEvent<any, any>) => {
+    if (this.props.onDoubleClick) {
+      this.props.onDoubleClick(e, this.props.name);
+    }
   };
 
   getTruncatedTitle = () => {
-    return this.props.title
+    return this.props.name
       .split(' ')
       .map(word => truncate(word, { length: 12 }))
       .join(' ');

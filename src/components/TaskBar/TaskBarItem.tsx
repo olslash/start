@@ -1,13 +1,23 @@
-import * as React from 'react';
-import * as p from 'prop-types';
 import cx from 'classnames';
-
-// import screenDoor from '../../../resources/selected-overlay-screen-inverse-40.svg';
-import icons from '../../../resources/icons';
-import ButtonBase from '../ButtonBase';
+import * as React from 'react';
+// import screenDoor from 'resources/selected-overlay-screen-inverse-40.svg';
+import icons, { Icon } from 'resources/icons';
+import ButtonBase from 'start/components/ButtonBase';
 import styles from './taskBarItem.scss';
 
-const TaskBarItem = ({ title, active, onClick, icon }) => (
+interface Props {
+  title: string;
+  active?: boolean;
+  icon: Icon;
+  onClick?(e?: React.MouseEvent<any, any>): void;
+}
+
+const TaskBarItem: React.FunctionComponent<Props> = ({
+  title,
+  active,
+  onClick,
+  icon
+}) => (
   <div className={styles.container}>
     <ButtonBase
       classes={{
@@ -24,12 +34,5 @@ const TaskBarItem = ({ title, active, onClick, icon }) => (
     </ButtonBase>
   </div>
 );
-
-TaskBarItem.propTypes = {
-  title: p.string,
-  icon: p.string.isRequired,
-  active: p.bool,
-  onClick: p.func
-};
 
 export default TaskBarItem;
