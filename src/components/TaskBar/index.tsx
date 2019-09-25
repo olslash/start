@@ -22,7 +22,7 @@ import TaskBarItem from './TaskBarItem';
 
 interface OwnProps {
   startMenuItems: StartMenuItem[];
-  height: number;
+  height?: number;
   onFocus(paneName: string): void;
 }
 

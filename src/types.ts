@@ -8,7 +8,7 @@ declare global {
 }
 export interface StartMenuItem {
   title: string;
-  icon: string;
+  icon: Icon;
   children?: StartMenuItem[];
 }
 

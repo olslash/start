@@ -1,11 +1,11 @@
 import * as React from 'react';
-import * as p from 'prop-types'
+import * as p from 'prop-types';
 
 import BorderedContainer from '../BorderedContainer';
 
 import styles from './clock.scss';
 
-const formatTime = date => {
+const formatTime = (date: Date) => {
   const hours = date
     .getHours()
     .toString()
@@ -19,7 +19,11 @@ const formatTime = date => {
   return `${hours}:${minutes}`;
 };
 
-const Clock = ({ currentDate }) => (
+interface Props {
+  currentDate: Date;
+}
+
+const Clock: React.FunctionComponent<Props> = ({ currentDate }: Props) => (
   <BorderedContainer
     depth={1}
     classes={{ root: styles.container, outer: styles.content }}
@@ -33,9 +37,5 @@ const Clock = ({ currentDate }) => (
     <span className={styles.time}>{formatTime(currentDate)}</span>
   </BorderedContainer>
 );
-
-Clock.propTypes = {
-  currentDate: p.instanceOf(Date).isRequired
-};
 
 export default Clock;
