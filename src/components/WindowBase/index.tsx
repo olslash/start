@@ -10,7 +10,6 @@ import styles from './index.scss';
 const titleBarHeight = 14;
 
 export interface Props {
-  children?: React.ReactNode;
   name: string;
   zIndex: number;
   icon: Icon;
@@ -37,7 +36,8 @@ class WindowBase extends React.Component<Props, State> {
     height: 200,
     width: 300,
     top: 0,
-    left: 0
+    left: 0,
+    zIndex: 0 // fixme? verify
   };
 
   state = {

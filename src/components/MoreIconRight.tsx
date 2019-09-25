@@ -3,7 +3,7 @@ import * as React from 'react';
 import styles from './moreIconRight.scss';
 
 interface Props {
-  inverted: boolean;
+  inverted?: boolean;
 }
 const MoreIconRight: React.FunctionComponent<Props> = ({ inverted }: Props) => (
   <div
