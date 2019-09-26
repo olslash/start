@@ -25,7 +25,7 @@ class AppNotepad extends React.Component<InternalProps> {
 
   render() {
     return (
-      <WindowBase {...this.props} name={this.getFullName()}>
+      <WindowBase {...this.props} title={this.getFullName()}>
         {this.props.loading ? (
           <DelayedLoadingIndicator>
             <pre className={styles.textContent}>Loading...</pre>

@@ -14,7 +14,7 @@ class AppImageViewer extends React.Component<Props> {
 
   render() {
     return (
-      <WindowBase {...this.props} name={this.getTitle()}>
+      <WindowBase {...this.props} title={this.getTitle()}>
         <img
           src={this.props.contentUrl}
           // alt={`project screenshot for ${this.props.name}`}

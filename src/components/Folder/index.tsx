@@ -19,7 +19,7 @@ export type Props = OwnProps & StateProps & WindowBaseProps;
 class Folder extends React.Component<Props> {
   render() {
     return (
-      <WindowBase {...this.props}>
+      <WindowBase {...this.props} title={this.props.name}>
         <FolderContents
           items={this.props.items || []}
           folderName={this.props.name}

@@ -6,7 +6,8 @@ import ButtonBase from 'start/components/ButtonBase';
 import styles from './index.scss';
 
 interface Props {
-  windowName: string;
+  title: string;
+  name: string;
   active: boolean;
   icon: Icon;
   height: number;
@@ -17,7 +18,8 @@ interface Props {
 }
 
 const TitleBar: React.FunctionComponent<Props> = ({
-  windowName,
+  title,
+  name,
   active = false,
   icon,
   height = 14,
@@ -34,12 +36,12 @@ const TitleBar: React.FunctionComponent<Props> = ({
   >
     <div
       className={styles.leftContainer}
-      onDoubleClick={() => onDoubleClick(windowName)}
+      onDoubleClick={() => onDoubleClick(name)}
     >
       <div>
         {icons[icon] && <img src={icons[icon]} className={styles.icon} />}
       </div>
-      <span className={styles.title}>{windowName}</span>
+      <span className={styles.title}>{title}</span>
     </div>
     <div className={styles.rightContainer}>
       {onMinimize && (
@@ -50,7 +52,7 @@ const TitleBar: React.FunctionComponent<Props> = ({
             icon: styles.buttonIcon
           }}
           iconSrc={icons.buttonMinimize}
-          onClick={() => onMinimize(windowName)}
+          onClick={() => onMinimize(name)}
         />
       )}
       {onMaximize && (
@@ -61,7 +63,7 @@ const TitleBar: React.FunctionComponent<Props> = ({
             icon: styles.buttonIcon
           }}
           iconSrc={icons.buttonMaximize}
-          onClick={() => onMaximize(windowName)}
+          onClick={() => onMaximize(name)}
         />
       )}
       {onClose && (
@@ -72,7 +74,7 @@ const TitleBar: React.FunctionComponent<Props> = ({
             icon: styles.buttonIcon
           }}
           iconSrc={icons.buttonClose}
-          onClick={() => onClose(windowName)}
+          onClick={() => onClose(name)}
         />
       )}
     </div>

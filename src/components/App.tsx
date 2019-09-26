@@ -54,11 +54,11 @@ const App: React.FunctionComponent<Props> = (props: Props) => (
           zIndex={i + 100}
           focused={props.focusedPaneName === pane.name}
           key={pane.name}
-          onFocus={focusPane}
-          onMinimize={minimizePane}
-          onMaximize={maximizePane}
-          onClose={closePane}
-          onMove={movePane}
+          onFocus={props.focusPane}
+          onMinimize={props.minimizePane}
+          onMaximize={props.maximizePane}
+          onClose={props.closePane}
+          onMove={props.movePane}
         />
       ) : (
         renderApp(pane, i, props)
@@ -70,13 +70,13 @@ const App: React.FunctionComponent<Props> = (props: Props) => (
     <TaskBar
       startMenuItems={startMenuItems}
       onFocus={(name: string) => {
-        focusPane(name);
+        props.focusPane(name);
 
-        const paneIsMinimized = !!get(openPaneItems, [name, 'minimized']);
+        const paneIsMinimized = !!get(props.openPaneItems, [name, 'minimized']);
         if (paneIsMinimized) {
           // win95 behavior: clicking a taskbar item doesn't minimize the pane
           // like it would in later releases
-          minimizePane(name);
+          props.minimizePane(name);
         }
       }}
     />
@@ -93,11 +93,11 @@ function renderApp(pane: File & PaneState, i: number, props: Props) {
       zIndex={i + 100}
       focused={props.focusedPaneName === pane.name}
       key={pane.name}
-      onFocus={focusPane}
-      onMinimize={minimizePane}
-      onMaximize={maximizePane}
-      onClose={closePane}
-      onMove={movePane}
+      onFocus={props.focusPane}
+      onMinimize={props.minimizePane}
+      onMaximize={props.maximizePane}
+      onClose={props.closePane}
+      onMove={props.movePane}
     />
   );
 }
@@ -105,7 +105,7 @@ function renderApp(pane: File & PaneState, i: number, props: Props) {
 function mapStateToProps(state: GlobalState): StateProps {
   return {
     openPaneItems: openPaneItems(state),
-    desktopItems: itemsForFolder(state, 'desktop') || [],
+    desktopItems: itemsForFolder(state, 'Desktop') || [],
     focusedPaneName: focusedPaneName(state),
     visiblePanes: sortBy(
       filter(openPaneItems(state), { minimized: false }),

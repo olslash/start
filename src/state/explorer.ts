@@ -65,7 +65,7 @@ const initialState: State = {
   itemsByName: initialItemsByName,
   fileTree: initialFileTree,
   paneStateByItemName: {},
-  focusedPaneOrder: ['desktop'],
+  focusedPaneOrder: ['Desktop'],
   primarySelectedFolderItemNameByFolderName: {},
   folderSelectionStateByFolderName: {}
 };
