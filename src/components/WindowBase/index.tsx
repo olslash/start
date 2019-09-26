@@ -11,7 +11,7 @@ const titleBarHeight = 14;
 
 export interface Props {
   name: string;
-  title: string;
+  title?: string;
   zIndex: number;
   icon: Icon;
   focused: boolean;
@@ -186,7 +186,7 @@ class WindowBase extends React.Component<Props, State> {
             onMaximize={this.props.onMaximize}
             onDoubleClick={this.props.onMaximize}
             onClose={this.props.onClose}
-            title={this.props.title}
+            title={this.props.title || this.props.name}
             name={this.props.name}
           />
           <BorderedContainer
