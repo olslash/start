@@ -24,8 +24,8 @@ const CLOSE_PANE = 'close a pane';
 const MOVE_PANE = 'change the position of a pane';
 
 export enum FolderState {
-  ACTIVE,
-  INACTIVE
+  ACTIVE = 'active',
+  INACTIVE = 'inactive'
 }
 
 const defaultPaneState = {
