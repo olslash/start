@@ -1,17 +1,25 @@
-import * as React from 'react';
 import cx from 'classnames';
-import * as p from 'prop-types'
+import * as React from 'react';
 import { withProps } from 'recompose';
-
-import ButtonBase from '../ButtonBase';
-
-import icons from '../../../resources/icons';
-
+import icons, { Icon } from 'resources/icons';
+import ButtonBase from 'start/components/ButtonBase';
 import styles from './index.scss';
 
-const TitleBar = ({
-  windowId,
+interface Props {
+  title: string;
+  name: string;
+  active: boolean;
+  icon: Icon;
+  height: number;
+  onMinimize(windowName: string): void;
+  onMaximize(windowName: string): void;
+  onClose(windowName: string): void;
+  onDoubleClick(windowName: string): void;
+}
+
+const TitleBar: React.FunctionComponent<Props> = ({
   title,
+  name,
   active = false,
   icon,
   height = 14,
@@ -28,7 +36,7 @@ const TitleBar = ({
   >
     <div
       className={styles.leftContainer}
-      onDoubleClick={() => onDoubleClick(windowId)}
+      onDoubleClick={() => onDoubleClick(name)}
     >
       <div>
         {icons[icon] && <img src={icons[icon]} className={styles.icon} />}
@@ -44,7 +52,7 @@ const TitleBar = ({
             icon: styles.buttonIcon
           }}
           iconSrc={icons.buttonMinimize}
-          onClick={() => onMinimize(windowId)}
+          onClick={() => onMinimize(name)}
         />
       )}
       {onMaximize && (
@@ -55,7 +63,7 @@ const TitleBar = ({
             icon: styles.buttonIcon
           }}
           iconSrc={icons.buttonMaximize}
-          onClick={() => onMaximize(windowId)}
+          onClick={() => onMaximize(name)}
         />
       )}
       {onClose && (
@@ -66,29 +74,17 @@ const TitleBar = ({
             icon: styles.buttonIcon
           }}
           iconSrc={icons.buttonClose}
-          onClick={() => onClose(windowId)}
+          onClick={() => onClose(name)}
         />
       )}
     </div>
   </div>
 );
 
-TitleBar.propTypes = {
-  windowId: p.string.isRequired,
-  title: p.string.isRequired,
-  active: p.bool,
-  icon: p.string,
-  height: p.number,
-  onMinimize: p.func,
-  onMaximize: p.func,
-  onClose: p.func,
-  onDoubleClick: p.func
-};
+const iconSpecialCaseReplacements = new Map<Icon, Icon>([
+  [Icon.Folder, Icon.FolderOpen]
+]);
 
-const iconSpecialCaseReplacements = {
-  folder: 'folderOpen'
-};
-
-export default withProps(({ icon }) => ({
-  icon: iconSpecialCaseReplacements[icon] || icon
+export default withProps<{}, Props>(({ icon }) => ({
+  icon: iconSpecialCaseReplacements.get(icon) || icon
 }))(TitleBar);

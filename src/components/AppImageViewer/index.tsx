@@ -1,23 +1,23 @@
 import * as React from 'react';
-import * as p from 'prop-types'
-
-import WindowBase from '../WindowBase';
+import WindowBase, { Props as WindowBaseProps } from '../WindowBase';
 import styles from './index.scss';
 
-class AppImageViewer extends React.Component {
-  static propTypes = {
-    title: p.string.isRequired,
-    contentUrl: p.string.isRequired
-  };
+interface OwnProps {
+  name: string;
+  contentUrl: string;
+}
 
-  getTitle = () => `${this.props.title} - Image Viewer`;
+export type Props = OwnProps & WindowBaseProps;
+
+class AppImageViewer extends React.Component<Props> {
+  getTitle = () => `${this.props.name} - Image Viewer`;
 
   render() {
     return (
       <WindowBase {...this.props} title={this.getTitle()}>
         <img
           src={this.props.contentUrl}
-          // alt={`project screenshot for ${this.props.title}`}
+          // alt={`project screenshot for ${this.props.name}`}
           className={styles.image}
         />
       </WindowBase>

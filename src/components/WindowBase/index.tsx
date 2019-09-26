@@ -1,52 +1,55 @@
-import * as React from 'react';
-import * as p from 'prop-types'
 import cx from 'classnames';
-import Rnd from 'react-rnd';
-
-import BorderedContainer from '../BorderedContainer';
-import TitleBar from '../TitleBar';
-
+import * as React from 'react';
+import * as Rnd from 'react-rnd';
+import { Position } from 'start/types';
+import { Icon } from 'resources/icons';
+import BorderedContainer from 'start/components/BorderedContainer';
+import TitleBar from 'start/components/TitleBar';
 import styles from './index.scss';
 
 const titleBarHeight = 14;
 
-class WindowBase extends React.Component {
-  static propTypes = {
-    children: p.node,
-    id: p.string.isRequired,
-    zIndex: p.number.isRequired,
-    title: p.string.isRequired,
-    icon: p.string,
-    focused: p.bool,
-    top: p.number,
-    left: p.number,
-    height: p.number,
-    width: p.number,
-    maximized: p.bool,
-    onMinimize: p.func,
-    onMaximize: p.func,
-    onClose: p.func,
-    onFocus: p.func.isRequired,
-    onMove: p.func.isRequired
-  };
+export interface Props {
+  name: string;
+  title: string;
+  zIndex: number;
+  icon: Icon;
+  focused: boolean;
+  top: number;
+  left: number;
+  height: number;
+  width: number;
+  maximized: boolean;
+  onMinimize(windowName: string): void;
+  onMaximize(windowName: string): void;
+  onClose(windowName: string): void;
+  onFocus(windowName: string): void;
+  onMove(windowName: string, position: Partial<Position>): void;
+}
 
+interface State {
+  isDragging: boolean;
+}
+
+class WindowBase extends React.Component<Props, State> {
   static defaultProps = {
     focused: false,
     height: 200,
     width: 300,
     top: 0,
-    left: 0
+    left: 0,
+    zIndex: 0 // fixme? verify
   };
 
   state = {
     isDragging: false
   };
 
-  handleDragStart = () => {
-    this.props.onFocus(this.props.id);
+  handleDragStart: Rnd.DraggableEventHandler = () => {
+    this.props.onFocus(this.props.name);
   };
 
-  handleDrag = (e, { x, y }) => {
+  handleDrag: Rnd.DraggableEventHandler = (e, { x, y }) => {
     // don't display dragging state on mouse down; only once user actually
     // starts dragging.
     if (x !== this.props.left || y !== this.props.left) {
@@ -54,18 +57,24 @@ class WindowBase extends React.Component {
     }
   };
 
-  handleDragStop = (e, { x, y }) => {
+  handleDragStop: Rnd.DraggableEventHandler = (e, { x, y }) => {
     this.setState({ isDragging: false });
 
-    this.props.onMove(this.props.id, { left: x, top: y });
+    this.props.onMove(this.props.name, { left: x, top: y });
   };
 
   handleResize = () => {
     this.setState({ isDragging: true });
   };
 
-  handleResizeStop = (e, direction, ref, delta, { x, y }) => {
-    this.props.onMove(this.props.id, {
+  handleResizeStop: Rnd.ResizeHandler = (
+    e,
+    direction,
+    ref,
+    delta,
+    { x, y }
+  ) => {
+    this.props.onMove(this.props.name, {
       left: x,
       top: y,
       width: ref.offsetWidth,
@@ -84,7 +93,7 @@ class WindowBase extends React.Component {
     return (
       <React.Fragment>
         {!this.props.maximized && (
-          <Rnd
+          <Rnd.default
             default={{
               x: this.props.left,
               y: this.props.top,
@@ -142,9 +151,9 @@ class WindowBase extends React.Component {
                 right: 50, // clear buttons (hack),
                 pointerEvents: 'auto'
               }}
-              onDoubleClick={() => this.props.onMaximize(this.props.id)}
+              onDoubleClick={() => this.props.onMaximize(this.props.name)}
             />
-          </Rnd>
+          </Rnd.default>
         )}
 
         <BorderedContainer
@@ -165,12 +174,11 @@ class WindowBase extends React.Component {
           handlers={{
             onClick: () => {
               // focus this pane via click on titlebar, edges, etc
-              this.props.onFocus(this.props.id);
+              this.props.onFocus(this.props.name);
             }
           }}
         >
           <TitleBar
-            title={this.props.title}
             active={this.props.focused}
             icon={this.props.icon}
             height={titleBarHeight}
@@ -178,7 +186,8 @@ class WindowBase extends React.Component {
             onMaximize={this.props.onMaximize}
             onDoubleClick={this.props.onMaximize}
             onClose={this.props.onClose}
-            windowId={this.props.id}
+            title={this.props.title}
+            name={this.props.name}
           />
           <BorderedContainer
             depth={2}

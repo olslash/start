@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { filter, get, sortBy } from 'lodash';
-import * as p from 'prop-types';
 
 import startMenuItems from '../startMenuItems';
 import {
   focusPane,
-  focusedPaneId,
+  focusedPaneName,
   focusedPaneOrder,
   itemsForFolder,
   openPaneItems,
@@ -21,78 +20,108 @@ import TaskBar from './TaskBar';
 import Desktop from './Desktop';
 
 import styles from './app.scss';
-import WindowContainer from './WindowContainer';
+import Folder from './Folder';
+import { Pane, Position, WindowType, PaneState, File } from 'start/types';
+import { GlobalState } from 'start/state/globalState';
+import { windowsApps, windowsAppIcons } from 'start/windowsApps';
 
-const App = ({
-  desktopItems = [],
-  openPaneItems = [],
-  focusedPaneId,
-  visiblePanes,
-  focusPane,
-  minimizePane,
-  maximizePane,
-  closePane,
-  movePane
-}) => (
+interface StateProps {
+  openPaneItems: ReturnType<typeof openPaneItems>;
+  desktopItems: Pane[];
+  focusedPaneName: string;
+  visiblePanes: (Pane & PaneState)[];
+}
+
+interface DispatchProps {
+  focusPane(paneName: string): void;
+  minimizePane(paneName: string): void;
+  maximizePane(paneName: string): void;
+  closePane(paneName: string): void;
+  movePane(paneName: string, positon: Position): void;
+}
+
+type Props = StateProps & DispatchProps;
+
+const App: React.FunctionComponent<Props> = (props: Props) => (
   <div className={styles.container}>
     <SVGDefinitions />
-    {visiblePanes.map((pane, i) => (
-      <WindowContainer
-        {...pane}
-        zIndex={i + 100}
-        focused={focusedPaneId === pane.id}
-        key={pane.id}
-        onFocus={focusPane}
-        onMinimize={minimizePane}
-        onMaximize={maximizePane}
-        onClose={closePane}
-        onMove={movePane}
-      />
-    ))}
-    <Desktop items={desktopItems} onFocus={focusPane} />
+
+    {props.visiblePanes.map((pane, i) =>
+      pane.type === WindowType.Folder ? (
+        <Folder
+          {...props}
+          {...pane}
+          zIndex={i + 100}
+          focused={props.focusedPaneName === pane.name}
+          key={pane.name}
+          onFocus={props.focusPane}
+          onMinimize={props.minimizePane}
+          onMaximize={props.maximizePane}
+          onClose={props.closePane}
+          onMove={props.movePane}
+        />
+      ) : (
+        renderApp(pane, i, props)
+      )
+    )}
+
+    <Desktop items={props.desktopItems} onFocus={props.focusPane} />
+
     <TaskBar
       startMenuItems={startMenuItems}
-      onFocus={id => {
-        focusPane(id);
+      onFocus={(name: string) => {
+        props.focusPane(name);
 
-        const paneIsMinimized = !!get(openPaneItems, [id, 'minimized']);
+        const paneIsMinimized = !!get(props.openPaneItems, [name, 'minimized']);
         if (paneIsMinimized) {
           // win95 behavior: clicking a taskbar item doesn't minimize the pane
           // like it would in later releases
-          minimizePane(id);
+          props.minimizePane(name);
         }
       }}
     />
   </div>
 );
 
-const paneType = p.shape({
-  type: p.string.isRequired,
-  id: p.string.isRequired
-});
+function renderApp(pane: File & PaneState, i: number, props: Props) {
+  const AppComponent = windowsApps[pane.opensWith];
 
-App.propTypes = {
-  openPaneItems: p.objectOf(paneType),
-  desktopItems: p.arrayOf(p.object),
-  focusedPaneId: p.string,
-  visiblePanes: p.arrayOf(paneType),
-  focusPane: p.func.isRequired,
-  minimizePane: p.func.isRequired,
-  maximizePane: p.func.isRequired,
-  closePane: p.func.isRequired,
-  movePane: p.func.isRequired
-};
+  return (
+    <AppComponent
+      {...pane}
+      icon={windowsAppIcons[pane.opensWith]}
+      zIndex={i + 100}
+      focused={props.focusedPaneName === pane.name}
+      key={pane.name}
+      onFocus={props.focusPane}
+      onMinimize={props.minimizePane}
+      onMaximize={props.maximizePane}
+      onClose={props.closePane}
+      onMove={props.movePane}
+    />
+  );
+}
 
-export default connect(
-  state => ({
+function mapStateToProps(state: GlobalState): StateProps {
+  return {
     openPaneItems: openPaneItems(state),
-    desktopItems: itemsForFolder(state, 'desktop'),
-    focusedPaneId: focusedPaneId(state),
+    desktopItems: itemsForFolder(state, 'Desktop') || [],
+    focusedPaneName: focusedPaneName(state),
     visiblePanes: sortBy(
       filter(openPaneItems(state), { minimized: false }),
       // sort panes (for z-index precedence) by their index in focusedPaneOrder
-      ({ id }) => focusedPaneOrder(state).indexOf(id)
+      ({ name }) => focusedPaneOrder(state).indexOf(name)
     ).reverse()
-  }),
-  { focusPane, minimizePane, maximizePane, closePane, movePane }
+  };
+}
+
+export default connect<StateProps, DispatchProps, {}, GlobalState>(
+  mapStateToProps,
+  {
+    focusPane,
+    minimizePane,
+    maximizePane,
+    closePane,
+    movePane
+  } as DispatchProps
 )(App);

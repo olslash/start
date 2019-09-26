@@ -1,33 +1,39 @@
 import * as React from 'react';
-import { compose } from 'redux';
-import { withProps } from 'recompose';
-import * as p from 'prop-types'
 import withClickOutHandler from 'react-onclickoutside';
-
+import { withProps } from 'recompose';
+import { compose } from 'redux';
+import { Icon } from 'resources/icons';
+import { StartMenuItem as StartMenuItemType } from 'start/types';
 import startMenuLogo from '../../../resources/startmenu-logo.png';
-
 import BorderedContainer from '../BorderedContainer';
+import styles from './startMenu.scss';
 import StartMenuItem from './StartMenuItem';
 import StartSubMenu from './StartSubMenu';
 
-import styles from './startMenu.scss';
-
 export const clickoutIgnoreClassname = 'start-clickout-ignore';
 
-class StartMenu extends React.Component {
-  static propTypes = {
-    items: p.arrayOf(p.object).isRequired,
-    bottom: p.number.isRequired,
-    activeFolderPath: p.arrayOf(p.number).isRequired,
-    onRequestClose: p.func,
-    onSetActiveFolderPath: p.func.isRequired
-  };
+interface Props {
+  items: StartMenuItemType[];
+  bottom: number;
+  activeFolderPath: number[];
+  onRequestClose(): void;
+  onSetActiveFolderPath(path: { depth: number; index: number }): void;
+}
 
+interface ProvidedProps {
+  outsideClickIgnoreClass: string;
+}
+
+class StartMenu extends React.Component<Props> {
   handleClickOutside = () => {
     this.props.onRequestClose();
   };
 
-  renderItem = ({ title, icon, children = [] }, index, depth = 0) => (
+  renderItem = (
+    { title, icon, children = [] }: StartMenuItemType,
+    index: number,
+    depth: number = 0
+  ) => (
     <StartMenuItem
       key={title}
       label={title}
@@ -47,9 +53,10 @@ class StartMenu extends React.Component {
         children &&
         !!children.length
       }
-      style={{
-        zIndex: 1
-      }}
+      // fixme?:
+      // style={{
+      //   zIndex: 1
+      // }}
     >
       {!!children.length &&
         // only render submenu for active path
@@ -67,7 +74,7 @@ class StartMenu extends React.Component {
     </StartMenuItem>
   );
 
-  stopEvent = e => e.stopPropagation();
+  stopEvent = (e: React.MouseEvent<any, any>) => e.stopPropagation();
 
   render() {
     const { bottom, items } = this.props;
@@ -94,7 +101,7 @@ class StartMenu extends React.Component {
               <div className={styles.divider} />
             </div>
             <div className={styles.bottom}>
-              <StartMenuItem icon="shutdown" label="Shut Down..." />
+              <StartMenuItem icon={Icon.Shutdown} label="Shut Down..." />
             </div>
           </div>
         </div>
@@ -104,7 +111,7 @@ class StartMenu extends React.Component {
 }
 
 export default compose(
-  withProps({
+  withProps<ProvidedProps, Props>({
     // don't trigger clickout events for start menu
     outsideClickIgnoreClass: clickoutIgnoreClassname
   }),

@@ -1,65 +1,87 @@
 import * as React from 'react';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { find } from 'lodash';
-import * as p from 'prop-types'
-
+import { GlobalState } from 'start/state/globalState';
+import { Pane, WindowType } from 'start/types';
+import { windowsAppIcons } from 'start/windowsApps';
 import {
-  primarySelectedItemIdForFolder,
-  folderSelectionState,
-  focusedPaneId,
-  selectItem,
   clickFolderItemGridBackground,
+  focusedPaneName,
+  folderSelectionState,
+  FolderState,
   openPane,
-  active_folder_state,
-  inactive_folder_state
+  primarySelectedItemNameForFolder,
+  selectItem
 } from '../../state/explorer';
-
 import FolderItem from './FolderItem';
 import FolderItemGrid from './FolderItemGrid';
 
-const FolderContents = ({
-  folderId,
+interface OwnProps {
+  folderName: string;
+  items: Pane[];
+  darkItemTitles?: boolean;
+  columnLayout?: boolean;
+}
+
+interface StateProps {
+  selectedItemName: string;
+  selectionState: FolderState;
+  folderActive: boolean;
+}
+
+interface DispatchProps {
+  selectItem(params: { folderName: string; itemName: string }): void;
+  clickFolderItemGridBackground(folderName: string): void;
+  openPane(name: string, openerName: string): void;
+}
+
+type Props = OwnProps & StateProps & DispatchProps;
+
+const FolderContents: React.FunctionComponent<Props> = ({
+  folderName,
   items = [],
   darkItemTitles,
-  selectedItemId,
+  selectedItemName,
   selectionState,
   folderActive,
   selectItem,
   openPane,
   clickFolderItemGridBackground,
   columnLayout
-}) => (
+}: Props) => (
   <div style={{ height: '100%' }}>
     <FolderItemGrid
       onBackgroundClick={() => {
-        clickFolderItemGridBackground(folderId);
+        clickFolderItemGridBackground(folderName);
       }}
       columnLayout={columnLayout}
     >
-      {items.map(item => (
+      {items.map((item: Pane) => (
         <FolderItem
-          {...item}
-          id={item.id}
-          key={item.id}
-          darkTitle={darkItemTitles}
-          selected={selectedItemId === item.id && folderActive}
-          partialSelected={
-            selectionState === inactive_folder_state && folderActive
+          name={item.name}
+          key={item.name}
+          icon={
+            item.type === WindowType.File
+              ? windowsAppIcons[item.opensWith]
+              : item.icon
           }
-          onMouseDown={(e, itemId) => {
+          darkTitle={darkItemTitles}
+          selected={selectedItemName === item.name && folderActive}
+          partialSelected={
+            selectionState === FolderState.INACTIVE && folderActive
+          }
+          onMouseDown={(e, itemName) => {
             if (folderActive) {
               e.stopPropagation();
             }
 
-            selectItem({ folderId, itemId });
+            selectItem({ folderName: folderName, itemName });
           }}
-          onDoubleClick={(e, itemId) => {
+          onDoubleClick={(e, itemName) => {
             if (folderActive) {
               e.stopPropagation();
             }
 
-            openPane(itemId, folderId);
+            openPane(itemName, folderName);
           }}
         />
       ))}
@@ -67,32 +89,18 @@ const FolderContents = ({
   </div>
 );
 
-FolderContents.propTypes = {
-  folderId: p.string.isRequired,
-  items: p.arrayOf(
-    p.shape({
-      title: p.string.isRequired,
-      icon: p.string.isRequired
-    })
-  ),
-  darkItemTitles: p.bool,
-  selectedItemId: p.string,
-  selectionState: p.oneOf([active_folder_state, inactive_folder_state])
-    .isRequired,
-  folderActive: p.bool,
-  columnLayout: p.bool,
-  selectItem: p.func.isRequired,
-  openPane: p.func.isRequired,
-  clickFolderItemGridBackground: p.func.isRequired
-};
+function mapStateToProps(state: GlobalState, ownProps: Props): StateProps {
+  return {
+    selectedItemName: primarySelectedItemNameForFolder(
+      state,
+      ownProps.folderName
+    ),
+    selectionState: folderSelectionState(state, ownProps.folderName),
+    folderActive: focusedPaneName(state) === ownProps.folderName
+  };
+}
 
-export default compose(
-  connect(
-    (state, ownProps) => ({
-      selectedItemId: primarySelectedItemIdForFolder(state, ownProps.folderId),
-      selectionState: folderSelectionState(state, ownProps.folderId),
-      folderActive: focusedPaneId(state) === ownProps.folderId
-    }),
-    { selectItem, clickFolderItemGridBackground, openPane }
-  )
+export default connect<StateProps, DispatchProps, OwnProps, GlobalState>(
+  mapStateToProps,
+  { selectItem, clickFolderItemGridBackground, openPane } as DispatchProps
 )(FolderContents);

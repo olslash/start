@@ -1,7 +1,7 @@
 import * as React from 'react';
 import screenDoorOverlay from '../../resources/selected-overlay-screen-40.svg';
 
-const SVGDefinitions = () => (
+const SVGDefinitions: React.FunctionComponent<{}> = () => (
   <svg width="0" height="0">
     <defs>
       <filter id="screendoor" width="40px" height="40px">

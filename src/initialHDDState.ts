@@ -1,194 +1,193 @@
-import { mapValues, map } from 'lodash';
+import { map } from 'lodash';
+import { Icon } from 'resources/icons';
+import { Apps, File, Folder, Pane, WindowType } from 'start/types';
 
-function addIdFields(objects) {
-  return mapValues(objects, (val, key) => ({
-    ...val,
-    id: key
-  }));
-}
-
-const resumeScreenshots = [
+const resumeScreenshots: File[] = [
   {
     contentUrl:
       'https://raw.githubusercontent.com/olslash/resume/master/screenshots/nc3-dashboards.png',
-    title: 'Nerve Center 3 Dashboards.png',
-    opensWith: 'AppImageViewer'
+    name: 'Nerve Center 3 Dashboards.png',
+    opensWith: Apps.ImageViewer,
+    type: WindowType.File
   },
   {
     contentUrl:
       'https://raw.githubusercontent.com/olslash/resume/master/screenshots/nc3-stream-wizard.png',
-    title: 'Nerve Center 3 Stream Wizard.png',
-    opensWith: 'AppImageViewer'
+    name: 'Nerve Center 3 Stream Wizard.png',
+    opensWith: Apps.ImageViewer,
+    type: WindowType.File
   },
   {
     contentUrl:
       'https://raw.githubusercontent.com/olslash/resume/master/screenshots/nc3-analyze.png',
-    title: 'Nerve Center 3 Analyze.png',
-    opensWith: 'AppImageViewer'
+    name: 'Nerve Center 3 Analyze.png',
+    opensWith: Apps.ImageViewer,
+    type: WindowType.File
   },
   {
     contentUrl:
       'https://raw.githubusercontent.com/olslash/resume/master/screenshots/nc2-dashboards.jpg',
-    title: 'Nerve Center 2 Dashboards.png',
-    opensWith: 'AppImageViewer'
+    name: 'Nerve Center 2 Dashboards.png',
+    opensWith: Apps.ImageViewer,
+    type: WindowType.File
   },
   {
     contentUrl:
       'https://raw.githubusercontent.com/olslash/resume/master/screenshots/cmdv.png',
-    title: 'cmdv-io.png',
-    opensWith: 'AppImageViewer'
+    name: 'cmdv-io.png',
+    opensWith: Apps.ImageViewer,
+    type: WindowType.File
   },
   {
     contentUrl:
       'https://raw.githubusercontent.com/olslash/resume/master/screenshots/storyviz.jpg',
-    title: 'Storyviz.png',
-    opensWith: 'AppImageViewer'
+    name: 'Storyviz.png',
+    opensWith: Apps.ImageViewer,
+    type: WindowType.File
   },
   {
     contentUrl:
       'https://raw.githubusercontent.com/olslash/resume/master/screenshots/baseraiders.png',
-    title: 'Base Raiders Calculator.png',
-    opensWith: 'AppImageViewer'
+    name: 'Base Raiders Calculator.png',
+    opensWith: Apps.ImageViewer,
+    type: WindowType.File
   },
   {
     contentUrl:
       'https://raw.githubusercontent.com/olslash/resume/master/screenshots/spacegame.jpg',
-    title: 'Space game.png',
-    opensWith: 'AppImageViewer'
+    name: 'Space game.png',
+    opensWith: Apps.ImageViewer,
+    type: WindowType.File
   }
-].reduce(
-  (result, v) => ({
+];
+
+const textFiles: File[] = [
+  {
+    type: WindowType.File,
+    name: 'My Resume.txt',
+    opensWith: Apps.Notepad,
+    contentUrl:
+      'https://raw.githubusercontent.com/olslash/olslash.github.io/master/resume-plaintext.txt'
+  },
+  {
+    type: WindowType.File,
+    name: 'Zack Tanner, Software Engineer.txt',
+    opensWith: Apps.Notepad,
+    contentUrl:
+      'https://raw.githubusercontent.com/olslash/olslash.github.io/master/recommendation-tanner-plaintext.txt'
+  },
+  {
+    type: WindowType.File,
+    name: 'Kshitij “Gio” Gujarati, Director of Product.txt',
+    opensWith: Apps.Notepad,
+    contentUrl:
+      'https://raw.githubusercontent.com/olslash/olslash.github.io/master/recommendation-gujarati-plaintext.txt'
+  }
+];
+
+const folders: Folder[] = [
+  {
+    type: WindowType.Folder,
+    name: 'My Computer',
+    icon: Icon.MyComputer
+  },
+  {
+    type: WindowType.Folder,
+    name: 'Recycle Bin',
+    icon: Icon.RecycleBinEmpty
+    // fixme -- full icon
+  },
+  {
+    type: WindowType.Folder,
+    name: 'Control Panel',
+    icon: Icon.ControlPanel
+  },
+  {
+    type: WindowType.Folder,
+    name: 'Desktop',
+    icon: Icon.DiskDrive // this shouldn't ever be visible
+  },
+  {
+    type: WindowType.Folder,
+    name: '3½ Floppy (A:)',
+    icon: Icon.FloppyDrive
+  },
+  {
+    type: WindowType.Folder,
+    name: 'Windows 95 (C:)',
+    icon: Icon.DiskDrive
+  },
+  {
+    type: WindowType.Folder,
+    name: 'Work Samples',
+    icon: Icon.Folder
+  },
+  {
+    type: WindowType.Folder,
+    name: 'Recommendations',
+    icon: Icon.Folder
+  }
+];
+
+export const itemsByName: {
+  [name: string]: Pane;
+} = [...textFiles, ...resumeScreenshots, ...folders].reduce(
+  (result, item: Pane) => ({
     ...result,
-    [v.title]: {
-      ...v,
-      type: 'file',
-      icon: 'appImageViewer',
-      id: v.title
-    }
+    [item.name]: item
   }),
   {}
 );
 
-export const itemsById = Object.assign(
-  addIdFields({
-    myComputer: {
-      type: 'folder',
-      title: 'My Computer',
-      icon: 'myComputer'
-    },
-    recycleBin: {
-      type: 'folder',
-      title: 'Recycle Bin',
-      icon: 'recycleBinEmpty'
-      // fixme -- full icon
-    },
-    controlPanel: {
-      type: 'folder',
-      title: 'Control Panel',
-      icon: 'controlPanel'
-    },
-    desktop: {
-      type: 'folder',
-      title: 'Desktop',
-      icon: null
-    },
-    driveA: {
-      type: 'folder',
-      title: '3½ Floppy (A:)',
-      icon: 'floppyDrive'
-    },
-    driveC: {
-      type: 'folder',
-      title: 'Windows 95 (C:)',
-      icon: 'diskDrive'
-    },
-    workSamplesFolder: {
-      type: 'folder',
-      title: 'Work Samples',
-      icon: 'folder'
-    },
-    recommendationsFolder: {
-      type: 'folder',
-      title: 'Recommendations',
-      icon: 'folder'
-    },
-    resumeFile: {
-      type: 'file',
-      title: 'My Resume.txt',
-      icon: 'appNotepad',
-      opensWith: 'AppNotepad',
-      contentUrl:
-        'https://raw.githubusercontent.com/olslash/olslash.github.io/master/resume-plaintext.txt'
-    },
-    tannerRecommendationFile: {
-      type: 'file',
-      title: 'Zack Tanner, Software Engineer.txt',
-      icon: 'appNotepad',
-      opensWith: 'AppNotepad',
-      contentUrl:
-        'https://raw.githubusercontent.com/olslash/olslash.github.io/master/recommendation-tanner-plaintext.txt'
-    },
-    gujaratiRecommendationFile: {
-      type: 'file',
-      title: 'Kshitij “Gio” Gujarati, Director of Product.txt',
-      icon: 'appNotepad',
-      opensWith: 'AppNotepad',
-      contentUrl:
-        'https://raw.githubusercontent.com/olslash/olslash.github.io/master/recommendation-gujarati-plaintext.txt'
-    }
-  }),
-  resumeScreenshots
-);
+interface FileTreeEntry {
+  name: string;
+  children?: FileTreeEntry[];
+}
 
-export const fileTree = [
+export const fileTree: FileTreeEntry[] = [
   {
-    id: itemsById.desktop.id,
+    name: 'Desktop',
     children: [
       {
-        id: itemsById.myComputer.id,
+        name: 'My Computer',
         children: [
           {
-            id: itemsById.driveA.id,
+            name: '3½ Floppy (A:)',
             children: []
           },
           {
-            id: itemsById.driveC.id,
+            name: 'Windows 95 (C:)',
             children: []
           },
           {
-            id: itemsById.controlPanel.id,
+            name: 'Control Panel',
             children: []
           }
         ]
       },
       {
-        id: itemsById.recycleBin.id,
+        name: 'Recycle Bin',
         children: []
       },
       {
-        id: itemsById.resumeFile.id,
+        name: 'My Resume.txt',
         children: []
       },
       {
-        id: itemsById.recommendationsFolder.id,
+        name: 'Recommendations',
         children: [
           {
-            id: 'tannerRecommendationFile'
+            name: 'Zack Tanner, Software Engineer.txt'
           },
           {
-            id: 'gujaratiRecommendationFile'
+            name: 'Kshitij “Gio” Gujarati, Director of Product.txt'
           }
         ]
       },
       {
-        id: itemsById.workSamplesFolder.id,
-        children: map(resumeScreenshots, v => ({ id: v.id }))
+        name: 'Work Samples',
+        children: map(resumeScreenshots, v => ({ name: v.name }))
       }
-
-      // {
-      //   id: itemsById.resumeFile.id,
-      //   children: []
-      // }
     ]
   }
 ];

@@ -1,26 +1,26 @@
-import * as React from 'react';
 import cx from 'classnames';
-import * as p from 'prop-types'
-
-import icons from '../../../resources/icons';
-import MoreIconRight from '../MoreIconRight';
-
+import * as React from 'react';
+import icons, { Icon } from 'resources/icons';
+import MoreIconRight from 'start/components/MoreIconRight';
 import styles from './startMenuItem.scss';
 
-class StartMenuItem extends React.Component {
-  static propTypes = {
-    label: p.string.isRequired,
-    icon: p.oneOf(Object.keys(icons)),
-    hasChildren: p.bool,
-    onActivate: p.func,
-    index: p.number,
-    depth: p.number,
-    activationDelayMs: p.number,
-    active: p.bool,
-    short: p.bool,
-    children: p.node
-  };
+interface Props {
+  label: string;
+  icon: Icon;
+  hasChildren?: boolean;
+  onActivate?(path: { depth: number; index: number }): void;
+  index?: number;
+  depth?: number;
+  activationDelayMs?: number;
+  active?: boolean;
+  short?: boolean;
+}
 
+interface State {
+  hovered: boolean;
+}
+
+class StartMenuItem extends React.Component<Props, State> {
   static defaultProps = {
     onActivate: () => {},
     activationDelayMs: 350
@@ -30,19 +30,20 @@ class StartMenuItem extends React.Component {
     hovered: false
   };
 
-  activateDelayTimeout = null;
+  activateDelayTimeout = 0;
 
-  setHovered = e => {
+  setHovered = (e: React.MouseEvent<any, any>) => {
     e.stopPropagation();
 
     if (this.state.hovered) {
       return;
     }
+
     this.setState({ hovered: true });
 
     // if still hovered after delay, activate (for folders)
     clearTimeout(this.activateDelayTimeout);
-    this.activateDelayTimeout = setTimeout(() => {
+    this.activateDelayTimeout = window.setTimeout(() => {
       if (this.state.hovered) {
         this.activate();
       }
@@ -54,15 +55,19 @@ class StartMenuItem extends React.Component {
     this.setState({ hovered: false });
   };
 
-  activate = (e = {}) => {
-    e.stopPropagation && e.stopPropagation();
+  activate = (e?: React.MouseEvent<any, any>) => {
+    if (e && e.stopPropagation) {
+      e.stopPropagation();
+    }
 
     clearTimeout(this.activateDelayTimeout);
 
-    this.props.onActivate({
-      depth: this.props.depth,
-      index: this.props.index
-    });
+    if (this.props.onActivate) {
+      this.props.onActivate({
+        depth: this.props.depth || 0,
+        index: this.props.index || 0
+      });
+    }
   };
 
   render() {

@@ -1,33 +1,28 @@
 import * as React from 'react';
-import * as p from 'prop-types'
-import { compose } from 'redux';
 import { connect } from 'react-redux';
-
-import { itemsForFolder } from '../../state/explorer';
-import WindowBase from '../WindowBase';
+import { itemsForFolder } from 'start/state/explorer';
+import { GlobalState } from 'start/state/globalState';
+import { Pane } from 'start/types';
+import WindowBase, { Props as WindowBaseProps } from '../WindowBase';
 import FolderContents from './FolderContents';
 
-class Folder extends React.Component {
-  static propTypes = {
-    id: p.string.isRequired,
-    items: p.arrayOf(
-      p.shape({
-        title: p.string.isRequired,
-        icon: p.string.isRequired
-      })
-    )
-  };
+interface OwnProps {
+  name: string;
+}
 
-  static defaultProps = {
-    items: []
-  };
+interface StateProps {
+  items?: Pane[];
+}
 
+export type Props = OwnProps & StateProps & WindowBaseProps;
+
+class Folder extends React.Component<Props> {
   render() {
     return (
-      <WindowBase {...this.props}>
+      <WindowBase {...this.props} title={this.props.name}>
         <FolderContents
-          items={this.props.items}
-          folderId={this.props.id}
+          items={this.props.items || []}
+          folderName={this.props.name}
           darkItemTitles
         />
       </WindowBase>
@@ -35,8 +30,12 @@ class Folder extends React.Component {
   }
 }
 
-export default compose(
-  connect((state, ownProps) => ({
-    items: itemsForFolder(state, ownProps.id)
-  }))
-)(Folder);
+function mapStateToProps(state: GlobalState, ownProps: Props): StateProps {
+  return {
+    items: itemsForFolder(state, ownProps.name)
+  };
+}
+
+export default connect<StateProps, {}, OwnProps, GlobalState>(mapStateToProps)(
+  Folder
+);

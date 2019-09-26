@@ -1,32 +1,29 @@
-import * as React from 'react';
-import * as p from 'prop-types'
 import cx from 'classnames';
-
+import * as React from 'react';
+import icons, { Icon } from 'resources/icons';
 import styles from './borderedContainer.scss';
 
-const borderColorPropType = p.shape({
-  topLeft: p.string.isRequired,
-  bottomRight: p.string.isRequired
-});
-
-class BorderedContainer extends React.Component {
-  static propTypes = {
-    depth: p.number,
-    // array index = depth (+1)
-    borderColors: p.arrayOf(borderColorPropType),
-    classes: p.shape({
-      root: p.string,
-      outer: p.string,
-      inner: p.string,
-      icon: p.string
-    }),
-    style: p.objectOf(p.any),
-    handlers: p.objectOf(p.func),
-    iconSrc: p.string,
-    scrollable: p.bool,
-    children: p.node
+interface Props {
+  depth: number;
+  borderColors: {
+    topLeft: string;
+    bottomRight: string;
+  }[];
+  classes: {
+    root?: string;
+    outer?: string;
+    inner?: string;
+    icon?: string;
   };
+  style?: { [prop: string]: string | number };
+  handlers?: {
+    [handlerName: string]: () => void;
+  };
+  icon?: Icon;
+  scrollable?: boolean;
+}
 
+class BorderedContainer extends React.Component<Props> {
   static defaultProps = {
     depth: 2,
     borderColors: [
@@ -49,7 +46,7 @@ class BorderedContainer extends React.Component {
       borderColors,
       classes,
       style,
-      iconSrc,
+      icon,
       scrollable,
       children,
       handlers
@@ -61,9 +58,9 @@ class BorderedContainer extends React.Component {
         style={style}
         {...handlers}
       >
-        {this.props.iconSrc && (
+        {icon && (
           <div className={styles.iconImgContainer}>
-            <img src={iconSrc} className={classes.icon} draggable={false} />
+            <img src={icons[icon]} className={classes.icon} draggable={false} />
           </div>
         )}
 

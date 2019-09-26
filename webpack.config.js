@@ -1,7 +1,9 @@
 /* eslint-disable */
 const webpack = require('webpack');
+const path = require('path');
 const HTMLPlugin = require('html-webpack-plugin');
 
+const includePaths = [__dirname + '/src', __dirname + '/resources'];
 module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   entry: ['@babel/polyfill', './src/index.tsx'],
@@ -9,20 +11,24 @@ module.exports = {
     filename: 'dist/bundle.js'
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss']
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss'],
+    alias: {
+      resources: path.resolve(__dirname, 'resources'),
+      start: path.resolve(__dirname, 'src')
+    }
   },
   devtool: 'eval-source-map',
   module: {
     rules: [
       {
-        include: __dirname + '/src',
+        include: includePaths,
         test: /\.tsx?$/,
         use: {
           loader: 'babel-loader'
         }
       },
       {
-        include: __dirname + '/src',
+        include: includePaths,
         test: /\.js$/,
         use: { loader: 'source-map-loader' },
         enforce: 'pre'
@@ -33,7 +39,7 @@ module.exports = {
         use: { loader: 'url-loader' }
       },
       {
-        include: __dirname + '/src',
+        include: includePaths,
         test: /\.scss$/,
         loaders: [
           'style-loader',
