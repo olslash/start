@@ -7,10 +7,11 @@ interface Props {
   onStart: (mousePosition: { x: number; y: number }) => void;
   onDrag: (mousePosition: { x: number; y: number }) => void;
   onEnd: () => void;
+  containerRef: React.MutableRefObject<HTMLElement>;
 }
 
 const DragSelect: React.FunctionComponent<Props> = props => {
-  const { x: mouseX, y: mouseY } = useMousePosition();
+  const { x: mouseX, y: mouseY } = useMousePosition(props.containerRef);
   const isMouseDown = useMouseDown();
 
   const [dragStartPosition, setDragStartPosition] = React.useState<{
@@ -28,18 +29,33 @@ const DragSelect: React.FunctionComponent<Props> = props => {
   }, [mouseX, mouseY]);
 
   React.useEffect(() => {
-    setDragStartPosition({ x: mouseX, y: mouseY });
-    isMouseDown ? props.onStart({ x: mouseX, y: mouseY }) : props.onEnd();
+    if (isMouseDown) {
+      setDragStartPosition({ x: mouseX, y: mouseY });
+      props.onStart({ x: mouseX, y: mouseY });
+    } else {
+      setDragStartPosition({ x: null, y: null });
+      props.onEnd();
+    }
   }, [isMouseDown]);
+
+  if (
+    !(
+      typeof dragStartPosition.x === 'number' &&
+      typeof dragStartPosition.y === 'number'
+    )
+  ) {
+    return null;
+  }
 
   return (
     <div
       style={{
         // fixme 0 falsy
+
         top: dragStartPosition.y || undefined,
         left: dragStartPosition.x || undefined,
-        width: -100,
-        height: 50
+        width: mouseX - dragStartPosition.x,
+        height: mouseY - dragStartPosition.y
       }}
       className={styles.container}
     />
