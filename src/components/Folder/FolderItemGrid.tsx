@@ -6,6 +6,7 @@ interface Props {
   onBackgroundClick(): void;
   columnLayout?: boolean;
 }
+
 const FolderItemGrid: React.FunctionComponent<Props> = ({
   children,
   onBackgroundClick,

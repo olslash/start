@@ -1,0 +1,15 @@
+@mixin track() {
+  color: red;
+}
+
+input {
+  &::-webkit-slider-runnable-track {
+    @include track;
+  }
+  &::-moz-range-track {
+    @include track;
+  }
+  &::-ms-track {
+    @include track;
+  }
+}

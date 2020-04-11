@@ -14,6 +14,7 @@ interface Props {
   // onClick(): void;
   onMouseDown?(e: React.MouseEvent<any, any>, name: string): void;
   onDoubleClick?(e: React.MouseEvent<any, any>, name: string): void;
+  forwardedRef: React.MutableRefObject<any>;
 }
 
 interface State {
@@ -80,6 +81,7 @@ class FolderItem extends React.Component<Props, State> {
       <div
         className={cx(styles.container)}
         onMouseDown={this.handleMouseDown}
+        ref={this.props.forwardedRef}
         // onClick={this.handleClick}
       >
         <img

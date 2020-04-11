@@ -14,6 +14,7 @@ import {
 } from '../../state/explorer';
 import FolderItem from './FolderItem';
 import FolderItemGrid from './FolderItemGrid';
+import DragSelect from 'start/components/DragSelect';
 
 interface OwnProps {
   folderName: string;
@@ -47,47 +48,79 @@ const FolderContents: React.FunctionComponent<Props> = ({
   openPane,
   clickFolderItemGridBackground,
   columnLayout
-}: Props) => (
-  <div style={{ height: '100%' }}>
-    <FolderItemGrid
-      onBackgroundClick={() => {
-        clickFolderItemGridBackground(folderName);
-      }}
-      columnLayout={columnLayout}
-    >
-      {items.map((item: Pane) => (
-        <FolderItem
-          name={item.name}
-          key={item.name}
-          icon={
-            item.type === WindowType.File
-              ? windowsAppIcons[item.opensWith]
-              : item.icon
-          }
-          darkTitle={darkItemTitles}
-          selected={selectedItemName === item.name && folderActive}
-          partialSelected={
-            selectionState === FolderState.INACTIVE && folderActive
-          }
-          onMouseDown={(e, itemName) => {
-            if (folderActive) {
-              e.stopPropagation();
-            }
+}: Props) => {
+  const folderItemRefs: {
+    [name: string]: React.MutableRefObject<null>;
+  } = {};
 
-            selectItem({ folderName: folderName, itemName });
-          }}
-          onDoubleClick={(e, itemName) => {
-            if (folderActive) {
-              e.stopPropagation();
-            }
+  items.forEach(item => (folderItemRefs[item.name] = React.useRef(null)));
 
-            openPane(itemName, folderName);
+  const [dragStartPosition, setDragStartPosition] = React.useState<{
+    x: number | null;
+    y: number | null;
+  }>({
+    x: null,
+    y: null
+  });
+
+  const onStart = React.useCallback(({ x, y }) => {
+    setDragStartPosition({ x, y });
+  }, []);
+
+  const onDrag = React.useCallback(({ x, y }) => {}, []);
+
+  const onEnd = React.useCallback(() => {}, []);
+
+  return (
+    // when i mousedown and hold on the folder background,
+    // store the clientRect of each FolderItem (get a ref to each from FolderContents) by ID
+    // then see which ones overlap and select them
+    <>
+      <DragSelect onStart={onStart} onDrag={onDrag} onEnd={onEnd} />
+
+      <div style={{ height: '100%' }}>
+        <FolderItemGrid
+          onBackgroundClick={() => {
+            clickFolderItemGridBackground(folderName);
           }}
-        />
-      ))}
-    </FolderItemGrid>
-  </div>
-);
+          columnLayout={columnLayout}
+        >
+          {items.map((item: Pane) => (
+            <FolderItem
+              forwardedRef={folderItemRefs[item.name]}
+              name={item.name}
+              key={item.name}
+              icon={
+                item.type === WindowType.File
+                  ? windowsAppIcons[item.opensWith]
+                  : item.icon
+              }
+              darkTitle={darkItemTitles}
+              selected={selectedItemName === item.name && folderActive}
+              partialSelected={
+                selectionState === FolderState.INACTIVE && folderActive
+              }
+              onMouseDown={(e, itemName) => {
+                if (folderActive) {
+                  e.stopPropagation();
+                }
+
+                selectItem({ folderName: folderName, itemName });
+              }}
+              onDoubleClick={(e, itemName) => {
+                if (folderActive) {
+                  e.stopPropagation();
+                }
+
+                openPane(itemName, folderName);
+              }}
+            />
+          ))}
+        </FolderItemGrid>
+      </div>
+    </>
+  );
+};
 
 function mapStateToProps(state: GlobalState, ownProps: Props): StateProps {
   return {
