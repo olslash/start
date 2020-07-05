@@ -26,11 +26,11 @@ const TitleBar: React.FunctionComponent<Props> = ({
   onMinimize,
   onMaximize,
   onClose,
-  onDoubleClick
+  onDoubleClick,
 }) => (
   <div
     className={cx(styles.container, {
-      [styles.containerActive]: active
+      [styles.containerActive]: active,
     })}
     style={{ height }}
   >
@@ -49,7 +49,7 @@ const TitleBar: React.FunctionComponent<Props> = ({
           classes={{
             root: styles.button,
             inner: styles.buttonIconContainer,
-            icon: styles.buttonIcon
+            icon: styles.buttonIcon,
           }}
           iconSrc={icons.buttonMinimize}
           onClick={() => onMinimize(name)}
@@ -60,7 +60,7 @@ const TitleBar: React.FunctionComponent<Props> = ({
           classes={{
             root: styles.button,
             inner: styles.buttonIconContainer,
-            icon: styles.buttonIcon
+            icon: styles.buttonIcon,
           }}
           iconSrc={icons.buttonMaximize}
           onClick={() => onMaximize(name)}
@@ -71,7 +71,7 @@ const TitleBar: React.FunctionComponent<Props> = ({
           classes={{
             root: cx(styles.button, styles.closeButton),
             inner: styles.buttonIconContainer,
-            icon: styles.buttonIcon
+            icon: styles.buttonIcon,
           }}
           iconSrc={icons.buttonClose}
           onClick={() => onClose(name)}
@@ -82,9 +82,9 @@ const TitleBar: React.FunctionComponent<Props> = ({
 );
 
 const iconSpecialCaseReplacements = new Map<Icon, Icon>([
-  [Icon.Folder, Icon.FolderOpen]
+  [Icon.Folder, Icon.FolderOpen],
 ]);
 
 export default withProps<{}, Props>(({ icon }) => ({
-  icon: iconSpecialCaseReplacements.get(icon) || icon
+  icon: iconSpecialCaseReplacements.get(icon) || icon,
 }))(TitleBar);

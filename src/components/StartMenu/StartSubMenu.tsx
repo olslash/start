@@ -10,14 +10,14 @@ interface Props {
 const StartSubMenu: React.FunctionComponent<Props> = ({
   items,
   style,
-  rightOffset = 0
+  rightOffset = 0,
 }) => (
   <BorderedContainer
     classes={{ root: styles.container }}
     style={{
       top: -3,
       right: -rightOffset,
-      ...style
+      ...style,
     }}
   >
     {items}

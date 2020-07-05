@@ -53,7 +53,7 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps): StateProps {
     fileData: fileData(state, ownProps.contentUrl),
     loading:
       fileDataFetchingStatus(state, ownProps.contentUrl) ===
-      FetchingStatus.Fetching
+      FetchingStatus.Fetching,
   };
 }
 

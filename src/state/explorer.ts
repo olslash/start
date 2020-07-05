@@ -4,7 +4,7 @@ import { Apps, Pane, PaneState, WindowType, Position } from 'start/types';
 import { moveOrPrependToFront, treeFind } from '../helpers';
 import {
   fileTree as initialFileTree,
-  itemsByName as initialItemsByName
+  itemsByName as initialItemsByName,
 } from '../initialHDDState';
 import { GlobalState } from './globalState';
 import { fetchTextFile } from './remoteFile';
@@ -25,7 +25,7 @@ const MOVE_PANE = 'change the position of a pane';
 
 export enum FolderState {
   ACTIVE = 'active',
-  INACTIVE = 'inactive'
+  INACTIVE = 'inactive',
 }
 
 const defaultPaneState = {
@@ -35,7 +35,7 @@ const defaultPaneState = {
   width: 200,
   height: 200,
   left: 50,
-  top: 50
+  top: 50,
 };
 
 export interface State {
@@ -67,7 +67,7 @@ const initialState: State = {
   paneStateByItemName: {},
   focusedPaneOrder: ['Desktop'],
   primarySelectedFolderItemNameByFolderName: {},
-  folderSelectionStateByFolderName: {}
+  folderSelectionStateByFolderName: {},
 };
 
 type Action = ReturnType<
@@ -89,14 +89,14 @@ export function reducer(state: State = initialState, action: Action): State {
     case OPEN_START_MENU:
       return {
         ...state,
-        startMenuOpen: true
+        startMenuOpen: true,
       };
 
     case CLOSE_START_MENU:
       return {
         ...state,
         startMenuOpen: false,
-        startMenuActiveFolderPath: []
+        startMenuActiveFolderPath: [],
       };
 
     case SET_START_MENU_ACTIVE_FOLDER_PATH: {
@@ -114,7 +114,7 @@ export function reducer(state: State = initialState, action: Action): State {
             ? // up-tree path changed, prune
               [...state.startMenuActiveFolderPath.slice(0, depth), index]
             : // add depth at index
-              [...state.startMenuActiveFolderPath, index]
+              [...state.startMenuActiveFolderPath, index],
       };
     }
 
@@ -125,12 +125,12 @@ export function reducer(state: State = initialState, action: Action): State {
         ...state,
         primarySelectedFolderItemNameByFolderName: {
           ...state.primarySelectedFolderItemNameByFolderName,
-          [folderName]: itemName
+          [folderName]: itemName,
         },
         folderSelectionStateByFolderName: {
           ...state.folderSelectionStateByFolderName,
-          [folderName]: FolderState.ACTIVE
-        }
+          [folderName]: FolderState.ACTIVE,
+        },
       };
     }
 
@@ -144,8 +144,8 @@ export function reducer(state: State = initialState, action: Action): State {
           ...state,
           folderSelectionStateByFolderName: {
             ...state.folderSelectionStateByFolderName,
-            [folderName]: FolderState.INACTIVE
-          }
+            [folderName]: FolderState.INACTIVE,
+          },
         };
       } else {
         // if the folder is unfocused, focus the pane
@@ -154,7 +154,7 @@ export function reducer(state: State = initialState, action: Action): State {
           focusedPaneOrder: moveOrPrependToFront(
             state.focusedPaneOrder,
             folderName
-          )
+          ),
         };
       }
     }
@@ -164,7 +164,7 @@ export function reducer(state: State = initialState, action: Action): State {
 
       return {
         ...state,
-        focusedPaneOrder: moveOrPrependToFront(state.focusedPaneOrder, name)
+        focusedPaneOrder: moveOrPrependToFront(state.focusedPaneOrder, name),
       };
     }
 
@@ -177,9 +177,9 @@ export function reducer(state: State = initialState, action: Action): State {
           ...state.paneStateByItemName,
           [name]: {
             ...state.paneStateByItemName[name],
-            minimized: !state.paneStateByItemName[name].minimized
-          }
-        }
+            minimized: !state.paneStateByItemName[name].minimized,
+          },
+        },
       };
     }
 
@@ -192,9 +192,9 @@ export function reducer(state: State = initialState, action: Action): State {
           ...state.paneStateByItemName,
           [name]: {
             ...state.paneStateByItemName[name],
-            maximized: !state.paneStateByItemName[name].maximized
-          }
-        }
+            maximized: !state.paneStateByItemName[name].maximized,
+          },
+        },
       };
     }
 
@@ -206,7 +206,7 @@ export function reducer(state: State = initialState, action: Action): State {
         'width',
         'top',
         'left',
-        'maximized'
+        'maximized',
       ]);
 
       const newWindowOffset = sample(range(10, 80, 10));
@@ -224,7 +224,7 @@ export function reducer(state: State = initialState, action: Action): State {
             // the previous position
             // fixme: apps need to open in a new window
             // fixme -- this state needs to be transient
-            open: openerPaneState.open && openInNewWindow
+            open: openerPaneState.open && openInNewWindow,
           },
           [name]: {
             ...defaultPaneState,
@@ -240,9 +240,9 @@ export function reducer(state: State = initialState, action: Action): State {
 
             // inherit size/position of opener if it exists, and we are opening
             // in its place
-            ...(openInNewWindow ? {} : openerPanePosition)
-          }
-        }
+            ...(openInNewWindow ? {} : openerPanePosition),
+          },
+        },
       };
     }
 
@@ -255,9 +255,9 @@ export function reducer(state: State = initialState, action: Action): State {
           ...state.paneStateByItemName,
           [name]: {
             ...state.paneStateByItemName[name],
-            open: false
-          }
-        }
+            open: false,
+          },
+        },
       };
     }
 
@@ -275,9 +275,9 @@ export function reducer(state: State = initialState, action: Action): State {
             left: left || paneState.left,
             top: top || paneState.top,
             width: width || paneState.width,
-            height: height || paneState.height
-          }
-        }
+            height: height || paneState.height,
+          },
+        },
       };
     }
 
@@ -289,7 +289,7 @@ export function reducer(state: State = initialState, action: Action): State {
 export function* saga() {
   yield takeEvery(
     (action: { type: string }) => action.type === OPEN_PANE,
-    function*({ payload: { name } }: ReturnType<typeof openPane>) {
+    function* ({ payload: { name } }: ReturnType<typeof openPane>) {
       const pane: Pane = yield select(itemByName, name);
 
       // fetch content for panes that have data requirements on opening
@@ -306,81 +306,81 @@ export function* saga() {
 
 export function openStartMenu() {
   return <const>{
-    type: OPEN_START_MENU
+    type: OPEN_START_MENU,
   };
 }
 
 export function closeStartMenu() {
   return <const>{
-    type: CLOSE_START_MENU
+    type: CLOSE_START_MENU,
   };
 }
 
 export function setStartMenuActiveFolderPath({
   depth,
-  index
+  index,
 }: {
   depth: number;
   index: number;
 }) {
   return <const>{
     type: SET_START_MENU_ACTIVE_FOLDER_PATH,
-    payload: { depth, index }
+    payload: { depth, index },
   };
 }
 
 export function selectItem({
   folderName,
-  itemName
+  itemName,
 }: {
   folderName: string;
   itemName: string;
 }) {
   return <const>{
     type: SELECT_ITEM,
-    payload: { folderName, itemName }
+    payload: { folderName, itemName },
   };
 }
 
 export function clickFolderItemGridBackground(folderName: string) {
   return <const>{
     type: CLICK_FOLDER_ITEM_GRID_BACKGROUND,
-    payload: { folderName }
+    payload: { folderName },
   };
 }
 
 export function focusPane(name: string) {
   return <const>{
     type: FOCUS_PANE,
-    payload: { name }
+    payload: { name },
   };
 }
 
 export function minimizePane(name: string) {
   return <const>{
     type: TOGGLE_MINIMIZE_PANE,
-    payload: { name }
+    payload: { name },
   };
 }
 
 export function maximizePane(name: string) {
   return <const>{
     type: TOGGLE_MAXIMIZE_PANE,
-    payload: { name }
+    payload: { name },
   };
 }
 
 export function openPane(name: string, openerName: string) {
   return <const>{
     type: OPEN_PANE,
-    payload: { name, openerName }
+    payload: { name, openerName },
   };
 }
 
 export function closePane(name: string) {
   return <const>{
     type: CLOSE_PANE,
-    payload: { name }
+    payload: { name },
   };
 }
 
@@ -390,7 +390,7 @@ export function movePane(
 ) {
   return <const>{
     type: MOVE_PANE,
-    payload: { name, left, top, width, height }
+    payload: { name, left, top, width, height },
   };
 }
 
@@ -451,18 +451,18 @@ export function itemsForFolder(state: GlobalState, folderName: string) {
   }
 
   // populate first-level children
-  return treeResult.children.map(child => itemByName(state, child.name));
+  return treeResult.children.map((child) => itemByName(state, child.name));
 }
 
 export function openPaneItems(
   state: GlobalState
 ): { [name: string]: Pane & PaneState } {
   const openPanes = pickBy(local(state).paneStateByItemName, {
-    open: true
+    open: true,
   });
 
   return mapValues(openPanes, (pane, name) => ({
     ...pane,
-    ...itemByName(state, name)
+    ...itemByName(state, name),
   }));
 }

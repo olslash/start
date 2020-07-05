@@ -10,7 +10,7 @@ interface Props {
 
 const Desktop: React.FunctionComponent<Props> = ({
   items = [],
-  onFocus
+  onFocus,
 }: Props) => (
   <div onMouseDown={() => onFocus('Desktop')} style={{ height: '100%' }}>
     <FolderContents items={items} folderName="Desktop" columnLayout />

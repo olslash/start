@@ -67,7 +67,7 @@ class StartMenu extends React.Component<Props> {
             )}
             rightOffset={135}
             style={{
-              zIndex: depth + 1
+              zIndex: depth + 1,
             }}
           />
         )}
@@ -83,10 +83,10 @@ class StartMenu extends React.Component<Props> {
       <BorderedContainer
         depth={2}
         classes={{
-          root: styles.window
+          root: styles.window,
         }}
         style={{
-          bottom
+          bottom,
         }}
       >
         <div className={styles.container}>
@@ -113,7 +113,7 @@ class StartMenu extends React.Component<Props> {
 export default compose(
   withProps<ProvidedProps, Props>({
     // don't trigger clickout events for start menu
-    outsideClickIgnoreClass: clickoutIgnoreClassname
+    outsideClickIgnoreClass: clickoutIgnoreClassname,
   }),
   withClickOutHandler
 )(StartMenu);

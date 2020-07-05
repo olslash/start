@@ -13,11 +13,11 @@ export default class DelayedLoadingIndicator extends React.Component<
   State
 > {
   static defaultProps = {
-    delay: 1000
+    delay: 1000,
   };
 
   state = {
-    delaying: true
+    delaying: true,
   };
 
   loadingDelay = 0;

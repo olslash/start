@@ -13,7 +13,7 @@ export interface State {
 
 const initialState: State = {
   fileDataByContentUrl: {},
-  fileFetchingStatusByContentUrl: {}
+  fileFetchingStatusByContentUrl: {},
 };
 
 type Action = ReturnType<
@@ -28,8 +28,8 @@ export function reducer(state: State = initialState, action: Action): State {
 
         fileFetchingStatusByContentUrl: {
           ...state.fileFetchingStatusByContentUrl,
-          [action.meta.contentUrl]: FetchingStatus.Fetching
-        }
+          [action.meta.contentUrl]: FetchingStatus.Fetching,
+        },
       };
     }
 
@@ -39,13 +39,13 @@ export function reducer(state: State = initialState, action: Action): State {
 
         fileFetchingStatusByContentUrl: {
           ...state.fileFetchingStatusByContentUrl,
-          [action.meta.contentUrl]: FetchingStatus.Success
+          [action.meta.contentUrl]: FetchingStatus.Success,
         },
 
         fileDataByContentUrl: {
           ...state.fileDataByContentUrl,
-          [action.meta.contentUrl]: action.payload.fileData
-        }
+          [action.meta.contentUrl]: action.payload.fileData,
+        },
       };
     }
 
@@ -55,8 +55,8 @@ export function reducer(state: State = initialState, action: Action): State {
 
         fileFetchingStatusByContentUrl: {
           ...state.fileFetchingStatusByContentUrl,
-          [action.meta.contentUrl]: FetchingStatus.Failure
-        }
+          [action.meta.contentUrl]: FetchingStatus.Failure,
+        },
       };
     }
 
@@ -77,7 +77,7 @@ export const fetchTextFile = (
   null,
   ReturnType<typeof fetchRequest | typeof fetchSuccess | typeof fetchFailure>
 > => {
-  return async function(dispatch) {
+  return async function (dispatch) {
     dispatch(fetchRequest(contentUrl));
 
     let fileData;
@@ -97,7 +97,7 @@ export const fetchTextFile = (
 function fetchRequest(contentUrl: string) {
   return <const>{
     type: FETCH_FILE,
-    meta: { contentUrl }
+    meta: { contentUrl },
   };
 }
 
@@ -105,14 +105,14 @@ function fetchSuccess(contentUrl: string, fileData: string) {
   return <const>{
     type: FETCH_FILE_SUCCESS,
     meta: { contentUrl },
-    payload: { fileData }
+    payload: { fileData },
   };
 }
 
 function fetchFailure(contentUrl: string) {
   return <const>{
     type: FETCH_FILE_FAILURE,
-    meta: { contentUrl }
+    meta: { contentUrl },
   };
 }
 

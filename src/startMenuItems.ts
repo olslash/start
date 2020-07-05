@@ -9,13 +9,13 @@ const items: StartMenuItem[] = [
       {
         title: 'Some Folder',
         icon: Icon.Programs,
-        children: [{ title: 'programs folder app 1', icon: Icon.Run }]
+        children: [{ title: 'programs folder app 1', icon: Icon.Run }],
       },
       {
         title: 'programs app 1',
-        icon: Icon.Run
-      }
-    ]
+        icon: Icon.Run,
+      },
+    ],
   },
   {
     title: 'Documents',
@@ -23,9 +23,9 @@ const items: StartMenuItem[] = [
     children: [
       {
         title: 'documents app 1',
-        icon: Icon.Run
-      }
-    ]
+        icon: Icon.Run,
+      },
+    ],
   },
   {
     title: 'Settings',
@@ -33,9 +33,9 @@ const items: StartMenuItem[] = [
     children: [
       {
         title: 'settings app 1',
-        icon: Icon.Run
-      }
-    ]
+        icon: Icon.Run,
+      },
+    ],
   },
   {
     title: 'Find',
@@ -43,12 +43,12 @@ const items: StartMenuItem[] = [
     children: [
       {
         title: 'find app 1',
-        icon: Icon.Run
-      }
-    ]
+        icon: Icon.Run,
+      },
+    ],
   },
   { title: 'Help', icon: Icon.Help }, // todo: action
-  { title: 'Run', icon: Icon.Run }
+  { title: 'Run', icon: Icon.Run },
 ];
 
 export default items;

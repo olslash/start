@@ -10,7 +10,7 @@ interface Props {
 const FolderItemGrid: React.FunctionComponent<Props> = ({
   children,
   onBackgroundClick,
-  columnLayout
+  columnLayout,
 }) => (
   <div
     className={cx(styles.container, { [styles.columnLayout]: columnLayout })}

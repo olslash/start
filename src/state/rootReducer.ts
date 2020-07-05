@@ -9,5 +9,5 @@ import { GlobalState } from './globalState';
 export default combineReducers<GlobalState>({
   clock,
   explorer,
-  remoteFile
+  remoteFile,
 });

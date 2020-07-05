@@ -12,7 +12,7 @@ import {
   openStartMenu,
   setStartMenuActiveFolderPath,
   startMenuActiveFolderPath,
-  startMenuOpen
+  startMenuOpen,
 } from '../../state/explorer';
 import StartButton from '../StartButton';
 import StartMenu from '../StartMenu';
@@ -50,7 +50,7 @@ const TaskBar: React.FunctionComponent<Props> = ({
   <div
     className={styles.container}
     style={{
-      height
+      height,
     }}
     onClick={() => props.onFocus('taskbar')}
   >
@@ -73,7 +73,7 @@ const TaskBar: React.FunctionComponent<Props> = ({
         />
       </div>
       <div className={styles.taskBarItems}>
-        {map(items, item => (
+        {map(items, (item) => (
           <TaskBarItem
             title={item.name}
             icon={
@@ -100,7 +100,7 @@ function mapStateToProps(state: GlobalState): StateProps {
     startMenuOpen: startMenuOpen(state),
     startMenuActiveFolderPath: startMenuActiveFolderPath(state),
     items: openPaneItems(state),
-    focusedPaneName: focusedPaneName(state)
+    focusedPaneName: focusedPaneName(state),
   };
 }
 
@@ -109,6 +109,6 @@ export default connect<StateProps, DispatchProps, OwnProps, GlobalState>(
   {
     openStartMenu,
     closeStartMenu,
-    setStartMenuActiveFolderPath
+    setStartMenuActiveFolderPath,
   } as DispatchProps
 )(TaskBar);

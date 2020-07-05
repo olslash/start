@@ -13,13 +13,13 @@ export interface StartMenuItem {
 
 export enum Apps {
   ImageViewer = 'ImageViewer',
-  Notepad = 'Notepad'
+  Notepad = 'Notepad',
 }
 
 export enum WindowType {
   Folder,
   App,
-  File
+  File,
 }
 
 export interface File {
@@ -53,7 +53,7 @@ export enum FetchingStatus {
   Fetching,
   Failure,
   Success,
-  Default
+  Default,
 }
 
 interface _PaneState {

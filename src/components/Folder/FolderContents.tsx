@@ -136,7 +136,7 @@ function mapStateToProps(state: GlobalState, ownProps: Props): StateProps {
       ownProps.folderName
     ),
     selectionState: folderSelectionState(state, ownProps.folderName),
-    folderActive: focusedPaneName(state) === ownProps.folderName
+    folderActive: focusedPaneName(state) === ownProps.folderName,
   };
 }
 

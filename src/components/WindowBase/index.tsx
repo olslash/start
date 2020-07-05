@@ -38,11 +38,11 @@ class WindowBase extends React.Component<Props, State> {
     width: 300,
     top: 0,
     left: 0,
-    zIndex: 0 // fixme? verify
+    zIndex: 0, // fixme? verify
   };
 
   state = {
-    isDragging: false
+    isDragging: false,
   };
 
   handleDragStart: Rnd.DraggableEventHandler = () => {
@@ -78,7 +78,7 @@ class WindowBase extends React.Component<Props, State> {
       left: x,
       top: y,
       width: ref.offsetWidth,
-      height: ref.offsetHeight
+      height: ref.offsetHeight,
     });
 
     this.setState({ isDragging: false });
@@ -87,7 +87,7 @@ class WindowBase extends React.Component<Props, State> {
   render() {
     const cornerDragHandleStyles = {
       width: 5,
-      height: 5
+      height: 5,
     };
 
     return (
@@ -98,12 +98,12 @@ class WindowBase extends React.Component<Props, State> {
               x: this.props.left,
               y: this.props.top,
               width: this.props.width,
-              height: this.props.height
+              height: this.props.height,
             }}
             style={{
               zIndex: this.props.zIndex + 1,
               // don't block pointer events for the rest of the window
-              pointerEvents: 'none'
+              pointerEvents: 'none',
             }}
             minWidth={100}
             minHeight={80}
@@ -115,29 +115,29 @@ class WindowBase extends React.Component<Props, State> {
             onResize={this.handleResize}
             onResizeStop={this.handleResizeStop}
             resizeHandleWrapperStyle={{
-              pointerEvents: 'auto'
+              pointerEvents: 'auto',
             }}
             resizeHandleStyles={{
               left: {
                 width: 5,
-                left: 0
+                left: 0,
               },
               right: {
                 width: 5,
-                right: 0
+                right: 0,
               },
               top: {
                 height: 5,
-                top: 0
+                top: 0,
               },
               bottom: {
                 height: 5,
-                bottom: 0
+                bottom: 0,
               },
               topLeft: { ...cornerDragHandleStyles, left: 0, top: 0 },
               topRight: { ...cornerDragHandleStyles, right: 0, top: 0 },
               bottomLeft: { ...cornerDragHandleStyles, left: 0, bottom: 0 },
-              bottomRight: { ...cornerDragHandleStyles, right: 0, bottom: 0 }
+              bottomRight: { ...cornerDragHandleStyles, right: 0, bottom: 0 },
             }}
           >
             <div
@@ -149,7 +149,7 @@ class WindowBase extends React.Component<Props, State> {
                 top: 4,
                 left: 4,
                 right: 50, // clear buttons (hack),
-                pointerEvents: 'auto'
+                pointerEvents: 'auto',
               }}
               onDoubleClick={() => this.props.onMaximize(this.props.name)}
             />
@@ -162,20 +162,20 @@ class WindowBase extends React.Component<Props, State> {
             width: this.props.width,
             top: this.props.top,
             left: this.props.left,
-            zIndex: this.props.zIndex
+            zIndex: this.props.zIndex,
           }}
           depth={2}
           classes={{
             root: cx(styles.container, {
-              [styles.maximized]: this.props.maximized
+              [styles.maximized]: this.props.maximized,
             }),
-            inner: styles.containerInner
+            inner: styles.containerInner,
           }}
           handlers={{
             onClick: () => {
               // focus this pane via click on titlebar, edges, etc
               this.props.onFocus(this.props.name);
-            }
+            },
           }}
         >
           <TitleBar
@@ -194,19 +194,19 @@ class WindowBase extends React.Component<Props, State> {
             borderColors={[
               {
                 bottomRight: 'white',
-                topLeft: '#868a8e'
+                topLeft: '#868a8e',
               },
               {
                 bottomRight: '#c3c7cb',
-                topLeft: 'black'
-              }
+                topLeft: 'black',
+              },
             ]}
             classes={{
               root: styles.windowContentContainer,
-              inner: styles.windowContentContainerContent
+              inner: styles.windowContentContainerContent,
             }}
             style={{
-              height: `calc(100% - ${titleBarHeight}px)`
+              height: `calc(100% - ${titleBarHeight}px)`,
             }}
             scrollable
           >

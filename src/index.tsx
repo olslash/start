@@ -12,7 +12,7 @@ import rootSaga from './state/rootSaga';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
   ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-      actionsBlacklist: ['CLOCK_TICK']
+      actionsBlacklist: ['CLOCK_TICK'],
     })
   : compose;
 

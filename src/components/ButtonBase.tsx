@@ -30,7 +30,7 @@ class ButtonBase extends React.Component<Props> {
   state = {
     active: false,
     mouseOver: false,
-    depressed: false
+    depressed: false,
   };
 
   handleMouseEnter = (e: React.MouseEvent<any, any>) => {
@@ -38,7 +38,7 @@ class ButtonBase extends React.Component<Props> {
 
     this.setState({
       mouseOver: true,
-      depressed: this.state.active
+      depressed: this.state.active,
     });
   };
 
@@ -47,7 +47,7 @@ class ButtonBase extends React.Component<Props> {
 
     this.setState({
       mouseOver: false,
-      depressed: false
+      depressed: false,
     });
   };
 
@@ -56,7 +56,7 @@ class ButtonBase extends React.Component<Props> {
 
     this.setState({
       active: true,
-      depressed: true
+      depressed: true,
     });
   };
 
@@ -71,7 +71,7 @@ class ButtonBase extends React.Component<Props> {
 
     this.setState({
       active: false,
-      depressed: false
+      depressed: false,
     });
   };
 
@@ -87,7 +87,7 @@ class ButtonBase extends React.Component<Props> {
       innerStyle = {},
       outerStyle = {},
       children,
-      iconSrc
+      iconSrc,
     } = this.props;
 
     return (
@@ -96,7 +96,7 @@ class ButtonBase extends React.Component<Props> {
           styles.container,
           {
             [styles.containerDepressed]:
-              this.state.depressed || this.props.depressed
+              this.state.depressed || this.props.depressed,
           },
           classes.root
         )}
@@ -108,7 +108,7 @@ class ButtonBase extends React.Component<Props> {
         onMouseLeave={this.handleMouseLeave}
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}
-        onClick={e => this.props.stopClickPropagation && e.stopPropagation()}
+        onClick={(e) => this.props.stopClickPropagation && e.stopPropagation()}
       >
         {this.props.iconSrc && (
           <div className={styles.iconImgContainer}>
@@ -116,7 +116,7 @@ class ButtonBase extends React.Component<Props> {
               src={iconSrc}
               className={cx(classes.icon, {
                 [styles.iconImgDepressed]:
-                  this.state.depressed || this.props.depressed
+                  this.state.depressed || this.props.depressed,
               })}
               draggable={false}
             />
@@ -127,7 +127,7 @@ class ButtonBase extends React.Component<Props> {
             styles.outerBorder,
             {
               [styles.outerBorderDepressed]:
-                this.state.depressed || this.props.depressed
+                this.state.depressed || this.props.depressed,
             },
             classes.outer
           )}
@@ -147,7 +147,7 @@ class ButtonBase extends React.Component<Props> {
 
 export default compose<React.ComponentType<Props>>(
   withProps({
-    eventTypes: 'mouseup'
+    eventTypes: 'mouseup',
   }),
   withClickOutHandler
 )(ButtonBase);
