@@ -11,7 +11,7 @@ import {
   FolderState,
   openPane,
   primarySelectedItemNameForFolder,
-  selectItem
+  selectItem,
 } from '../../state/explorer';
 import FolderItem from './FolderItem';
 import FolderItemGrid from './FolderItemGrid';
@@ -47,23 +47,23 @@ const FolderContents: React.FunctionComponent<Props> = ({
   selectItem,
   openPane,
   clickFolderItemGridBackground,
-  columnLayout
+  columnLayout,
 }: Props) => {
   const folderItemRefs: {
     [name: string]: React.MutableRefObject<null>;
   } = {};
 
-  items.forEach(item => (folderItemRefs[item.name] = React.useRef(null)));
+  items.forEach((item) => (folderItemRefs[item.name] = React.useRef(null)));
 
   const [dragStartPosition, setDragStartPosition] = React.useState<{
     x: number | null;
     y: number | null;
   }>({
     x: null,
-    y: null
+    y: null,
   });
 
-  const containerRef = React.useRef(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   const onStart = React.useCallback(({ x, y }) => {
     setDragStartPosition({ x, y });
@@ -80,10 +80,11 @@ const FolderContents: React.FunctionComponent<Props> = ({
 
     <div style={{ height: '100%' }} ref={containerRef}>
       <DragSelect
+        active={folderActive}
         onStart={onStart}
         onDrag={onDrag}
         onEnd={onEnd}
-        containerRef={containerRef.current}
+        containerRef={containerRef}
       />
 
       <FolderItemGrid
