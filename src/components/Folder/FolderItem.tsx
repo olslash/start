@@ -14,99 +14,106 @@ interface Props {
   // onClick(): void;
   onMouseDown?(e: React.MouseEvent<any, any>, name: string): void;
   onDoubleClick?(e: React.MouseEvent<any, any>, name: string): void;
-  forwardedRef: React.MutableRefObject<any>;
 }
 
 interface State {
   shouldDoubleClick: boolean;
 }
 
-class FolderItem extends React.Component<Props, State> {
-  static defaultProps = {
-    doubleClickDelayMax: 400,
-  };
+const FolderItem = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
+  const {
+    icon,
+    name,
+    selected,
+    partialSelected,
+    darkTitle,
+    onDoubleClick,
+    onMouseDown,
+    doubleClickDelayMax = 400,
+  } = props;
+  const isActiveSelection = selected && !partialSelected;
 
-  state = {
-    shouldDoubleClick: false,
-  };
+  const [shouldDoubleClick, setShouldDoubleClick] = React.useState(false);
+  const [doubleClickTimeout, setDoubleClickTimeout] = React.useState(0);
 
-  doubleClickTimeout = 0;
+  const handleDoubleClick = React.useCallback(
+    (e: React.MouseEvent<any, any>) => {
+      onDoubleClick?.(e, name);
+    },
+    [onDoubleClick, name]
+  );
 
-  componentWillUnmount() {
-    clearTimeout(this.doubleClickTimeout);
-  }
+  const handleMouseDown = React.useCallback(
+    (e: React.MouseEvent<any, any>) => {
+      // double click is mousedown-mouseup-<mousedown>
 
-  handleMouseDown = (e: React.MouseEvent<any, any>) => {
-    // double click is mousedown-mouseup-<mousedown>
-
-    if (this.state.shouldDoubleClick) {
-      this.setState({ shouldDoubleClick: false });
-      return this.handleDoubleClick(e);
-    }
-
-    if (this.props.onMouseDown) {
-      this.props.onMouseDown(e, this.props.name);
-    }
-
-    this.setState(
-      {
-        shouldDoubleClick: true,
-      },
-      () => {
-        this.doubleClickTimeout = setTimeout(() => {
-          this.setState({ shouldDoubleClick: false });
-        }, this.props.doubleClickDelayMax);
+      if (shouldDoubleClick) {
+        setShouldDoubleClick(false);
+        return handleDoubleClick(e);
       }
-    );
-  };
 
-  handleDoubleClick = (e: React.MouseEvent<any, any>) => {
-    if (this.props.onDoubleClick) {
-      this.props.onDoubleClick(e, this.props.name);
-    }
-  };
+      onMouseDown?.(e, name);
 
-  getTruncatedTitle = () => {
-    return this.props.name
-      .split(' ')
-      .map((word) => truncate(word, { length: 12 }))
-      .join(' ');
-  };
+      setShouldDoubleClick(true);
 
-  render() {
-    const { icon, selected, partialSelected, darkTitle } = this.props;
-    const isActiveSelection = selected && !partialSelected;
+      setDoubleClickTimeout(
+        window.setTimeout(() => {
+          setShouldDoubleClick(false);
+        }, doubleClickDelayMax)
+      );
+    },
+    [
+      handleDoubleClick,
+      name,
+      shouldDoubleClick,
+      doubleClickDelayMax,
+      onMouseDown,
+    ]
+  );
 
-    return (
-      <div
-        className={cx(styles.container)}
-        onMouseDown={this.handleMouseDown}
-        ref={this.props.forwardedRef}
-        // onClick={this.handleClick}
-      >
-        <img
-          src={icons[icon]}
-          className={cx(styles.icon, {
-            [styles.iconSelected]: isActiveSelection,
+  // React.useEffect(() => {
+  //   return () => {
+  //     console.log('cleaning up');
+  //     clearTimeout(doubleClickTimeout);
+  //   };
+  // }, [doubleClickTimeout]);
+
+  const truncatedTitle = props.name
+    .split(' ')
+    .map((word) => truncate(word, { length: 12 }))
+    .join(' ');
+
+  return (
+    <div
+      className={cx(styles.container)}
+      onMouseDown={handleMouseDown}
+      ref={ref}
+      id={name}
+      // onClick={this.handleClick}
+    >
+      <img
+        src={icons[icon]}
+        className={cx(styles.icon, {
+          [styles.iconSelected]: isActiveSelection,
+        })}
+        style={{
+          WebkitMaskImage: `url(${icons[icon]})`,
+        }}
+      />
+      <div className={styles.titleContainer}>
+        <div
+          className={cx(styles.title, {
+            [styles.titleDarkFont]: darkTitle,
+            [styles.titleSelected]: isActiveSelection,
+            [styles.titleSelectedInactive]: selected && !isActiveSelection,
           })}
-          style={{
-            WebkitMaskImage: `url(${icons[icon]})`,
-          }}
-        />
-        <div className={styles.titleContainer}>
-          <div
-            className={cx(styles.title, {
-              [styles.titleDarkFont]: darkTitle,
-              [styles.titleSelected]: isActiveSelection,
-              [styles.titleSelectedInactive]: selected && !isActiveSelection,
-            })}
-          >
-            {this.getTruncatedTitle()}
-          </div>
+        >
+          {truncatedTitle}
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+});
 
+FolderItem.displayName = 'FolderItem';
 export default FolderItem;

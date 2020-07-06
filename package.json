@@ -33,7 +33,8 @@
     "recompose": "^0.26.0",
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "use-intersection": "^0.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

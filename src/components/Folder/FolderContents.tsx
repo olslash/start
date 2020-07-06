@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { useIntersection } from 'use-intersection';
 import DragSelect from 'start/components/DragSelect';
 import { GlobalState } from 'start/state/globalState';
 import { Pane, WindowType } from 'start/types';
@@ -15,6 +16,7 @@ import {
 } from '../../state/explorer';
 import FolderItem from './FolderItem';
 import FolderItemGrid from './FolderItemGrid';
+import { select } from 'redux-saga/effects';
 
 interface OwnProps {
   folderName: string;
@@ -49,42 +51,69 @@ const FolderContents: React.FunctionComponent<Props> = ({
   clickFolderItemGridBackground,
   columnLayout,
 }: Props) => {
-  const folderItemRefs: {
-    [name: string]: React.MutableRefObject<null>;
-  } = {};
-
-  items.forEach((item) => (folderItemRefs[item.name] = React.useRef(null)));
-
-  const [dragStartPosition, setDragStartPosition] = React.useState<{
-    x: number | null;
-    y: number | null;
-  }>({
-    x: null,
-    y: null,
-  });
-
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const dragSelectAreaRef = React.useRef<HTMLDivElement>(null);
 
-  const onStart = React.useCallback(({ x, y }) => {
-    setDragStartPosition({ x, y });
-  }, []);
+  const [folderItemRefs, setFolderItemRefs] = React.useState<{
+    [name: string]: HTMLDivElement;
+  }>({});
 
-  const onDrag = React.useCallback(({ x, y }) => {}, []);
+  const setRef = (name: string) => (instance: HTMLDivElement) => {
+    if (!instance) {
+      return;
+    }
 
-  const onEnd = React.useCallback(() => {}, []);
+    if (folderItemRefs[name] === instance) {
+      return;
+    }
+
+    console.log('Setting new ref');
+    setFolderItemRefs({ ...folderItemRefs, [name]: instance });
+  };
+
+  const handleFolderMouseDown = React.useCallback(
+    (e, itemName) => {
+      if (folderActive) {
+        e.stopPropagation();
+      }
+
+      selectItem({ folderName: folderName, itemName });
+    },
+    [folderActive, folderName, selectItem]
+  );
+
+  const handleFolderDoubleClick = React.useCallback(
+    (e, itemName) => {
+      if (folderActive) {
+        e.stopPropagation();
+      }
+
+      openPane(itemName, folderName);
+    },
+    [folderActive, folderName, openPane]
+  );
+
+  const handleDrag = React.useCallback(() => {
+    if (!dragSelectAreaRef.current) {
+      return;
+    }
+
+    // fixme debounce this
+    for (const [name, folderItem] of Object.entries(folderItemRefs)) {
+    }
+
+    return () => {};
+  }, [folderItemRefs]);
 
   return (
-    // when i mousedown and hold on the folder background,
-    // store the clientRect of each FolderItem (get a ref to each from FolderContents) by ID
-    // then see which ones overlap and select them
-
     <div style={{ height: '100%' }} ref={containerRef}>
       <DragSelect
-        active={folderActive}
-        onStart={onStart}
-        onDrag={onDrag}
-        onEnd={onEnd}
+        enabled={folderActive}
+        // onStart={onStart}
+        onDrag={handleDrag}
+        // onEnd={onEnd}
         containerRef={containerRef}
+        ref={dragSelectAreaRef}
       />
 
       <FolderItemGrid
@@ -92,10 +121,11 @@ const FolderContents: React.FunctionComponent<Props> = ({
           clickFolderItemGridBackground(folderName);
         }}
         columnLayout={columnLayout}
+        // ref={folderItemGridRef}
       >
         {items.map((item: Pane) => (
           <FolderItem
-            forwardedRef={folderItemRefs[item.name]}
+            ref={setRef(item.name)}
             name={item.name}
             key={item.name}
             icon={
@@ -108,20 +138,8 @@ const FolderContents: React.FunctionComponent<Props> = ({
             partialSelected={
               selectionState === FolderState.INACTIVE && folderActive
             }
-            onMouseDown={(e, itemName) => {
-              if (folderActive) {
-                e.stopPropagation();
-              }
-
-              selectItem({ folderName: folderName, itemName });
-            }}
-            onDoubleClick={(e, itemName) => {
-              if (folderActive) {
-                e.stopPropagation();
-              }
-
-              openPane(itemName, folderName);
-            }}
+            onMouseDown={handleFolderMouseDown}
+            onDoubleClick={handleFolderDoubleClick}
           />
         ))}
       </FolderItemGrid>

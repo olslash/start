@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const useMousePosition = (containerRef: React.RefObject<HTMLDivElement>) => {
+const useMousePosition = (containerRef: React.RefObject<HTMLElement>) => {
   const [position, setPosition] = React.useState({ x: 0, y: 0 });
 
   const getBoundingClientRect = (e: MouseEvent) => {
