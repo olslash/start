@@ -54,3 +54,25 @@ export function moveOrPrependToFront(array: string[], searchString: string) {
 
   return ordered[0] === searchString ? ordered : [searchString, ...ordered];
 }
+
+export function rectsOverlap(
+  rect1TopLeftX: number,
+  rect1TopLeftY: number,
+  rect1BottomRightX: number,
+  rect1BottomRightY: number,
+  rect2TopLeftX: number,
+  rect2TopLeftY: number,
+  rect2BottomRightX: number,
+  rect2BottomRightY: number
+) {
+  if (
+    rect1TopLeftX < rect2BottomRightX &&
+    rect1BottomRightX > rect2TopLeftX &&
+    rect1TopLeftY < rect2BottomRightY &&
+    rect1BottomRightY > rect2TopLeftY
+  ) {
+    return true;
+  }
+
+  return false;
+}

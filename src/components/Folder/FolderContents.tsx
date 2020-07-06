@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { useIntersection } from 'use-intersection';
 import DragSelect from 'start/components/DragSelect';
+import { rectsOverlap } from 'start/helpers';
 import { GlobalState } from 'start/state/globalState';
 import { Pane, WindowType } from 'start/types';
 import { windowsAppIcons } from 'start/windowsApps';
@@ -16,7 +16,6 @@ import {
 } from '../../state/explorer';
 import FolderItem from './FolderItem';
 import FolderItemGrid from './FolderItemGrid';
-import { select } from 'redux-saga/effects';
 
 interface OwnProps {
   folderName: string;
@@ -67,7 +66,6 @@ const FolderContents: React.FunctionComponent<Props> = ({
       return;
     }
 
-    console.log('Setting new ref');
     setFolderItemRefs({ ...folderItemRefs, [name]: instance });
   };
 
@@ -77,7 +75,7 @@ const FolderContents: React.FunctionComponent<Props> = ({
         e.stopPropagation();
       }
 
-      selectItem({ folderName: folderName, itemName });
+      selectItem({ folderName, itemName });
     },
     [folderActive, folderName, selectItem]
   );
@@ -98,12 +96,31 @@ const FolderContents: React.FunctionComponent<Props> = ({
       return;
     }
 
+    const dragSelectAreaRect = dragSelectAreaRef.current.getBoundingClientRect();
+
     // fixme debounce this
     for (const [name, folderItem] of Object.entries(folderItemRefs)) {
+      const itemRect = folderItem.getBoundingClientRect();
+      const itemIsWithinDragSelectArea = rectsOverlap(
+        dragSelectAreaRect.x,
+        dragSelectAreaRect.y,
+        dragSelectAreaRect.x + dragSelectAreaRect.width,
+        dragSelectAreaRect.y + dragSelectAreaRect.height,
+
+        itemRect.x,
+        itemRect.y,
+        itemRect.x + itemRect.width,
+        itemRect.y + itemRect.height
+      );
+
+      if (itemIsWithinDragSelectArea) {
+        selectItem({ folderName, itemName: name });
+      } else {
+      }
     }
 
     return () => {};
-  }, [folderItemRefs]);
+  }, [folderItemRefs, folderName, selectItem]);
 
   return (
     <div style={{ height: '100%' }} ref={containerRef}>
