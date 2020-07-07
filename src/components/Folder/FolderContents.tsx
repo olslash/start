@@ -51,7 +51,6 @@ const FolderContents: React.FunctionComponent<Props> = ({
   columnLayout,
 }: Props) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const dragSelectAreaRef = React.useRef<HTMLDivElement>(null);
 
   const [folderItemRefs, setFolderItemRefs] = React.useState<{
     [name: string]: HTMLDivElement;
@@ -91,36 +90,33 @@ const FolderContents: React.FunctionComponent<Props> = ({
     [folderActive, folderName, openPane]
   );
 
-  const handleDrag = React.useCallback(() => {
-    if (!dragSelectAreaRef.current) {
-      return;
-    }
+  const handleDrag = React.useCallback(
+    ({ topLeft, bottomRight }) => {
+      // fixme debounce this
+      for (const [name, folderItem] of Object.entries(folderItemRefs)) {
+        const itemRect = folderItem.getBoundingClientRect();
+        const itemIsWithinDragSelectArea = rectsOverlap(
+          topLeft[0],
+          topLeft[1],
+          bottomRight[0],
+          bottomRight[1],
 
-    const dragSelectAreaRect = dragSelectAreaRef.current.getBoundingClientRect();
+          itemRect.x,
+          itemRect.y,
+          itemRect.x + itemRect.width,
+          itemRect.y + itemRect.height
+        );
 
-    // fixme debounce this
-    for (const [name, folderItem] of Object.entries(folderItemRefs)) {
-      const itemRect = folderItem.getBoundingClientRect();
-      const itemIsWithinDragSelectArea = rectsOverlap(
-        dragSelectAreaRect.x,
-        dragSelectAreaRect.y,
-        dragSelectAreaRect.x + dragSelectAreaRect.width,
-        dragSelectAreaRect.y + dragSelectAreaRect.height,
-
-        itemRect.x,
-        itemRect.y,
-        itemRect.x + itemRect.width,
-        itemRect.y + itemRect.height
-      );
-
-      if (itemIsWithinDragSelectArea) {
-        selectItem({ folderName, itemName: name });
-      } else {
+        if (itemIsWithinDragSelectArea) {
+          selectItem({ folderName, itemName: name });
+        } else {
+        }
       }
-    }
 
-    return () => {};
-  }, [folderItemRefs, folderName, selectItem]);
+      return () => {};
+    },
+    [folderItemRefs, folderName, selectItem]
+  );
 
   return (
     <div style={{ height: '100%' }} ref={containerRef}>
@@ -130,7 +126,6 @@ const FolderContents: React.FunctionComponent<Props> = ({
         onDrag={handleDrag}
         // onEnd={onEnd}
         containerRef={containerRef}
-        ref={dragSelectAreaRef}
       />
 
       <FolderItemGrid
@@ -138,7 +133,6 @@ const FolderContents: React.FunctionComponent<Props> = ({
           clickFolderItemGridBackground(folderName);
         }}
         columnLayout={columnLayout}
-        // ref={folderItemGridRef}
       >
         {items.map((item: Pane) => (
           <FolderItem
