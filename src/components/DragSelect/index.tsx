@@ -23,9 +23,8 @@ const DragSelect: React.FC<Props> = ({
   const isMouseDown = useMouseDown();
   const [isActive, setActive] = React.useState(false);
 
-  const [[dragStartX, dragStartY], setDragStartPosition] = React.useState<
-    Point
-  >([0, 0]);
+  const [[dragStartX, dragStartY], setDragStartPosition] =
+    React.useState<Point>([0, 0]);
 
   React.useEffect(() => {
     if (isMouseDown) {

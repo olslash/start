@@ -454,9 +454,9 @@ export function itemsForFolder(state: GlobalState, folderName: string) {
   return treeResult.children.map((child) => itemByName(state, child.name));
 }
 
-export function openPaneItems(
-  state: GlobalState
-): { [name: string]: Pane & PaneState } {
+export function openPaneItems(state: GlobalState): {
+  [name: string]: Pane & PaneState;
+} {
   const openPanes = pickBy(local(state).paneStateByItemName, {
     open: true,
   });
