@@ -6,7 +6,7 @@ const HTMLPlugin = require('html-webpack-plugin');
 const includePaths = [__dirname + '/src', __dirname + '/resources'];
 module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-  entry: ['@babel/polyfill', './src/index.tsx'],
+  entry: ['core-js/stable', 'regenerator-runtime/runtime', './src/index.tsx'],
   output: {
     filename: 'dist/bundle.js'
   },
