@@ -41,15 +41,16 @@ module.exports = {
       {
         include: includePaths,
         test: /\.scss$/,
-        loaders: [
+        use: [
           'style-loader',
 
           '@teamsupercell/typings-for-css-modules-loader',
           {
             loader: 'css-loader',
             options: {
-              modules: true,
-              localIdentName: '[local]--[hash:base64:5]'
+              modules: {
+                localIdentName: '[local]--[hash:base64:5]'
+              }
               // alias: {a
               //   resources: __dirname + '/resources'
               // }
@@ -60,5 +61,8 @@ module.exports = {
       }
     ]
   },
-  plugins: [new HTMLPlugin(), new webpack.WatchIgnorePlugin([/css\.d\.ts$/])]
+  plugins: [
+    new HTMLPlugin(),
+    new webpack.WatchIgnorePlugin({ paths: [/css\.d\.ts$/] })
+  ]
 };
