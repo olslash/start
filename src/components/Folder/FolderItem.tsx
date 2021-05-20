@@ -22,11 +22,11 @@ interface State {
 
 class FolderItem extends React.Component<Props, State> {
   static defaultProps = {
-    doubleClickDelayMax: 400
+    doubleClickDelayMax: 400,
   };
 
   state = {
-    shouldDoubleClick: false
+    shouldDoubleClick: false,
   };
 
   doubleClickTimeout = 0;
@@ -49,7 +49,7 @@ class FolderItem extends React.Component<Props, State> {
 
     this.setState(
       {
-        shouldDoubleClick: true
+        shouldDoubleClick: true,
       },
       () => {
         this.doubleClickTimeout = setTimeout(() => {
@@ -68,7 +68,7 @@ class FolderItem extends React.Component<Props, State> {
   getTruncatedTitle = () => {
     return this.props.name
       .split(' ')
-      .map(word => truncate(word, { length: 12 }))
+      .map((word) => truncate(word, { length: 12 }))
       .join(' ');
   };
 
@@ -85,10 +85,10 @@ class FolderItem extends React.Component<Props, State> {
         <img
           src={icons[icon]}
           className={cx(styles.icon, {
-            [styles.iconSelected]: isActiveSelection
+            [styles.iconSelected]: isActiveSelection,
           })}
           style={{
-            WebkitMaskImage: `url(${icons[icon]})`
+            WebkitMaskImage: `url(${icons[icon]})`,
           }}
         />
         <div className={styles.titleContainer}>
@@ -96,7 +96,7 @@ class FolderItem extends React.Component<Props, State> {
             className={cx(styles.title, {
               [styles.titleDarkFont]: darkTitle,
               [styles.titleSelected]: isActiveSelection,
-              [styles.titleSelectedInactive]: selected && !isActiveSelection
+              [styles.titleSelectedInactive]: selected && !isActiveSelection,
             })}
           >
             {this.getTruncatedTitle()}

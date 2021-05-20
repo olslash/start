@@ -23,11 +23,11 @@ interface State {
 class StartMenuItem extends React.Component<Props, State> {
   static defaultProps = {
     onActivate: () => {},
-    activationDelayMs: 350
+    activationDelayMs: 350,
   };
 
   state = {
-    hovered: false
+    hovered: false,
   };
 
   activateDelayTimeout = 0;
@@ -65,7 +65,7 @@ class StartMenuItem extends React.Component<Props, State> {
     if (this.props.onActivate) {
       this.props.onActivate({
         depth: this.props.depth || 0,
-        index: this.props.index || 0
+        index: this.props.index || 0,
       });
     }
   };
@@ -77,7 +77,7 @@ class StartMenuItem extends React.Component<Props, State> {
       <div
         className={cx(styles.container, {
           [styles.active]: this.state.hovered || active,
-          [styles.containerShort]: short
+          [styles.containerShort]: short,
         })}
         onMouseOver={this.setHovered}
         onMouseLeave={this.setUnHovered}
@@ -90,7 +90,7 @@ class StartMenuItem extends React.Component<Props, State> {
         <span
           className={cx(styles.label, {
             [styles.labelHovered]: this.state.hovered || active,
-            [styles.labelShort]: short
+            [styles.labelShort]: short,
           })}
         >
           {label}

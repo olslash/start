@@ -29,15 +29,15 @@ class BorderedContainer extends React.Component<Props> {
     borderColors: [
       {
         bottomRight: 'black',
-        topLeft: '#c3c7cb'
+        topLeft: '#c3c7cb',
       },
       {
         bottomRight: '#868a8e',
-        topLeft: 'white'
-      }
+        topLeft: 'white',
+      },
     ],
     classes: {},
-    style: {}
+    style: {},
   };
 
   render() {
@@ -49,7 +49,7 @@ class BorderedContainer extends React.Component<Props> {
       icon,
       scrollable,
       children,
-      handlers
+      handlers,
     } = this.props;
 
     return (
@@ -69,7 +69,7 @@ class BorderedContainer extends React.Component<Props> {
           style={{
             borderLeft: `1px solid ${borderColors[0].topLeft}`,
             borderTop: `1px solid ${borderColors[0].topLeft}`,
-            boxShadow: `0.5px 0.5px 0 0.5px ${borderColors[0].bottomRight}`
+            boxShadow: `0.5px 0.5px 0 0.5px ${borderColors[0].bottomRight}`,
           }}
         >
           {depth === 1 && children}
@@ -80,7 +80,7 @@ class BorderedContainer extends React.Component<Props> {
                 borderLeft: `1px solid ${borderColors[1].topLeft}`,
                 borderTop: `1px solid ${borderColors[1].topLeft}`,
                 boxShadow: `0.5px 0.5px 0 0.5px ${borderColors[1].bottomRight}`,
-                overflowY: scrollable ? 'scroll' : 'initial'
+                overflowY: scrollable ? 'scroll' : 'initial',
               }}
             >
               {children}

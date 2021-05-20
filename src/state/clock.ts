@@ -5,7 +5,7 @@ import { GlobalState } from './globalState';
 export const CLOCK_TICK = 'CLOCK_TICK';
 
 const initialState = {
-  currentDate: new Date()
+  currentDate: new Date(),
 };
 
 export type State = typeof initialState;
@@ -23,7 +23,7 @@ export function reducer(state: State = initialState, action: Action): State {
 export function* saga() {
   const tick = yield call(intervalChan, 5000);
 
-  yield takeEvery(tick, function*() {
+  yield takeEvery(tick, function* () {
     yield put(clockTick(new Date()));
   });
 }
@@ -31,7 +31,7 @@ export function* saga() {
 export function clockTick(date: Date) {
   return <const>{
     type: CLOCK_TICK,
-    payload: { date }
+    payload: { date },
   };
 }
 

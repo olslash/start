@@ -16,12 +16,12 @@ const TaskBarItem: React.FunctionComponent<Props> = ({
   title,
   active,
   onClick,
-  icon
+  icon,
 }) => (
   <div className={styles.container}>
     <ButtonBase
       classes={{
-        root: styles.button
+        root: styles.button,
       }}
       depressed={active}
       onClick={onClick}

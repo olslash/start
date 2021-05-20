@@ -12,7 +12,7 @@ import {
   minimizePane,
   maximizePane,
   closePane,
-  movePane
+  movePane,
 } from '../state/explorer';
 
 import SVGDefinitions from './SVGDefinitions';
@@ -111,7 +111,7 @@ function mapStateToProps(state: GlobalState): StateProps {
       filter(openPaneItems(state), { minimized: false }),
       // sort panes (for z-index precedence) by their index in focusedPaneOrder
       ({ name }) => focusedPaneOrder(state).indexOf(name)
-    ).reverse()
+    ).reverse(),
   };
 }
 
@@ -122,6 +122,6 @@ export default connect<StateProps, DispatchProps, {}, GlobalState>(
     minimizePane,
     maximizePane,
     closePane,
-    movePane
+    movePane,
   } as DispatchProps
 )(App);

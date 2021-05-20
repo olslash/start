@@ -2,7 +2,7 @@ import { find, flatten, partition } from 'lodash';
 import { eventChannel } from 'redux-saga';
 
 export function intervalChan(timeMs: number) {
-  return eventChannel<true>(emitter => {
+  return eventChannel<true>((emitter) => {
     const iv = setInterval(() => emitter(true), timeMs);
     return () => clearInterval(iv);
   });
@@ -50,7 +50,7 @@ export function treeFind(
 }
 
 export function moveOrPrependToFront(array: string[], searchString: string) {
-  const ordered = flatten(partition(array, o => o === searchString));
+  const ordered = flatten(partition(array, (o) => o === searchString));
 
   return ordered[0] === searchString ? ordered : [searchString, ...ordered];
 }

@@ -10,7 +10,7 @@ import {
   FolderState,
   openPane,
   primarySelectedItemNameForFolder,
-  selectItem
+  selectItem,
 } from '../../state/explorer';
 import FolderItem from './FolderItem';
 import FolderItemGrid from './FolderItemGrid';
@@ -46,7 +46,7 @@ const FolderContents: React.FunctionComponent<Props> = ({
   selectItem,
   openPane,
   clickFolderItemGridBackground,
-  columnLayout
+  columnLayout,
 }: Props) => (
   <div style={{ height: '100%' }}>
     <FolderItemGrid
@@ -96,7 +96,7 @@ function mapStateToProps(state: GlobalState, ownProps: Props): StateProps {
       ownProps.folderName
     ),
     selectionState: folderSelectionState(state, ownProps.folderName),
-    folderActive: focusedPaneName(state) === ownProps.folderName
+    folderActive: focusedPaneName(state) === ownProps.folderName,
   };
 }
 

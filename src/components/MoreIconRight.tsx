@@ -8,7 +8,7 @@ interface Props {
 const MoreIconRight: React.FunctionComponent<Props> = ({ inverted }: Props) => (
   <div
     className={cx(styles.arrowRight, {
-      [styles.inverted]: inverted
+      [styles.inverted]: inverted,
     })}
   />
 );

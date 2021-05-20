@@ -3,15 +3,9 @@ import BorderedContainer from '../BorderedContainer';
 import styles from './clock.scss';
 
 const formatTime = (date: Date) => {
-  const hours = date
-    .getHours()
-    .toString()
-    .padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
 
-  const minutes = date
-    .getMinutes()
-    .toString()
-    .padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
 
   return `${hours}:${minutes}`;
 };
@@ -27,8 +21,8 @@ const Clock: React.FunctionComponent<Props> = ({ currentDate }: Props) => (
     borderColors={[
       {
         topLeft: '#868a8e',
-        bottomRight: 'white'
-      }
+        bottomRight: 'white',
+      },
     ]}
   >
     <span className={styles.time}>{formatTime(currentDate)}</span>

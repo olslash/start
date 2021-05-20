@@ -32,7 +32,7 @@ class Folder extends React.Component<Props> {
 
 function mapStateToProps(state: GlobalState, ownProps: Props): StateProps {
   return {
-    items: itemsForFolder(state, ownProps.name)
+    items: itemsForFolder(state, ownProps.name),
   };
 }
 
