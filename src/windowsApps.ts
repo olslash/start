@@ -1,9 +1,9 @@
 import { Apps } from 'start/types';
+import { Icon } from 'resources/icons';
 import ImageViewer, {
   Props as ImageViewerProps,
 } from './components/AppImageViewer';
 import Notepad, { Props as NotepadProps } from './components/AppNotepad';
-import { Icon } from 'resources/icons';
 
 type AppProps = ImageViewerProps | NotepadProps;
 

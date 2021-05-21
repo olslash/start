@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import FolderContents from './Folder/FolderContents';
 import { Pane } from 'start/types';
+import FolderContents from './Folder/FolderContents';
 
 interface Props {
   items: Pane[];

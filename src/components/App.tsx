@@ -2,6 +2,9 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { filter, get, sortBy } from 'lodash';
 
+import { Pane, Position, WindowType, PaneState, File } from 'start/types';
+import { GlobalState } from 'start/state/globalState';
+import { windowsApps, windowsAppIcons } from 'start/windowsApps';
 import startMenuItems from '../startMenuItems';
 import {
   focusPane,
@@ -21,9 +24,6 @@ import Desktop from './Desktop';
 
 import styles from './app.scss';
 import Folder from './Folder';
-import { Pane, Position, WindowType, PaneState, File } from 'start/types';
-import { GlobalState } from 'start/state/globalState';
-import { windowsApps, windowsAppIcons } from 'start/windowsApps';
 
 interface StateProps {
   openPaneItems: ReturnType<typeof openPaneItems>;

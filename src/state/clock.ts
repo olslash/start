@@ -1,5 +1,5 @@
-import { intervalChan } from '../helpers';
 import { call, put, takeEvery } from 'redux-saga/effects';
+import { intervalChan } from '../helpers';
 import { GlobalState } from './globalState';
 
 export const CLOCK_TICK = 'CLOCK_TICK';

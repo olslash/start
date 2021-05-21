@@ -32,7 +32,7 @@ class StartMenu extends React.Component<Props> {
   renderItem = (
     { title, icon, children = [] }: StartMenuItemType,
     index: number,
-    depth: number = 0
+    depth = 0
   ) => (
     <StartMenuItem
       key={title}
