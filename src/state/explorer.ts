@@ -1,4 +1,4 @@
-import { mapValues, pick, pickBy, range, sample } from 'lodash';
+import { mapValues, pick, pickBy, range, sample, union, without } from 'lodash';
 import { put, select, takeEvery } from 'redux-saga/effects'; // eslint-disable-line
 import { Apps, Pane, PaneState, WindowType, Position } from 'start/types';
 import { moveOrPrependToFront, treeFind } from '../helpers';
@@ -14,6 +14,10 @@ const CLOSE_START_MENU = 'Close the start menu';
 const SET_START_MENU_ACTIVE_FOLDER_PATH =
   'Set the active path of the start menu as the user navigates';
 const SELECT_ITEM = 'Select a desktop/folder item';
+const ADD_ITEM_TO_MULTI_SELECT =
+  'Add an item to the selection created by dragging a selection box';
+const REMOVE_ITEM_FROM_MULTI_SELECT =
+  'Remove an item from the selection created by dragging a selection box';
 const FOCUS_PANE = 'Focus a folder, the desktop, the taskbar, etc';
 const CLICK_FOLDER_ITEM_GRID_BACKGROUND =
   'The item grid of a folder was clicked';
@@ -57,6 +61,9 @@ export interface State {
   // folders start "inactive", move to "active" when an item is selected,
   // and back to "inactive" when the folder BG is clicked.
   folderSelectionStateByFolderName: { [name: string]: FolderState };
+  // When items are part of a multi-select (bounding box) group, their selection
+  // doesn't create a new primary item.
+  multiSelectedFolderItemsByFolderName: { [name: string]: string[] };
 }
 
 const initialState: State = {
@@ -68,6 +75,7 @@ const initialState: State = {
   focusedPaneOrder: ['Desktop'],
   primarySelectedFolderItemNameByFolderName: {},
   folderSelectionStateByFolderName: {},
+  multiSelectedFolderItemsByFolderName: {},
 };
 
 type Action = ReturnType<
@@ -75,6 +83,8 @@ type Action = ReturnType<
   | typeof closeStartMenu
   | typeof setStartMenuActiveFolderPath
   | typeof selectItem
+  | typeof addItemToMultiSelect
+  | typeof removeItemFromMultiSelect
   | typeof clickFolderItemGridBackground
   | typeof focusPane
   | typeof minimizePane
@@ -130,6 +140,36 @@ export function reducer(state: State = initialState, action: Action): State {
         folderSelectionStateByFolderName: {
           ...state.folderSelectionStateByFolderName,
           [folderName]: FolderState.ACTIVE,
+        },
+      };
+    }
+
+    case ADD_ITEM_TO_MULTI_SELECT: {
+      const { itemName, folderName } = action.payload;
+
+      return {
+        ...state,
+        multiSelectedFolderItemsByFolderName: {
+          ...state.multiSelectedFolderItemsByFolderName,
+          [folderName]: union(
+            state.multiSelectedFolderItemsByFolderName[folderName],
+            [itemName]
+          ),
+        },
+      };
+    }
+
+    case REMOVE_ITEM_FROM_MULTI_SELECT: {
+      const { itemName, folderName } = action.payload;
+
+      return {
+        ...state,
+        multiSelectedFolderItemsByFolderName: {
+          ...state.multiSelectedFolderItemsByFolderName,
+          [folderName]: without(
+            state.multiSelectedFolderItemsByFolderName[folderName],
+            itemName
+          ),
         },
       };
     }
@@ -231,6 +271,9 @@ export function reducer(state: State = initialState, action: Action): State {
             // for new panes, choose a semi-random position for the new folder,
             // since windows' behavior is inscrutable. seems to start at 0,0 and
             // increment by x,x.
+
+            // fixme: we need paneStateByItemName: { [name: string]: PaneState | undefined};
+            // above to resolve this ts error; ts doesn't realize a pane might not exist
             top: newWindowOffset,
             left: newWindowOffset,
             ...state.paneStateByItemName[name],
@@ -342,6 +385,32 @@ export function selectItem({
   };
 }
 
+export function addItemToMultiSelect({
+  folderName,
+  itemName,
+}: {
+  folderName: string;
+  itemName: string;
+}) {
+  return <const>{
+    type: ADD_ITEM_TO_MULTI_SELECT,
+    payload: { folderName, itemName },
+  };
+}
+
+export function removeItemFromMultiSelect({
+  folderName,
+  itemName,
+}: {
+  folderName: string;
+  itemName: string;
+}) {
+  return <const>{
+    type: REMOVE_ITEM_FROM_MULTI_SELECT,
+    payload: { folderName, itemName },
+  };
+}
+
 export function clickFolderItemGridBackground(folderName: string) {
   return <const>{
     type: CLICK_FOLDER_ITEM_GRID_BACKGROUND,
@@ -419,6 +488,13 @@ export function folderSelectionState(state: GlobalState, folderName: string) {
     local(state).folderSelectionStateByFolderName[folderName] ||
     FolderState.INACTIVE
   );
+}
+
+export function multiSelectedItemsForFolder(
+  state: GlobalState,
+  folderName: string
+) {
+  return local(state).multiSelectedFolderItemsByFolderName[folderName] || [];
 }
 
 export function focusedPaneName(state: GlobalState) {

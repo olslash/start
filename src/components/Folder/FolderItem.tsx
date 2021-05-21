@@ -16,10 +16,6 @@ interface Props {
   onDoubleClick?(e: React.MouseEvent<any, any>, name: string): void;
 }
 
-interface State {
-  shouldDoubleClick: boolean;
-}
-
 const FolderItem = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   const {
     icon,

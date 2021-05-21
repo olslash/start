@@ -13,6 +13,9 @@ import {
   openPane,
   primarySelectedItemNameForFolder,
   selectItem,
+  addItemToMultiSelect,
+  removeItemFromMultiSelect,
+  multiSelectedItemsForFolder,
 } from '../../state/explorer';
 import FolderItem from './FolderItem';
 import FolderItemGrid from './FolderItemGrid';
@@ -28,10 +31,16 @@ interface StateProps {
   selectedItemName: string;
   selectionState: FolderState;
   folderActive: boolean;
+  multiSelectedItems: string[];
 }
 
 interface DispatchProps {
   selectItem(params: { folderName: string; itemName: string }): void;
+  addItemToMultiSelect(params: { folderName: string; itemName: string }): void;
+  removeItemFromMultiSelect(params: {
+    folderName: string;
+    itemName: string;
+  }): void;
   clickFolderItemGridBackground(folderName: string): void;
   openPane(name: string, openerName: string): void;
 }
@@ -43,9 +52,12 @@ const FolderContents: React.FunctionComponent<Props> = ({
   items = [],
   darkItemTitles,
   selectedItemName,
+  multiSelectedItems,
   selectionState,
   folderActive,
   selectItem,
+  addItemToMultiSelect,
+  removeItemFromMultiSelect,
   openPane,
   clickFolderItemGridBackground,
   columnLayout,
@@ -108,14 +120,20 @@ const FolderContents: React.FunctionComponent<Props> = ({
         );
 
         if (itemIsWithinDragSelectArea) {
-          selectItem({ folderName, itemName: name });
+          addItemToMultiSelect({ folderName, itemName: name });
         } else {
+          removeItemFromMultiSelect({ folderName, itemName: name });
         }
       }
 
       return () => {};
     },
-    [folderItemRefs, folderName, selectItem]
+    [
+      addItemToMultiSelect,
+      folderItemRefs,
+      folderName,
+      removeItemFromMultiSelect,
+    ]
   );
 
   return (
@@ -145,9 +163,15 @@ const FolderContents: React.FunctionComponent<Props> = ({
                 : item.icon
             }
             darkTitle={darkItemTitles}
-            selected={selectedItemName === item.name && folderActive}
+            selected={
+              folderActive &&
+              (selectedItemName === item.name ||
+                multiSelectedItems.includes(item.name))
+            }
             partialSelected={
-              selectionState === FolderState.INACTIVE && folderActive
+              folderActive &&
+              selectionState === FolderState.INACTIVE &&
+              !multiSelectedItems.includes(item.name)
             }
             onMouseDown={handleFolderMouseDown}
             onDoubleClick={handleFolderDoubleClick}
@@ -164,6 +188,7 @@ function mapStateToProps(state: GlobalState, ownProps: Props): StateProps {
       state,
       ownProps.folderName
     ),
+    multiSelectedItems: multiSelectedItemsForFolder(state, ownProps.folderName),
     selectionState: folderSelectionState(state, ownProps.folderName),
     folderActive: focusedPaneName(state) === ownProps.folderName,
   };
@@ -171,5 +196,11 @@ function mapStateToProps(state: GlobalState, ownProps: Props): StateProps {
 
 export default connect<StateProps, DispatchProps, OwnProps, GlobalState>(
   mapStateToProps,
-  { selectItem, clickFolderItemGridBackground, openPane } as DispatchProps
+  {
+    selectItem,
+    addItemToMultiSelect,
+    removeItemFromMultiSelect,
+    clickFolderItemGridBackground,
+    openPane,
+  } as DispatchProps
 )(FolderContents);
