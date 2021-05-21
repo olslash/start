@@ -65,14 +65,10 @@ export function rectsOverlap(
   rect2BottomRightX: number,
   rect2BottomRightY: number
 ) {
-  if (
+  return (
     rect1TopLeftX < rect2BottomRightX &&
     rect1BottomRightX > rect2TopLeftX &&
     rect1TopLeftY < rect2BottomRightY &&
     rect1BottomRightY > rect2TopLeftY
-  ) {
-    return true;
-  }
-
-  return false;
+  );
 }

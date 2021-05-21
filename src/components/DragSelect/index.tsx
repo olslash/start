@@ -16,7 +16,13 @@ const DragSelect: React.FC<Props> = ({
   enabled,
   containerRef,
   onDrag,
+  /**
+   * Should be wrapped in useCallback
+   */
   onStart,
+  /**
+   * Should be wrapped in useCallback
+   */
   onEnd,
 }) => {
   const { x: mouseX, y: mouseY } = useMousePosition(containerRef);
@@ -30,10 +36,10 @@ const DragSelect: React.FC<Props> = ({
     if (isMouseDown) {
       if (!isActive) {
         setActive(true);
-      }
 
-      setDragStartPosition([mouseX, mouseY]);
-      onStart?.([mouseX, mouseY]);
+        setDragStartPosition([mouseX, mouseY]);
+        onStart?.([mouseX, mouseY]);
+      }
     } else {
       if (isActive) {
         setActive(false);
@@ -41,9 +47,7 @@ const DragSelect: React.FC<Props> = ({
         onEnd?.();
       }
     }
-    // fixme?
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMouseDown]);
+  }, [isActive, isMouseDown, mouseX, mouseY, onEnd, onStart]);
 
   const top = mouseY > dragStartY ? dragStartY : mouseY;
   const height =
