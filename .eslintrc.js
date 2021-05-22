@@ -16,6 +16,7 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 0,
     '@typescript-eslint/camelcase': 0,
     '@typescript-eslint/no-use-before-define': 0,
+    '@typescript-eslint/no-empty-function': 0,
     'no-unused-vars': 0,
   },
   settings: {

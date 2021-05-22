@@ -104,7 +104,6 @@ const FolderContents: React.FunctionComponent<Props> = ({
 
   const handleDrag = React.useCallback(
     ({ topLeft, bottomRight }) => {
-      // fixme debounce this
       for (const [name, folderItem] of Object.entries(folderItemRefs)) {
         const itemRect = folderItem.getBoundingClientRect();
         const itemIsWithinDragSelectArea = rectsOverlap(
@@ -119,10 +118,15 @@ const FolderContents: React.FunctionComponent<Props> = ({
           itemRect.y + itemRect.height
         );
 
+        const itemIsMultiSelected = multiSelectedItems.includes(name);
         if (itemIsWithinDragSelectArea) {
-          addItemToMultiSelect({ folderName, itemName: name });
+          if (!itemIsMultiSelected) {
+            addItemToMultiSelect({ folderName, itemName: name });
+          }
         } else {
-          removeItemFromMultiSelect({ folderName, itemName: name });
+          if (itemIsMultiSelected) {
+            removeItemFromMultiSelect({ folderName, itemName: name });
+          }
         }
       }
 
@@ -133,6 +137,7 @@ const FolderContents: React.FunctionComponent<Props> = ({
       folderItemRefs,
       folderName,
       removeItemFromMultiSelect,
+      multiSelectedItems,
     ]
   );
 
