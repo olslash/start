@@ -137,7 +137,6 @@ export function reducer(state: State = initialState, action: Action): State {
     case SELECT_ITEM: {
       const { itemName, folderName } = action.payload;
 
-      // fixme: should unset any multi select state
       return {
         ...state,
         primarySelectedFolderItemNameByFolderName: {
@@ -147,6 +146,10 @@ export function reducer(state: State = initialState, action: Action): State {
         folderSelectionStateByFolderName: {
           ...state.folderSelectionStateByFolderName,
           [folderName]: FolderState.ACTIVE,
+        },
+        multiSelectedFolderItemsByFolderName: {
+          ...state.multiSelectedFolderItemsByFolderName,
+          [folderName]: [],
         },
       };
     }
