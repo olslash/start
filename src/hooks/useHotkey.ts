@@ -2,17 +2,12 @@ import * as React from 'react';
 import hotkeys from 'hotkeys-js';
 
 const useHotkey = (key: string, cb: () => void) => {
-  const handleKey = React.useCallback(
-    (event: KeyboardEvent) => {
-      if (event.type === 'keydown') {
-        cb();
-      }
-    },
-    [cb]
-  );
+  const handleKey = React.useCallback(() => {
+    cb();
+  }, [cb]);
 
   React.useEffect(() => {
-    hotkeys(key, { keyup: true }, handleKey);
+    hotkeys(key, handleKey);
 
     return () => {
       hotkeys.unbind(key, handleKey);
