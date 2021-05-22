@@ -151,7 +151,9 @@ const FolderContents: React.FunctionComponent<Props> = ({
     <div style={{ height: '100%' }} ref={containerRef}>
       <KeyBindings
         folderName={folderName}
-        selectedItemName={selectedItemName}
+        selectedItemName={
+          selectionState === FolderState.ACTIVE ? selectedItemName : undefined
+        }
         multiSelectedItems={multiSelectedItems}
         disabled={!folderActive}
       />

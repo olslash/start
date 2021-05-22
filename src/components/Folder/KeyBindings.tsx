@@ -30,11 +30,13 @@ const KeyBindings: React.FC<InternalProps> = ({
    *  Open selected item on <Enter>
    */
   const handleEnter = React.useCallback(() => {
-    if (disabled || !selectedItemName) {
+    if (disabled) {
       return;
     }
 
-    const items = union([selectedItemName], multiSelectedItems);
+    const items = selectedItemName
+      ? union([selectedItemName], multiSelectedItems)
+      : multiSelectedItems;
 
     items.forEach((itemName) => {
       openPane(itemName, folderName);
