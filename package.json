@@ -10,7 +10,7 @@
     "format": "prettier --write \"./src/**/*.{ts,tsx}\"",
     "lint": "eslint src/** --ext .tsx --ext .ts",
     "import-types": "typesync",
-    "typecheck": "tsc"
+    "typecheck": "tsc -p tsconfig.json --skipLibCheck"
   },
   "resolutions": {},
   "dependencies": {

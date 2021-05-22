@@ -21,6 +21,9 @@ export function reducer(state: State = initialState, action: Action): State {
 }
 
 export function* saga() {
+  // fixme: figure out the type of `tick`
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const tick = yield call(intervalChan, 5000);
 
   yield takeEvery(tick, function* () {

@@ -47,23 +47,27 @@ export interface State {
   startMenuActiveFolderPath: number[];
   itemsByName: typeof initialItemsByName;
   fileTree: typeof initialFileTree;
-  paneStateByItemName: { [name: string]: PaneState };
+  paneStateByItemName: { [name: string]: PaneState | undefined };
   // pane means folder/app or other special entities that can be
   // active (taskbar, desktop)
   focusedPaneOrder: string[];
   // which item within each folder/the desktop is currently selected?
   // (primary selection, not including multi-select)
-  primarySelectedFolderItemNameByFolderName: { [name: string]: string };
+  primarySelectedFolderItemNameByFolderName: {
+    [name: string]: string | undefined;
+  };
   // Does the current folder have an active selection, or is it inactive?
   // (once an item has been selected in a folder, it can't actually be
   // de-selected; clicking the folder background makes the selection
   // "inactive" but the previous selection remains half-selected in the UI)
   // folders start "inactive", move to "active" when an item is selected,
   // and back to "inactive" when the folder BG is clicked.
-  folderSelectionStateByFolderName: { [name: string]: FolderState };
+  folderSelectionStateByFolderName: { [name: string]: FolderState | undefined };
   // When items are part of a multi-select (bounding box) group, their selection
   // doesn't create a new primary item.
-  multiSelectedFolderItemsByFolderName: { [name: string]: string[] };
+  multiSelectedFolderItemsByFolderName: {
+    [name: string]: string[] | undefined;
+  };
 }
 
 const initialState: State = {
@@ -71,7 +75,9 @@ const initialState: State = {
   startMenuActiveFolderPath: [],
   itemsByName: initialItemsByName,
   fileTree: initialFileTree,
-  paneStateByItemName: {},
+  paneStateByItemName: {
+    Desktop: { ...defaultPaneState },
+  },
   focusedPaneOrder: ['Desktop'],
   primarySelectedFolderItemNameByFolderName: {},
   folderSelectionStateByFolderName: {},
@@ -131,6 +137,7 @@ export function reducer(state: State = initialState, action: Action): State {
     case SELECT_ITEM: {
       const { itemName, folderName } = action.payload;
 
+      // fixme: should unset any multi select state
       return {
         ...state,
         primarySelectedFolderItemNameByFolderName: {
@@ -210,14 +217,19 @@ export function reducer(state: State = initialState, action: Action): State {
 
     case TOGGLE_MINIMIZE_PANE: {
       const { name } = action.payload;
+      const paneState = state.paneStateByItemName[name];
+
+      if (!paneState) {
+        return state;
+      }
 
       return {
         ...state,
         paneStateByItemName: {
           ...state.paneStateByItemName,
           [name]: {
-            ...state.paneStateByItemName[name],
-            minimized: !state.paneStateByItemName[name].minimized,
+            ...paneState,
+            minimized: !paneState.minimized,
           },
         },
       };
@@ -225,14 +237,19 @@ export function reducer(state: State = initialState, action: Action): State {
 
     case TOGGLE_MAXIMIZE_PANE: {
       const { name } = action.payload;
+      const paneState = state.paneStateByItemName[name];
+
+      if (!paneState) {
+        return state;
+      }
 
       return {
         ...state,
         paneStateByItemName: {
           ...state.paneStateByItemName,
           [name]: {
-            ...state.paneStateByItemName[name],
-            maximized: !state.paneStateByItemName[name].maximized,
+            ...paneState,
+            maximized: !paneState.maximized,
           },
         },
       };
@@ -240,7 +257,7 @@ export function reducer(state: State = initialState, action: Action): State {
 
     case OPEN_PANE: {
       const { name, openerName } = action.payload;
-      const openerPaneState = state.paneStateByItemName[openerName] || {};
+      const openerPaneState = state.paneStateByItemName[openerName];
       const openerPanePosition = pick(openerPaneState, [
         'height',
         'width',
@@ -249,8 +266,12 @@ export function reducer(state: State = initialState, action: Action): State {
         'maximized',
       ]);
 
-      const newWindowOffset = sample(range(10, 80, 10));
-      const openInNewWindow = state.itemsByName[name].type === WindowType.File;
+      if (!openerPaneState) {
+        return state;
+      }
+
+      const newWindowOffset = sample(range(10, 80, 10)) as number;
+      const openInNewWindow = state.itemsByName[name]?.type === WindowType.File;
 
       return {
         ...state,
@@ -258,7 +279,7 @@ export function reducer(state: State = initialState, action: Action): State {
         paneStateByItemName: {
           ...state.paneStateByItemName,
           [openerName]: {
-            ...state.paneStateByItemName[openerName],
+            ...openerPaneState,
             // while navigating between folders, use the "same" window by
             // closing the opener and replacing it with the new pane, inheriting
             // the previous position
@@ -271,9 +292,6 @@ export function reducer(state: State = initialState, action: Action): State {
             // for new panes, choose a semi-random position for the new folder,
             // since windows' behavior is inscrutable. seems to start at 0,0 and
             // increment by x,x.
-
-            // fixme: we need paneStateByItemName: { [name: string]: PaneState | undefined};
-            // above to resolve this ts error; ts doesn't realize a pane might not exist
             top: newWindowOffset,
             left: newWindowOffset,
             ...state.paneStateByItemName[name],
@@ -291,13 +309,18 @@ export function reducer(state: State = initialState, action: Action): State {
 
     case CLOSE_PANE: {
       const { name } = action.payload;
+      const paneState = state.paneStateByItemName[name];
+
+      if (!paneState) {
+        return state;
+      }
 
       return {
         ...state,
         paneStateByItemName: {
           ...state.paneStateByItemName,
           [name]: {
-            ...state.paneStateByItemName[name],
+            ...paneState,
             open: false,
           },
         },
@@ -307,6 +330,10 @@ export function reducer(state: State = initialState, action: Action): State {
     case MOVE_PANE: {
       const { name, left, top, width, height } = action.payload;
       const paneState = state.paneStateByItemName[name];
+
+      if (!paneState) {
+        return state;
+      }
 
       return {
         ...state,
@@ -479,8 +506,11 @@ export function primarySelectedItemNameForFolder(
   state: GlobalState,
   folderName: string
 ) {
-  // fixme: this needs to be the *first* folder item by default if none exists
-  return local(state).primarySelectedFolderItemNameByFolderName[folderName];
+  return (
+    local(state).primarySelectedFolderItemNameByFolderName[folderName] ||
+    //  *first* folder item by default if none exists
+    itemsForFolder(state, folderName)?.[0]?.name
+  );
 }
 
 export function folderSelectionState(state: GlobalState, folderName: string) {
@@ -526,8 +556,14 @@ export function itemsForFolder(state: GlobalState, folderName: string) {
     return undefined;
   }
 
+  const isPane = (item: Pane | undefined): item is Pane => {
+    return !!item;
+  };
+
   // populate first-level children
-  return treeResult.children.map((child) => itemByName(state, child.name));
+  return treeResult.children
+    .map((child) => itemByName(state, child.name))
+    .filter(isPane);
 }
 
 export function openPaneItems(state: GlobalState): {
@@ -535,10 +571,12 @@ export function openPaneItems(state: GlobalState): {
 } {
   const openPanes = pickBy(local(state).paneStateByItemName, {
     open: true,
-  });
+  }) as Record<string, PaneState>;
 
   return mapValues(openPanes, (pane, name) => ({
     ...pane,
-    ...itemByName(state, name),
+    // we can assume that the name has items if it's in openPanes
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    ...itemByName(state, name)!,
   }));
 }

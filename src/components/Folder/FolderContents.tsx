@@ -28,7 +28,7 @@ interface OwnProps {
 }
 
 interface StateProps {
-  selectedItemName: string;
+  selectedItemName?: string;
   selectionState: FolderState;
   folderActive: boolean;
   multiSelectedItems: string[];
