@@ -23,6 +23,7 @@ const logger = createLogger({
   predicate(_, action) {
     return !actionsBlacklist.includes(action.type);
   },
+  collapsed: true,
 });
 
 const store = createStore(
