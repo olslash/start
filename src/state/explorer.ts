@@ -196,6 +196,10 @@ export function reducer(state: State = initialState, action: Action): State {
             ...state.folderSelectionStateByFolderName,
             [folderName]: FolderState.INACTIVE,
           },
+          multiSelectedFolderItemsByFolderName: {
+            ...state.multiSelectedFolderItemsByFolderName,
+            [folderName]: [],
+          },
         };
       } else {
         // if the folder is unfocused, focus the pane
