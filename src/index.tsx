@@ -5,7 +5,7 @@ import createSagaMiddleware from 'redux-saga';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
-import App from './components/App';
+import Windows from './components/Windows';
 
 import rootReducer from './state/rootReducer';
 import rootSaga from './state/rootSaga';
@@ -29,7 +29,7 @@ document.body.appendChild(root);
 
 render(
   <Provider store={store}>
-    <App />
+    <Windows />
   </Provider>,
   root
 );

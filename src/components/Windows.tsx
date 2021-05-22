@@ -42,7 +42,7 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps;
 
-const App: React.FunctionComponent<Props> = (props: Props) => (
+const Windows: React.FunctionComponent<Props> = (props: Props) => (
   <div className={styles.container}>
     <SVGDefinitions />
 
@@ -124,4 +124,4 @@ export default connect<StateProps, DispatchProps, {}, GlobalState>(
     closePane,
     movePane,
   } as DispatchProps
-)(App);
+)(Windows);
