@@ -104,6 +104,10 @@ const FolderContents: React.FunctionComponent<Props> = ({
 
   const handleDrag = React.useCallback(
     ({ topLeft, bottomRight }) => {
+      if (!folderActive) {
+        return;
+      }
+
       for (const [name, folderItem] of Object.entries(folderItemRefs)) {
         const itemRect = folderItem.getBoundingClientRect();
         const itemIsWithinDragSelectArea = rectsOverlap(
@@ -133,11 +137,12 @@ const FolderContents: React.FunctionComponent<Props> = ({
       return () => {};
     },
     [
-      addItemToMultiSelect,
+      folderActive,
       folderItemRefs,
+      multiSelectedItems,
+      addItemToMultiSelect,
       folderName,
       removeItemFromMultiSelect,
-      multiSelectedItems,
     ]
   );
 

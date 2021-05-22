@@ -56,7 +56,7 @@ const DragSelect: React.FC<Props> = ({
   const width = mouseX > dragStartX ? mouseX - dragStartX : dragStartX - mouseX;
 
   React.useEffect(() => {
-    if (isMouseDown && isActive) {
+    if (isMouseDown && isActive && width > 0 && height > 0) {
       onDrag?.({
         topLeft: [left, top],
         bottomRight: [left + width, top + height],
@@ -65,6 +65,10 @@ const DragSelect: React.FC<Props> = ({
   }, [isActive, mouseX, mouseY, isMouseDown, onDrag, top, height, left, width]);
 
   if (!enabled || !isActive) {
+    return null;
+  }
+
+  if (width === 0 && height === 0) {
     return null;
   }
 

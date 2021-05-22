@@ -327,6 +327,10 @@ export function reducer(state: State = initialState, action: Action): State {
             open: false,
           },
         },
+        multiSelectedFolderItemsByFolderName: {
+          ...state.multiSelectedFolderItemsByFolderName,
+          [name]: [],
+        },
       };
     }
 
