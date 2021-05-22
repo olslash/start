@@ -21,9 +21,8 @@ import {
 import SVGDefinitions from './SVGDefinitions';
 import TaskBar from './TaskBar';
 import Desktop from './Desktop';
-
-import styles from './app.scss';
 import Folder from './Folder';
+import styles from './app.scss';
 
 interface StateProps {
   openPaneItems: ReturnType<typeof openPaneItems>;
