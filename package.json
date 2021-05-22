@@ -23,7 +23,7 @@
     "classnames": "^2.2.5",
     "core-js": "3.12.1",
     "hotkeys-js": "^3.8.5",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-onclickoutside": "^6.7.1",
