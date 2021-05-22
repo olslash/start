@@ -19,6 +19,7 @@ import {
 } from '../../state/explorer';
 import FolderItem from './FolderItem';
 import FolderItemGrid from './FolderItemGrid';
+import KeyBindings from './KeyBindings';
 
 interface OwnProps {
   folderName: string;
@@ -148,6 +149,15 @@ const FolderContents: React.FunctionComponent<Props> = ({
 
   return (
     <div style={{ height: '100%' }} ref={containerRef}>
+      <KeyBindings
+        folderName={folderName}
+        selectedItemName={
+          selectionState === FolderState.ACTIVE ? selectedItemName : undefined
+        }
+        multiSelectedItems={multiSelectedItems}
+        disabled={!folderActive}
+      />
+
       <DragSelect
         enabled={folderActive}
         // onStart={onStart}
