@@ -274,7 +274,9 @@ export function reducer(state: State = initialState, action: Action): State {
       }
 
       const newWindowOffset = sample(range(10, 80, 10)) as number;
-      const openInNewWindow = state.itemsByName[name]?.type === WindowType.File;
+      const openInNewWindow =
+        state.itemsByName[name]?.type === WindowType.File ||
+        openerName === 'Desktop';
 
       return {
         ...state,
