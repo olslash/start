@@ -66,7 +66,7 @@ const FolderContents: React.FunctionComponent<Props> = ({
   const containerRef = React.useRef<HTMLDivElement>(null);
 
   const [folderItemRefs, setFolderItemRefs] = React.useState<{
-    [name: string]: HTMLDivElement;
+    [name: string]: HTMLElement[];
   }>({});
 
   const setRef = (name: string) => (instance: HTMLDivElement) => {
@@ -74,11 +74,14 @@ const FolderContents: React.FunctionComponent<Props> = ({
       return;
     }
 
-    if (folderItemRefs[name] === instance) {
+    // the children of item instance are the item's icon/label
+    const boundingChildren = Array.from(instance.children) as HTMLElement[];
+
+    if (boundingChildren.every((c) => folderItemRefs[name]?.includes(c))) {
       return;
     }
 
-    setFolderItemRefs({ ...folderItemRefs, [name]: instance });
+    setFolderItemRefs({ ...folderItemRefs, [name]: boundingChildren });
   };
 
   const handleFolderMouseDown = React.useCallback(
@@ -103,24 +106,44 @@ const FolderContents: React.FunctionComponent<Props> = ({
     [folderActive, folderName, openPane]
   );
 
+  const currentRef = containerRef.current;
+
+  // containerRect accounts for offsets from eg. body margin
+  const containerRect = React.useMemo(
+    () => currentRef?.getBoundingClientRect(),
+    [currentRef]
+  );
+
   const handleDrag = React.useCallback(
     ({ topLeft, bottomRight }) => {
       if (!folderActive) {
         return;
       }
 
-      for (const [name, folderItem] of Object.entries(folderItemRefs)) {
-        const itemRect = folderItem.getBoundingClientRect();
-        const itemIsWithinDragSelectArea = rectsOverlap(
-          topLeft[0],
-          topLeft[1],
-          bottomRight[0],
-          bottomRight[1],
+      for (const [name, folderItemComponentElements] of Object.entries(
+        folderItemRefs
+      )) {
+        if (!containerRect) {
+          // fixme?
+          return;
+        }
 
-          itemRect.x,
-          itemRect.y,
-          itemRect.x + itemRect.width,
-          itemRect.y + itemRect.height
+        const itemIsWithinDragSelectArea = folderItemComponentElements.some(
+          (item) => {
+            const itemRect = item.getBoundingClientRect();
+
+            return rectsOverlap(
+              topLeft[0],
+              topLeft[1],
+              bottomRight[0],
+              bottomRight[1],
+
+              itemRect.x - containerRect.left,
+              itemRect.y - containerRect.top,
+              itemRect.x + itemRect.width - containerRect.left,
+              itemRect.y + itemRect.height - containerRect.top
+            );
+          }
         );
 
         const itemIsMultiSelected = multiSelectedItems.includes(name);
@@ -134,12 +157,11 @@ const FolderContents: React.FunctionComponent<Props> = ({
           }
         }
       }
-
-      return () => {};
     },
     [
       folderActive,
       folderItemRefs,
+      containerRect,
       multiSelectedItems,
       addItemToMultiSelect,
       folderName,

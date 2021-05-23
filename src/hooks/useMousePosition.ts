@@ -1,44 +1,46 @@
 import * as React from 'react';
 
-const useMousePosition = (containerRef: React.RefObject<HTMLElement>) => {
+const useMousePosition = (
+  containerRef: React.RefObject<HTMLElement>,
+  throttleMs = 16 // 60 fps
+) => {
   const [position, setPosition] = React.useState({ x: 0, y: 0 });
-
-  const getBoundingClientRect = (e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-
-    const offsetParent = target.offsetParent as HTMLDivElement;
-    if (!offsetParent) {
-      // fixme?
-      return;
-    }
-
-    return target.offsetParent?.getBoundingClientRect();
-  };
+  const currentRef = containerRef.current;
+  const containerRect = React.useMemo(
+    () => currentRef?.getBoundingClientRect(),
+    [currentRef]
+  );
+  const lastCalledTime = React.useRef(Date.now());
 
   const _setPosition = React.useCallback(
     (e: MouseEvent) => {
-      const rect = getBoundingClientRect(e);
-      if (!rect) {
+      if (!containerRect) {
         return;
       }
 
+      // throttle
+      const now = Date.now();
+      if (now - lastCalledTime.current < throttleMs) {
+        return;
+      }
+      lastCalledTime.current = now;
+
       setPosition({
-        x: e.clientX - rect.x,
-        y: e.clientY - rect.y,
+        x: e.clientX - containerRect.x,
+        y: e.clientY - containerRect.y,
       });
     },
-    [setPosition]
+    [containerRect, throttleMs]
   );
 
   const _handleLeave = React.useCallback(
     (e: MouseEvent) => {
-      const rect = getBoundingClientRect(e);
-      if (!rect) {
+      if (!containerRect) {
         return;
       }
 
-      const xExit = e.clientX - rect.x;
-      const yExit = e.clientY - rect.y;
+      const xExit = e.clientX - containerRect.x;
+      const yExit = e.clientY - containerRect.y;
 
       /**
        * The mouseMove event doesn't fire very frequently, so at high cursor speeds
@@ -54,18 +56,18 @@ const useMousePosition = (containerRef: React.RefObject<HTMLElement>) => {
         // constrain left
         x: Math.max(
           // constrain right
-          Math.min(xExit, rect.width),
+          Math.min(xExit, containerRect.width),
           0
         ),
         // constrain bottom
         y: Math.max(
           // constrain top
-          Math.min(yExit, rect.height),
+          Math.min(yExit, containerRect.height),
           0
         ),
       });
     },
-    [setPosition]
+    [containerRect]
   );
 
   const { current } = containerRef;

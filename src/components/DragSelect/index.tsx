@@ -15,6 +15,9 @@ interface Props {
 const DragSelect: React.FC<Props> = ({
   enabled,
   containerRef,
+  /**
+   * Should be wrapped in useCallback
+   */
   onDrag,
   /**
    * Should be wrapped in useCallback
@@ -25,9 +28,9 @@ const DragSelect: React.FC<Props> = ({
    */
   onEnd,
 }) => {
+  const [isActive, setActive] = React.useState(false);
   const { x: mouseX, y: mouseY } = useMousePosition(containerRef);
   const isMouseDown = useMouseDown();
-  const [isActive, setActive] = React.useState(false);
 
   const [[dragStartX, dragStartY], setDragStartPosition] =
     React.useState<Point>([0, 0]);
