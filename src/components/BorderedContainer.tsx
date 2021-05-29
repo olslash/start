@@ -23,73 +23,61 @@ interface Props {
   scrollable?: boolean;
 }
 
-class BorderedContainer extends React.Component<Props> {
-  static defaultProps = {
-    depth: 2,
-    borderColors: [
-      {
-        bottomRight: 'black',
-        topLeft: '#c3c7cb',
-      },
-      {
-        bottomRight: '#868a8e',
-        topLeft: 'white',
-      },
-    ],
-    classes: {},
-    style: {},
-  };
+const BorderedContainer: React.FC<Props> = ({
+  depth = 2,
+  borderColors = [
+    {
+      bottomRight: 'black',
+      topLeft: '#c3c7cb',
+    },
+    {
+      bottomRight: '#868a8e',
+      topLeft: 'white',
+    },
+  ],
+  classes = {},
+  style = {},
+  ...props
+}) => {
+  const { icon, scrollable, children, handlers } = props;
 
-  render() {
-    const {
-      depth,
-      borderColors,
-      classes,
-      style,
-      icon,
-      scrollable,
-      children,
-      handlers,
-    } = this.props;
+  return (
+    <div
+      className={cx(styles.container, classes.root)}
+      style={style}
+      {...handlers}
+    >
+      {icon && (
+        <div className={styles.iconImgContainer}>
+          <img src={icons[icon]} className={classes.icon} draggable={false} />
+        </div>
+      )}
 
-    return (
       <div
-        className={cx(styles.container, classes.root)}
-        style={style}
-        {...handlers}
+        className={cx(styles.outerBorder, classes.outer)}
+        style={{
+          borderLeft: `1px solid ${borderColors[0].topLeft}`,
+          borderTop: `1px solid ${borderColors[0].topLeft}`,
+          boxShadow: `0.5px 0.5px 0 0.5px ${borderColors[0].bottomRight}`,
+        }}
       >
-        {icon && (
-          <div className={styles.iconImgContainer}>
-            <img src={icons[icon]} className={classes.icon} draggable={false} />
+        {depth === 1 && children}
+        {depth === 2 && (
+          <div
+            className={cx(styles.innerBorder, classes.inner)}
+            style={{
+              borderLeft: `1px solid ${borderColors[1].topLeft}`,
+              borderTop: `1px solid ${borderColors[1].topLeft}`,
+              boxShadow: `0.5px 0.5px 0 0.5px ${borderColors[1].bottomRight}`,
+              overflowY: scrollable ? 'scroll' : 'initial',
+            }}
+          >
+            {children}
           </div>
         )}
-
-        <div
-          className={cx(styles.outerBorder, classes.outer)}
-          style={{
-            borderLeft: `1px solid ${borderColors[0].topLeft}`,
-            borderTop: `1px solid ${borderColors[0].topLeft}`,
-            boxShadow: `0.5px 0.5px 0 0.5px ${borderColors[0].bottomRight}`,
-          }}
-        >
-          {depth === 1 && children}
-          {depth === 2 && (
-            <div
-              className={cx(styles.innerBorder, classes.inner)}
-              style={{
-                borderLeft: `1px solid ${borderColors[1].topLeft}`,
-                borderTop: `1px solid ${borderColors[1].topLeft}`,
-                boxShadow: `0.5px 0.5px 0 0.5px ${borderColors[1].bottomRight}`,
-                overflowY: scrollable ? 'scroll' : 'initial',
-              }}
-            >
-              {children}
-            </div>
-          )}
-        </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default BorderedContainer;
