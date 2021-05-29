@@ -17,12 +17,20 @@ interface StateProps {
 export type Props = OwnProps & StateProps & WindowBaseProps;
 
 const Folder: React.FC<Props> = (props) => {
+  const scrollableContentRef: React.MutableRefObject<HTMLDivElement | null> =
+    React.useRef(null);
+
   return (
-    <WindowBase {...props} title={props.name}>
+    <WindowBase
+      {...props}
+      title={props.name}
+      scrollableContentRef={scrollableContentRef}
+    >
       <FolderContents
         items={props.items || []}
         folderName={props.name}
         darkItemTitles
+        scrollableContentRef={scrollableContentRef}
       />
     </WindowBase>
   );

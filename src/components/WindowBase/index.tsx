@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import * as React from 'react';
-import * as Rnd from 'react-rnd';
+import { Rnd, RndDragCallback, RndResizeCallback } from 'react-rnd';
 import { Position } from 'start/types';
 import { Icon } from 'resources/icons';
 import BorderedContainer from 'start/components/BorderedContainer';
@@ -20,6 +20,7 @@ export interface Props {
   height: number;
   width: number;
   maximized: boolean;
+  scrollableContentRef?: React.MutableRefObject<HTMLDivElement | null>;
   onMinimize(windowName: string): void;
   onMaximize(windowName: string): void;
   onClose(windowName: string): void;
@@ -45,11 +46,11 @@ class WindowBase extends React.Component<Props, State> {
     isDragging: false,
   };
 
-  handleDragStart: Rnd.DraggableEventHandler = () => {
+  handleDragStart: RndDragCallback = () => {
     this.props.onFocus(this.props.name);
   };
 
-  handleDrag: Rnd.DraggableEventHandler = (e, { x, y }) => {
+  handleDrag: RndDragCallback = (e, { x, y }) => {
     // don't display dragging state on mouse down; only once user actually
     // starts dragging.
     if (x !== this.props.left || y !== this.props.left) {
@@ -57,7 +58,7 @@ class WindowBase extends React.Component<Props, State> {
     }
   };
 
-  handleDragStop: Rnd.DraggableEventHandler = (e, { x, y }) => {
+  handleDragStop: RndDragCallback = (e, { x, y }) => {
     this.setState({ isDragging: false });
 
     this.props.onMove(this.props.name, { left: x, top: y });
@@ -67,7 +68,7 @@ class WindowBase extends React.Component<Props, State> {
     this.setState({ isDragging: true });
   };
 
-  handleResizeStop: Rnd.ResizeHandler = (
+  handleResizeStop: RndResizeCallback = (
     e,
     direction,
     ref,
@@ -93,7 +94,7 @@ class WindowBase extends React.Component<Props, State> {
     return (
       <React.Fragment>
         {!this.props.maximized && (
-          <Rnd.default
+          <Rnd
             default={{
               x: this.props.left,
               y: this.props.top,
@@ -111,7 +112,7 @@ class WindowBase extends React.Component<Props, State> {
             onDragStart={this.handleDragStart}
             onDrag={this.handleDrag}
             onDragStop={this.handleDragStop}
-            dragHandleClassName=".draghandle"
+            dragHandleClassName="draghandle"
             onResize={this.handleResize}
             onResizeStop={this.handleResizeStop}
             resizeHandleWrapperStyle={{
@@ -153,7 +154,7 @@ class WindowBase extends React.Component<Props, State> {
               }}
               onDoubleClick={() => this.props.onMaximize(this.props.name)}
             />
-          </Rnd.default>
+          </Rnd>
         )}
 
         <BorderedContainer
@@ -190,6 +191,7 @@ class WindowBase extends React.Component<Props, State> {
             name={this.props.name}
           />
           <BorderedContainer
+            innerRef={this.props.scrollableContentRef}
             depth={2}
             borderColors={[
               {

@@ -333,9 +333,17 @@ export function reducer(state: State = initialState, action: Action): State {
             open: false,
           },
         },
+        primarySelectedFolderItemNameByFolderName: {
+          ...state.primarySelectedFolderItemNameByFolderName,
+          [name]: undefined,
+        },
         multiSelectedFolderItemsByFolderName: {
           ...state.multiSelectedFolderItemsByFolderName,
           [name]: [],
+        },
+        folderSelectionStateByFolderName: {
+          ...state.folderSelectionStateByFolderName,
+          [name]: FolderState.INACTIVE,
         },
       };
     }

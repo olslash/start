@@ -5,11 +5,11 @@ import styles from './borderedContainer.scss';
 
 interface Props {
   depth: number;
-  borderColors: {
+  borderColors?: {
     topLeft: string;
     bottomRight: string;
   }[];
-  classes: {
+  classes?: {
     root?: string;
     outer?: string;
     inner?: string;
@@ -21,6 +21,7 @@ interface Props {
   };
   icon?: Icon;
   scrollable?: boolean;
+  innerRef?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 const BorderedContainer: React.FC<Props> = ({
@@ -37,10 +38,12 @@ const BorderedContainer: React.FC<Props> = ({
   ],
   classes = {},
   style = {},
-  ...props
+  icon,
+  scrollable,
+  children,
+  handlers,
+  innerRef,
 }) => {
-  const { icon, scrollable, children, handlers } = props;
-
   return (
     <div
       className={cx(styles.container, classes.root)}
@@ -71,6 +74,7 @@ const BorderedContainer: React.FC<Props> = ({
               boxShadow: `0.5px 0.5px 0 0.5px ${borderColors[1].bottomRight}`,
               overflowY: scrollable ? 'scroll' : 'initial',
             }}
+            ref={innerRef}
           >
             {children}
           </div>

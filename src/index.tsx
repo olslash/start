@@ -28,7 +28,13 @@ const logger = createLogger({
 
 const store = createStore(
   rootReducer,
-  composeEnhancers(applyMiddleware(sagaMiddleware, thunk, logger))
+  composeEnhancers(
+    applyMiddleware(
+      sagaMiddleware,
+      thunk
+      //  logger
+    )
+  )
 );
 sagaMiddleware.run(rootSaga);
 

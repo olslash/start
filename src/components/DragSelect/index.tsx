@@ -1,9 +1,9 @@
 import * as React from 'react';
 import useMouseDown from 'start/hooks/useMouseDown';
+import { Point } from 'start/types';
 import useMousePosition from 'start/hooks/useMousePosition';
 import styles from './index.scss';
 
-type Point = [number, number];
 interface Props {
   enabled?: boolean;
   onStart?: (mousePosition: Point) => void;
@@ -29,19 +29,24 @@ const DragSelect: React.FC<Props> = ({
   onEnd,
 }) => {
   const [isActive, setActive] = React.useState(false);
-  const { x: mouseX, y: mouseY } = useMousePosition(containerRef);
+  const mousePosition = useMousePosition(containerRef);
   const isMouseDown = useMouseDown();
 
-  const [[dragStartX, dragStartY], setDragStartPosition] =
-    React.useState<Point>([0, 0]);
+  const [dragStartPosition, setDragStartPosition] = React.useState<Point>([
+    0, 0,
+  ]);
 
   React.useEffect(() => {
+    if (!mousePosition) {
+      return;
+    }
+
     if (isMouseDown) {
       if (!isActive) {
         setActive(true);
 
-        setDragStartPosition([mouseX, mouseY]);
-        onStart?.([mouseX, mouseY]);
+        setDragStartPosition(mousePosition);
+        onStart?.(mousePosition);
       }
     } else {
       if (isActive) {
@@ -50,26 +55,38 @@ const DragSelect: React.FC<Props> = ({
         onEnd?.();
       }
     }
-  }, [isActive, isMouseDown, mouseX, mouseY, onEnd, onStart]);
-
-  const top = mouseY > dragStartY ? dragStartY : mouseY;
-  const height =
-    mouseY > dragStartY ? mouseY - dragStartY : dragStartY - mouseY;
-  const left = mouseX > dragStartX ? dragStartX : mouseX;
-  const width = mouseX > dragStartX ? mouseX - dragStartX : dragStartX - mouseX;
+  }, [isActive, isMouseDown, mousePosition, onEnd, onStart]);
 
   React.useEffect(() => {
+    if (!mousePosition) {
+      return;
+    }
+
+    const { top, left, width, height } = getDimensions(
+      dragStartPosition,
+      mousePosition
+    );
+
     if (isMouseDown && isActive && width > 0 && height > 0) {
       onDrag?.({
         topLeft: [left, top],
         bottomRight: [left + width, top + height],
       });
     }
-  }, [isActive, mouseX, mouseY, isMouseDown, onDrag, top, height, left, width]);
+  }, [isActive, isMouseDown, onDrag, mousePosition, dragStartPosition]);
 
   if (!enabled || !isActive) {
     return null;
   }
+
+  if (!mousePosition) {
+    return null;
+  }
+
+  const { top, left, width, height } = getDimensions(
+    dragStartPosition,
+    mousePosition
+  );
 
   if (width === 0 && height === 0) {
     return null;
@@ -89,4 +106,21 @@ const DragSelect: React.FC<Props> = ({
   );
 };
 
+function getDimensions(mousePosition: Point, dragStartPosition: Point) {
+  const [dragStartX, dragStartY] = dragStartPosition;
+  const [mouseX, mouseY] = mousePosition;
+
+  const top = mouseY > dragStartY ? dragStartY : mouseY;
+  const height =
+    mouseY > dragStartY ? mouseY - dragStartY : dragStartY - mouseY;
+  const left = mouseX > dragStartX ? dragStartX : mouseX;
+  const width = mouseX > dragStartX ? mouseX - dragStartX : dragStartX - mouseX;
+
+  return {
+    top,
+    left,
+    width,
+    height,
+  };
+}
 export default DragSelect;

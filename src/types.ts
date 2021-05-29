@@ -63,3 +63,5 @@ interface _PaneState {
 }
 
 export type PaneState = _PaneState & Position;
+
+export type Point = [number, number];

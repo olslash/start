@@ -26,6 +26,7 @@ interface OwnProps {
   items: Pane[];
   darkItemTitles?: boolean;
   columnLayout?: boolean;
+  scrollableContentRef?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 interface StateProps {
@@ -56,6 +57,7 @@ const FolderContents: React.FunctionComponent<Props> = ({
   multiSelectedItems,
   selectionState,
   folderActive,
+  scrollableContentRef,
   selectItem,
   addItemToMultiSelect,
   removeItemFromMultiSelect,
@@ -64,24 +66,27 @@ const FolderContents: React.FunctionComponent<Props> = ({
   columnLayout,
 }: Props) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
-
-  const [folderItemRefs, setFolderItemRefs] = React.useState<{
-    [name: string]: HTMLElement[];
+  const folderItemRefs = React.useRef<{
+    [name: string]: DOMRect[];
   }>({});
 
-  const setRef = (name: string) => (instance: HTMLDivElement) => {
+  const setRef = (instance: HTMLDivElement) => {
     if (!instance) {
       return;
     }
 
-    // the children of item instance are the item's icon/label
-    const boundingChildren = Array.from(instance.children) as HTMLElement[];
+    // hack-ish: use the dom ID of the item so we don't have to use a curried
+    // function to get at the name from state in here
+    const itemName = instance.id;
 
-    if (boundingChildren.every((c) => folderItemRefs[name]?.includes(c))) {
-      return;
-    }
+    // the children of item instance are the item's icon/label.
+    // cache the client rects so we don't have to cause DOM
+    // reflows during drag events
+    const boundingChildren = (
+      Array.from(instance.children) as HTMLElement[]
+    ).map((c) => c.getBoundingClientRect());
 
-    setFolderItemRefs({ ...folderItemRefs, [name]: boundingChildren });
+    folderItemRefs.current[itemName] = boundingChildren;
   };
 
   const handleFolderMouseDown = React.useCallback(
@@ -96,7 +101,7 @@ const FolderContents: React.FunctionComponent<Props> = ({
   );
 
   const handleFolderDoubleClick = React.useCallback(
-    (e, itemName) => {
+    (e: React.MouseEvent<any, any>, itemName: string) => {
       if (folderActive) {
         e.stopPropagation();
       }
@@ -120,18 +125,16 @@ const FolderContents: React.FunctionComponent<Props> = ({
         return;
       }
 
-      for (const [name, folderItemComponentElements] of Object.entries(
-        folderItemRefs
+      for (const [name, folderItemDOMRects] of Object.entries(
+        folderItemRefs.current
       )) {
         if (!containerRect) {
           // fixme?
           return;
         }
 
-        const itemIsWithinDragSelectArea = folderItemComponentElements.some(
-          (item) => {
-            const itemRect = item.getBoundingClientRect();
-
+        const itemIsWithinDragSelectArea = folderItemDOMRects.some(
+          (itemRect) => {
             return rectsOverlap(
               topLeft[0],
               topLeft[1],
@@ -185,7 +188,7 @@ const FolderContents: React.FunctionComponent<Props> = ({
         // onStart={onStart}
         onDrag={handleDrag}
         // onEnd={onEnd}
-        containerRef={containerRef}
+        containerRef={scrollableContentRef || containerRef}
       />
 
       <FolderItemGrid
@@ -196,7 +199,7 @@ const FolderContents: React.FunctionComponent<Props> = ({
       >
         {items.map((item: Pane) => (
           <FolderItem
-            ref={setRef(item.name)}
+            ref={setRef}
             name={item.name}
             key={item.name}
             icon={

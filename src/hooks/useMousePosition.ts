@@ -1,40 +1,33 @@
 import * as React from 'react';
+import { Point } from 'start/types';
 
-const useMousePosition = (
-  containerRef: React.RefObject<HTMLElement>,
-  throttleMs = 16 // 60 fps
-) => {
-  const [position, setPosition] = React.useState({ x: 0, y: 0 });
-  const currentRef = containerRef.current;
-  const containerRect = React.useMemo(
-    () => currentRef?.getBoundingClientRect(),
-    [currentRef]
-  );
-  const lastCalledTime = React.useRef(Date.now());
+const useMousePosition = (containerRef: React.RefObject<HTMLElement>) => {
+  const [position, setPosition] = React.useState<Point | null>(null);
+
+  const canCall = React.useRef(true);
 
   const _setPosition = React.useCallback(
     (e: MouseEvent) => {
+      // throttle
+      if (!canCall.current) {
+        return;
+      }
+      canCall.current = false;
+      requestAnimationFrame(() => (canCall.current = true));
+
+      const containerRect = containerRef.current?.getBoundingClientRect();
       if (!containerRect) {
         return;
       }
 
-      // throttle
-      const now = Date.now();
-      if (now - lastCalledTime.current < throttleMs) {
-        return;
-      }
-      lastCalledTime.current = now;
-
-      setPosition({
-        x: e.clientX - containerRect.x,
-        y: e.clientY - containerRect.y,
-      });
+      setPosition([e.clientX - containerRect.x, e.clientY - containerRect.y]);
     },
-    [containerRect, throttleMs]
+    [containerRef]
   );
 
   const _handleLeave = React.useCallback(
     (e: MouseEvent) => {
+      const containerRect = containerRef.current?.getBoundingClientRect();
       if (!containerRect) {
         return;
       }
@@ -52,26 +45,26 @@ const useMousePosition = (
        * is moving quickly enough)
        */
 
-      setPosition({
+      setPosition([
         // constrain left
-        x: Math.max(
+        Math.max(
           // constrain right
           Math.min(xExit, containerRect.width),
           0
         ),
         // constrain bottom
-        y: Math.max(
+        Math.max(
           // constrain top
           Math.min(yExit, containerRect.height),
           0
         ),
-      });
+      ]);
     },
-    [containerRect]
+    [containerRef]
   );
 
-  const { current } = containerRef;
   React.useEffect(() => {
+    const { current } = containerRef;
     if (!current) {
       return;
     }
@@ -81,8 +74,9 @@ const useMousePosition = (
 
     return () => {
       current.removeEventListener('mousemove', _setPosition);
+      current.removeEventListener('mouseleave', _handleLeave);
     };
-  }, [current, _handleLeave, _setPosition]);
+  }, [_handleLeave, _setPosition, containerRef]);
 
   return position;
 };
