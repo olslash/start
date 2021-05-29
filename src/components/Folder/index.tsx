@@ -16,19 +16,17 @@ interface StateProps {
 
 export type Props = OwnProps & StateProps & WindowBaseProps;
 
-class Folder extends React.Component<Props> {
-  render() {
-    return (
-      <WindowBase {...this.props} title={this.props.name}>
-        <FolderContents
-          items={this.props.items || []}
-          folderName={this.props.name}
-          darkItemTitles
-        />
-      </WindowBase>
-    );
-  }
-}
+const Folder: React.FC<Props> = (props) => {
+  return (
+    <WindowBase {...props} title={props.name}>
+      <FolderContents
+        items={props.items || []}
+        folderName={props.name}
+        darkItemTitles
+      />
+    </WindowBase>
+  );
+};
 
 function mapStateToProps(state: GlobalState, ownProps: Props): StateProps {
   return {
