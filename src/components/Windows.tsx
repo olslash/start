@@ -16,6 +16,8 @@ import {
   maximizePane,
   closePane,
   movePane,
+  dragPaneStart,
+  dragPaneStop,
 } from '../state/explorer';
 
 import SVGDefinitions from './SVGDefinitions';
@@ -37,6 +39,8 @@ interface DispatchProps {
   maximizePane(paneName: string): void;
   closePane(paneName: string): void;
   movePane(paneName: string, positon: Position): void;
+  dragPaneStart(paneName: string): void;
+  dragPaneStop(paneName: string): void;
 }
 
 type Props = StateProps & DispatchProps;
@@ -58,6 +62,8 @@ const Windows: React.FunctionComponent<Props> = (props: Props) => (
           onMaximize={props.maximizePane}
           onClose={props.closePane}
           onMove={props.movePane}
+          onDrag={props.dragPaneStart}
+          onDragStop={props.dragPaneStop}
         />
       ) : (
         renderApp(pane, i, props)
@@ -97,6 +103,8 @@ function renderApp(pane: File & PaneState, i: number, props: Props) {
       onMaximize={props.maximizePane}
       onClose={props.closePane}
       onMove={props.movePane}
+      onDrag={props.dragPaneStart}
+      onDragStop={props.dragPaneStop}
     />
   );
 }
@@ -122,5 +130,7 @@ export default connect<StateProps, DispatchProps, {}, GlobalState>(
     maximizePane,
     closePane,
     movePane,
+    dragPaneStart,
+    dragPaneStop,
   } as DispatchProps
 )(Windows);
