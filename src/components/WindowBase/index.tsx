@@ -5,9 +5,11 @@ import { Position } from 'start/types';
 import { Icon } from 'resources/icons';
 import BorderedContainer from 'start/components/BorderedContainer';
 import TitleBar from 'start/components/TitleBar';
+import MenuBar from '../MenuBar';
 import styles from './index.scss';
 
 const titleBarHeight = 14;
+const menuBarHeight = 18;
 
 export interface Props {
   name: string;
@@ -190,6 +192,7 @@ class WindowBase extends React.Component<Props, State> {
             title={this.props.title || this.props.name}
             name={this.props.name}
           />
+          {/* <MenuBar height={menuBarHeight} /> */}
           <BorderedContainer
             innerRef={this.props.scrollableContentRef}
             depth={2}

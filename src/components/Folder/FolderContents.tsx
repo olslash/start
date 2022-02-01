@@ -114,10 +114,11 @@ const FolderContents: React.FunctionComponent<Props> = ({
   const currentRef = containerRef.current;
 
   // containerRect accounts for offsets from eg. body margin
-  const containerRect = React.useMemo(
-    () => currentRef?.getBoundingClientRect(),
-    [currentRef]
-  );
+  // const containerRect = React.useMemo(
+  //   () => currentRef?.getBoundingClientRect(),
+  //   [currentRef]
+  // );
+  const containerRect = currentRef?.getBoundingClientRect();
 
   const handleDrag = React.useCallback(
     ({ topLeft, bottomRight }) => {

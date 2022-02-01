@@ -1,0 +1,28 @@
+$height: 18px;
+
+.container {
+  display: flex;
+  // background-color: #868a8e;
+  // color: #c3c7cb;
+  // line-height: 12px;
+  // height: $height;
+  font-size: 10px;
+  // padding: 0 4px;
+  align-items: center;
+}
+
+.button {
+  padding: 0 5px;
+  margin: 0;
+  // fixme - do this in js?
+  line-height: $height;
+
+  &::first-letter {
+    text-decoration: underline;
+  }
+
+  &.active {
+    background-color: #0000aa;
+    color: white;
+  }
+}
