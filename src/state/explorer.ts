@@ -26,6 +26,8 @@ const TOGGLE_MAXIMIZE_PANE = 'maximize a pane (toggle)';
 const OPEN_PANE = 'create a new open pane for an item';
 const CLOSE_PANE = 'close a pane';
 const MOVE_PANE = 'change the position of a pane';
+const DRAG_PANE_START = 'A pane has started to be dragged';
+const DRAG_PANE_STOP = 'A pane has stopped being dragged';
 
 export enum FolderState {
   ACTIVE = 'active',
@@ -68,6 +70,9 @@ export interface State {
   multiSelectedFolderItemsByFolderName: {
     [name: string]: string[] | undefined;
   };
+  // if any pane is being dragged, we need to avoid starting new drag groups
+  // (which seem to be caused by rogue mouse events?)
+  anyPaneIsBeingDragged: boolean;
 }
 
 const initialState: State = {
@@ -82,6 +87,7 @@ const initialState: State = {
   primarySelectedFolderItemNameByFolderName: {},
   folderSelectionStateByFolderName: {},
   multiSelectedFolderItemsByFolderName: {},
+  anyPaneIsBeingDragged: false,
 };
 
 type Action = ReturnType<
@@ -372,6 +378,20 @@ export function reducer(state: State = initialState, action: Action): State {
       };
     }
 
+    case DRAG_PANE_START: {
+      return {
+        ...state,
+        anyPaneIsBeingDragged: true,
+      };
+    }
+
+    case DRAG_PANE_STOP: {
+      return {
+        ...state,
+        anyPaneIsBeingDragged: false,
+      };
+    }
+
     default:
       return state;
   }
@@ -511,6 +531,20 @@ export function movePane(
   };
 }
 
+export function dragPaneStart(name: string) {
+  return <const>{
+    type: DRAG_PANE_START,
+    payload: { name },
+  };
+}
+
+export function dragPaneStop(name: string) {
+  return <const>{
+    type: DRAG_PANE_STOP,
+    payload: { name },
+  };
+}
+
 function local(state: GlobalState): State {
   return state.explorer;
 }
@@ -600,4 +634,8 @@ export function openPaneItems(state: GlobalState): {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     ...itemByName(state, name)!,
   }));
+}
+
+export function anyPaneIsBeingDragged(state: GlobalState) {
+  return local(state).anyPaneIsBeingDragged;
 }

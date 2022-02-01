@@ -6,6 +6,7 @@ import { GlobalState } from 'start/state/globalState';
 import { Pane, WindowType } from 'start/types';
 import { windowsAppIcons } from 'start/windowsApps';
 import {
+  anyPaneIsBeingDragged,
   clickFolderItemGridBackground,
   focusedPaneName,
   folderSelectionState,
@@ -30,6 +31,7 @@ interface OwnProps {
 }
 
 interface StateProps {
+  anyPaneIsBeingDragged: boolean;
   selectedItemName?: string;
   selectionState: FolderState;
   folderActive: boolean;
@@ -50,6 +52,7 @@ interface DispatchProps {
 type Props = OwnProps & StateProps & DispatchProps;
 
 const FolderContents: React.FunctionComponent<Props> = ({
+  anyPaneIsBeingDragged,
   folderName,
   items = [],
   darkItemTitles,
@@ -121,7 +124,7 @@ const FolderContents: React.FunctionComponent<Props> = ({
 
   const handleDrag = React.useCallback(
     ({ topLeft, bottomRight }) => {
-      if (!folderActive) {
+      if (!folderActive || anyPaneIsBeingDragged) {
         return;
       }
 
@@ -162,6 +165,7 @@ const FolderContents: React.FunctionComponent<Props> = ({
       }
     },
     [
+      anyPaneIsBeingDragged,
       folderActive,
       folderItemRefs,
       containerRect,
@@ -184,7 +188,7 @@ const FolderContents: React.FunctionComponent<Props> = ({
       />
 
       <DragSelect
-        enabled={folderActive}
+        enabled={folderActive && !anyPaneIsBeingDragged}
         // onStart={onStart}
         onDrag={handleDrag}
         // onEnd={onEnd}
@@ -236,6 +240,7 @@ function mapStateToProps(state: GlobalState, ownProps: Props): StateProps {
     multiSelectedItems: multiSelectedItemsForFolder(state, ownProps.folderName),
     selectionState: folderSelectionState(state, ownProps.folderName),
     folderActive: focusedPaneName(state) === ownProps.folderName,
+    anyPaneIsBeingDragged: anyPaneIsBeingDragged(state),
   };
 }
 

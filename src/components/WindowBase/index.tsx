@@ -26,6 +26,8 @@ export interface Props {
   onClose(windowName: string): void;
   onFocus(windowName: string): void;
   onMove(windowName: string, position: Partial<Position>): void;
+  onDrag(windowName: string): void;
+  onDragStop(windowName: string): void;
 }
 
 interface State {
@@ -54,6 +56,9 @@ class WindowBase extends React.Component<Props, State> {
     // don't display dragging state on mouse down; only once user actually
     // starts dragging.
     if (x !== this.props.left || y !== this.props.left) {
+      if (!this.state.isDragging) {
+        this.props.onDrag(this.props.name);
+      }
       this.setState({ isDragging: true });
     }
   };
@@ -62,6 +67,7 @@ class WindowBase extends React.Component<Props, State> {
     this.setState({ isDragging: false });
 
     this.props.onMove(this.props.name, { left: x, top: y });
+    this.props.onDragStop(this.props.name);
   };
 
   handleResize = () => {
