@@ -7,8 +7,8 @@ $height: 18px;
   // line-height: 12px;
   // height: $height;
   font-size: 10px;
-  margin-top: 0.5px;
-  margin-bottom: 1px;
+  // margin-top: 0.5px;
+  // margin-bottom: 1px;
   align-items: center;
 }
 
@@ -16,7 +16,8 @@ $height: 18px;
   padding: 0 5px;
   margin: 0;
   // fixme - do this in js?
-  line-height: $height;
+  // 2px shrinks active area so you can see some above and below it
+  line-height: $height - 2px;
 
   &.active {
     background-color: #0000aa;

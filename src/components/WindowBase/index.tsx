@@ -200,7 +200,7 @@ class WindowBase extends React.Component<Props, State> {
             name={this.props.name}
           />
           <MenuBar height={menuBarHeight}>
-            <MenuBarItem title="File" underlineIndex={0} />
+            <MenuBarItem title="File" underlineIndex={0} active />
             <MenuBarItem title="Edit" underlineIndex={0} />
             <MenuBarItem title="View" underlineIndex={0} />
             <MenuBarItem title="Help" underlineIndex={0} />
