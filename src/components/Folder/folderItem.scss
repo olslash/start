@@ -26,6 +26,8 @@
 .title {
   border-radius: 1px;
   padding: 1px;
+  // account for layout shift in item title text caused by addition of selection border
+  margin: -0.5px;
 }
 
 .titleDarkFont {

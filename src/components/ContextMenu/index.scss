@@ -1,0 +1,25 @@
+.outerContainer {
+  font-size: 10px;
+
+  position: absolute;
+  // fixme: remove positioning
+  top: 20%;
+  left: 25%;
+}
+
+.divider {
+  height: 2px;
+  border-top: 1px solid #868a8e;
+  border-bottom: 1px solid white;
+  margin: 2px 1px;
+}
+
+.item {
+  padding: 2px 18px;
+  margin-right: 1px; // when active, blue zone shouldn't quite touch edge
+
+  &.active {
+    background-color: #0000aa;
+    color: white;
+  }
+}

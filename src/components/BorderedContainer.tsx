@@ -4,7 +4,7 @@ import icons, { Icon } from 'resources/icons';
 import styles from './borderedContainer.scss';
 
 interface Props {
-  depth: number;
+  depth?: 1 | 2;
   borderColors?: {
     topLeft: string;
     bottomRight: string;
@@ -73,6 +73,8 @@ const BorderedContainer: React.FC<Props> = ({
               borderTop: `1px solid ${borderColors[1].topLeft}`,
               boxShadow: `0.5px 0.5px 0 0.5px ${borderColors[1].bottomRight}`,
               overflowY: scrollable ? 'scroll' : 'initial',
+              // spaces out last item in a container so the correct border shows
+              paddingBottom: 1,
             }}
             ref={innerRef}
           >

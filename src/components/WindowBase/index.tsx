@@ -1,10 +1,11 @@
 import cx from 'classnames';
 import * as React from 'react';
 import { Rnd, RndDragCallback, RndResizeCallback } from 'react-rnd';
-import { Position } from 'start/types';
 import { Icon } from 'resources/icons';
 import BorderedContainer from 'start/components/BorderedContainer';
+import MenuBarItem from 'start/components/MenuBar/MenuBarItem';
 import TitleBar from 'start/components/TitleBar';
+import { Position } from 'start/types';
 import MenuBar from '../MenuBar';
 import styles from './index.scss';
 
@@ -198,7 +199,12 @@ class WindowBase extends React.Component<Props, State> {
             title={this.props.title || this.props.name}
             name={this.props.name}
           />
-          {/* <MenuBar height={menuBarHeight} /> */}
+          <MenuBar height={menuBarHeight}>
+            <MenuBarItem title="File" underlineIndex={0} />
+            <MenuBarItem title="Edit" underlineIndex={0} />
+            <MenuBarItem title="View" underlineIndex={0} />
+            <MenuBarItem title="Help" underlineIndex={0} />
+          </MenuBar>
           <BorderedContainer
             innerRef={this.props.scrollableContentRef}
             depth={2}
@@ -217,7 +223,7 @@ class WindowBase extends React.Component<Props, State> {
               inner: styles.windowContentContainerContent,
             }}
             style={{
-              height: `calc(100% - ${titleBarHeight}px)`,
+              height: `calc(100% - ${titleBarHeight + menuBarHeight}px)`,
             }}
             scrollable
           >

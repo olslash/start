@@ -6,17 +6,17 @@ import { GlobalState } from 'start/state/globalState';
 import { Pane, WindowType } from 'start/types';
 import { windowsAppIcons } from 'start/windowsApps';
 import {
+  addItemToMultiSelect,
   anyPaneIsBeingDragged,
   clickFolderItemGridBackground,
   focusedPaneName,
   folderSelectionState,
   FolderState,
+  multiSelectedItemsForFolder,
   openPane,
   primarySelectedItemNameForFolder,
-  selectItem,
-  addItemToMultiSelect,
   removeItemFromMultiSelect,
-  multiSelectedItemsForFolder,
+  selectItem,
 } from '../../state/explorer';
 import FolderItem from './FolderItem';
 import FolderItemGrid from './FolderItemGrid';
@@ -117,11 +117,10 @@ const FolderContents: React.FunctionComponent<Props> = ({
   const currentRef = containerRef.current;
 
   // containerRect accounts for offsets from eg. body margin
-  // const containerRect = React.useMemo(
-  //   () => currentRef?.getBoundingClientRect(),
-  //   [currentRef]
-  // );
-  const containerRect = currentRef?.getBoundingClientRect();
+  const containerRect = React.useMemo(
+    () => currentRef?.getBoundingClientRect(),
+    [currentRef]
+  );
 
   const handleDrag = React.useCallback(
     ({ topLeft, bottomRight }) => {
