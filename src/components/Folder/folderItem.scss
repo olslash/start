@@ -27,7 +27,16 @@
   border-radius: 1px;
   padding: 1px;
   // account for layout shift in item title text caused by addition of selection border
-  margin: -0.5px;
+  border: 0.5px dotted transparent;
+}
+
+.titleSelected {
+  background: #0000aa;
+  border: 0.5px dotted white;
+}
+
+.titleSelectedInactive {
+  border: 0.5px dotted white;
 }
 
 .titleDarkFont {
@@ -41,13 +50,4 @@
   &.titleSelectedInactive {
     border: 0.5px dotted #868a8e;
   }
-}
-
-.titleSelected {
-  background: #0000aa;
-  border: 0.5px dotted white;
-}
-
-.titleSelectedInactive {
-  border: 0.5px dotted white;
 }
